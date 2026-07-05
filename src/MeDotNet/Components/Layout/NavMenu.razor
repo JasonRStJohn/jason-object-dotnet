@@ -20,6 +20,17 @@
             </NavLink>
         </div>
 
+        <AuthorizeView>
+            <Authorized>
+                <form action="/account/logout" method="post">
+                    <AntiForgeryToken />
+                    <button type="submit">Logout</button>
+                </form>
+            </Authorized>
+            <NotAuthorized>
+                <a href="/account/login">Login</a>
+            </NotAuthorized>
+        </AuthorizeView>
     </nav>
 </div>
 
