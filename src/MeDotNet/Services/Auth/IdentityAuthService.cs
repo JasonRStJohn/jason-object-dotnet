@@ -29,7 +29,7 @@ public class IdentityAuthService : IAuthService
     public async Task<AuthResult> SignInAsync(string email, string password)
     {
         var result = await _signInManager.PasswordSignInAsync(email, password,
-            isPersistent: false, lockoutOnFailure: false);
+            isPersistent: false, lockoutOnFailure: true);
         return result.Succeeded
             ? new AuthResult(true)
             : new AuthResult(false, "Invalid email or password.");

@@ -31,6 +31,7 @@ public class RegisterModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
+        // TODO Phase 2: restrict registration to authorized users or invites; currently any registered user can access /admin
         if (!ModelState.IsValid)
             return Page();
 

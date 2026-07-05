@@ -60,7 +60,7 @@ public class IdentityAuthServiceTests
     public async Task SignInAsync_ReturnsSuccess_WhenCredentialsAreValid()
     {
         _signInManagerMock
-            .Setup(x => x.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), false, false))
+            .Setup(x => x.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), false, true))
             .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
 
         var result = await _authService.SignInAsync("test@example.com", "Password123!");
@@ -72,13 +72,25 @@ public class IdentityAuthServiceTests
     public async Task SignInAsync_ReturnsFailure_WhenCredentialsAreInvalid()
     {
         _signInManagerMock
-            .Setup(x => x.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), false, false))
+            .Setup(x => x.PasswordSignInAsync(It.IsAny<string>(), It.IsAny<string>(), false, true))
             .ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Failed);
 
         var result = await _authService.SignInAsync("test@example.com", "wrongpassword");
 
         result.Success.Should().BeFalse();
         result.ErrorMessage.Should().Be("Invalid email or password.");
+    }
+
+    [Fact]
+    public async Task SignOutAsync_CallsSignInManagerSignOut()
+    {
+        _signInManagerMock
+            .Setup(x => x.SignOutAsync())
+            .Returns(Task.CompletedTask);
+
+        await _authService.SignOutAsync();
+
+        _signInManagerMock.Verify(x => x.SignOutAsync(), Times.Once);
     }
 
     [Fact]
