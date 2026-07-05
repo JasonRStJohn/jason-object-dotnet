@@ -54,6 +54,37 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+// Seed admin user on first run
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var adminEmail = app.Configuration["ADMIN_EMAIL"];
+    var adminPassword = app.Configuration["ADMIN_PASSWORD"];
+
+    if (adminEmail is not null && adminPassword is not null)
+    {
+        try
+        {
+            var existing = await userManager.FindByEmailAsync(adminEmail);
+            if (existing is null)
+            {
+                var user = new ApplicationUser { UserName = adminEmail, Email = adminEmail };
+                var result = await userManager.CreateAsync(user, adminPassword);
+                if (!result.Succeeded)
+                    logger.LogError("Admin seed failed: {Errors}",
+                        string.Join(", ", result.Errors.Select(e => e.Description)));
+                else
+                    logger.LogInformation("Admin user seeded: {Email}", adminEmail);
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Admin seeding failed");
+        }
+    }
+}
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
