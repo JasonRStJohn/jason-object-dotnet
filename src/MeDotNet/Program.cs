@@ -4,6 +4,7 @@ using MeDotNet.Components;
 using MeDotNet.Data;
 using MeDotNet.Models;
 using MeDotNet.Services.Auth;
+using MeDotNet.Services.Posts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddScoped<IAuthService, IdentityAuthService>();
+builder.Services.AddScoped<PostService>();
 
 var app = builder.Build();
 
