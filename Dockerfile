@@ -5,7 +5,7 @@ COPY src/MeDotNet/*.csproj src/MeDotNet/
 RUN dotnet restore src/MeDotNet/MeDotNet.csproj
 
 COPY src/ src/
-RUN dotnet publish src/MeDotNet/MeDotNet.csproj -c Release -o /app --no-restore
+RUN dotnet publish src/MeDotNet/MeDotNet.csproj -c Release -o /app
 
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
