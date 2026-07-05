@@ -16,10 +16,17 @@
 
         <AuthorizeView>
             <Authorized>
-                <a href="/account/logout">Logout</a>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="admin/posts">Posts</NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <a class="nav-link" href="/account/logout">Logout</a>
+                </div>
             </Authorized>
             <NotAuthorized>
-                <a href="/account/login">Login</a>
+                <div class="nav-item px-3">
+                    <a class="nav-link" href="/account/login">Login</a>
+                </div>
             </NotAuthorized>
         </AuthorizeView>
     </nav>

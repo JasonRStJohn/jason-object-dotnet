@@ -1,0 +1,65 @@
+@page "/admin/posts"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@inject PostService PostService
+@inject IJSRuntime JS
+
+<PageTitle>Posts — Admin</PageTitle>
+
+<h1>Posts</h1>
+<a href="/admin/posts/new">New Post</a>
+
+@if (_posts is null)
+{
+    <p>Loading…</p>
+}
+else if (_posts.Count == 0)
+{
+    <p>No posts yet.</p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var post in _posts)
+            {
+                <tr>
+                    <td>@post.Title</td>
+                    <td>@post.Slug</td>
+                    <td>@(post.PublishedAt.HasValue ? "Published" : "Draft")</td>
+                    <td>@post.CreatedAt.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a href="/admin/posts/@post.Id">Edit</a>
+                        &nbsp;
+                        <button @onclick="() => DeleteAsync(post.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Post>? _posts;
+
+    protected override async Task OnInitializedAsync() =>
+        _posts = await PostService.GetAllAsync();
+
+    private async Task DeleteAsync(int id)
+    {
+        if (await JS.InvokeAsync<bool>("confirm", "Delete this post?"))
+        {
+            await PostService.DeleteAsync(id);
+            _posts = await PostService.GetAllAsync();
+        }
+    }
+}
