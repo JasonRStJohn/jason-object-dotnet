@@ -1,0 +1,6 @@
+# This file is auto-merged by docker compose locally.
+# Exposes SQL Server port so you can run `dotnet ef` commands from your host machine.
+services:
+  sqlserver:
+    ports:
+      - "1433:1433"
