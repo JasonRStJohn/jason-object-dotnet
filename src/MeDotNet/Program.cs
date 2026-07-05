@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MeDotNet.Components;
 using MeDotNet.Data;
 using MeDotNet.Models;
+using MeDotNet.Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,16 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/account/login";
 });
 
+builder.Services.AddScoped<IAuthService, IdentityAuthService>();
+
 var app = builder.Build();
+
+// Apply pending EF Core migrations on startup
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+}
 
 if (!app.Environment.IsDevelopment())
 {
