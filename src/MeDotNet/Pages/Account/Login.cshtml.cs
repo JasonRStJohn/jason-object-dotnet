@@ -33,7 +33,7 @@ public class LoginModel : PageModel
 
         var result = await _authService.SignInAsync(Input.Email, Input.Password);
         if (result.Success)
-            return LocalRedirect("/admin");
+            return LocalRedirect("/admin/posts");
 
         ModelState.AddModelError(string.Empty, result.ErrorMessage!);
         return Page();

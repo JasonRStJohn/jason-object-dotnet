@@ -3,17 +3,21 @@ using MeDotNet.Data;
 using MeDotNet.Models;
 using MeDotNet.Services.Posts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MeDotNet.Tests.Services.Posts;
 
 public class PostServiceTests
 {
-    private static AppDbContext CreateDb()
+    private static IDbContextFactory<AppDbContext> CreateDb()
     {
-        var options = new DbContextOptionsBuilder<AppDbContext>()
-            .UseInMemoryDatabase(Guid.NewGuid().ToString())
-            .Options;
-        return new AppDbContext(options);
+        var root = new InMemoryDatabaseRoot();
+        var databaseName = Guid.NewGuid().ToString();
+        var services = new ServiceCollection();
+        services.AddDbContextFactory<AppDbContext>(options =>
+            options.UseInMemoryDatabase(databaseName, root));
+        return services.BuildServiceProvider().GetRequiredService<IDbContextFactory<AppDbContext>>();
     }
 
     private static Post MakePost(string title = "Test", bool published = false) => new()
@@ -28,7 +32,7 @@ public class PostServiceTests
     [Fact]
     public async Task GetAllAsync_ReturnsAllPostsNewestFirst()
     {
-        using var db = CreateDb();
+        var db = CreateDb();
         var svc = new PostService(db);
         var older = MakePost("Older");
         older.CreatedAt = DateTime.UtcNow.AddDays(-1);
@@ -47,7 +51,7 @@ public class PostServiceTests
     [Fact]
     public async Task GetPublishedAsync_ExcludesDrafts()
     {
-        using var db = CreateDb();
+        var db = CreateDb();
         var svc = new PostService(db);
         await svc.CreateAsync(MakePost("Draft", published: false));
         await svc.CreateAsync(MakePost("Published", published: true));
@@ -61,7 +65,7 @@ public class PostServiceTests
     [Fact]
     public async Task GetBySlugAsync_ReturnsNullForUnpublishedPost()
     {
-        using var db = CreateDb();
+        var db = CreateDb();
         var svc = new PostService(db);
         await svc.CreateAsync(MakePost("draft-post", published: false));
 
@@ -73,7 +77,7 @@ public class PostServiceTests
     [Fact]
     public async Task GetBySlugAsync_ReturnsPublishedPost()
     {
-        using var db = CreateDb();
+        var db = CreateDb();
         var svc = new PostService(db);
         await svc.CreateAsync(MakePost("live-post", published: true));
 
@@ -86,7 +90,7 @@ public class PostServiceTests
     [Fact]
     public async Task CreateAsync_PersistsPost()
     {
-        using var db = CreateDb();
+        var db = CreateDb();
         var svc = new PostService(db);
 
         await svc.CreateAsync(MakePost("Hello"));
@@ -99,7 +103,7 @@ public class PostServiceTests
     [Fact]
     public async Task UpdateAsync_MutatesPost()
     {
-        using var db = CreateDb();
+        var db = CreateDb();
         var svc = new PostService(db);
         await svc.CreateAsync(MakePost("Original"));
         var post = (await svc.GetAllAsync())[0];
@@ -114,7 +118,7 @@ public class PostServiceTests
     [Fact]
     public async Task DeleteAsync_RemovesPost()
     {
-        using var db = CreateDb();
+        var db = CreateDb();
         var svc = new PostService(db);
         await svc.CreateAsync(MakePost("To Delete"));
         var post = (await svc.GetAllAsync())[0];
