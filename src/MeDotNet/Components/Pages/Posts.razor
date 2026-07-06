@@ -1,0 +1,35 @@
+@page "/posts"
+@inject PostService PostService
+
+<PageTitle>Blog</PageTitle>
+<h1>Blog</h1>
+
+@if (_posts is null)
+{
+    <p>Loading…</p>
+}
+else if (_posts.Count == 0)
+{
+    <p>No posts yet.</p>
+}
+else
+{
+    @foreach (var post in _posts)
+    {
+        <article style="margin-bottom:2rem">
+            <h2><a href="/posts/@post.Slug">@post.Title</a></h2>
+            <time>@post.PublishedAt!.Value.ToString("MMMM d, yyyy")</time>
+            <p>@Excerpt(post.Body)</p>
+        </article>
+    }
+}
+
+@code {
+    private List<Post>? _posts;
+
+    protected override async Task OnInitializedAsync() =>
+        _posts = await PostService.GetPublishedAsync();
+
+    private static string Excerpt(string body) =>
+        body.Length <= 150 ? body : body[..150] + "…";
+}

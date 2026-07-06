@@ -1,0 +1,28 @@
+@page "/posts/{Slug}"
+@inject PostService PostService
+
+<PageTitle>@(_post?.Title ?? "Not Found")</PageTitle>
+
+@if (_post is null)
+{
+    <h1>Post not found.</h1>
+}
+else
+{
+    <h1>@_post.Title</h1>
+    <time>@_post.PublishedAt!.Value.ToString("MMMM d, yyyy")</time>
+    <p style="white-space:pre-wrap">@_post.Body</p>
+}
+
+@code {
+    [Parameter] public string Slug { get; set; } = "";
+    [CascadingParameter] HttpContext? HttpContext { get; set; }
+    private Post? _post;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _post = await PostService.GetBySlugAsync(Slug);
+        if (_post is null && HttpContext is not null)
+            HttpContext.Response.StatusCode = 404;
+    }
+}
