@@ -1,0 +1,122 @@
+@page "/admin/posts/new"
+@page "/admin/posts/{Id:int}"
+@attribute [Authorize]
+@rendermode InteractiveServer
+@inject PostService PostService
+@inject NavigationManager Nav
+@inject AuthenticationStateProvider AuthStateProvider
+
+<PageTitle>@(_isNew ? "New Post" : "Edit Post") — Admin</PageTitle>
+<h1>@(_isNew ? "New Post" : "Edit Post")</h1>
+
+@if (_error is not null)
+{
+    <p style="color:red">@_error</p>
+}
+
+<div>
+    <label>Title</label><br />
+    <input type="text" value="@_title" @oninput="OnTitleInput" style="width:100%" />
+</div>
+<br />
+<div>
+    <label>Slug</label><br />
+    <input type="text" value="@_slug" @oninput="OnSlugInput" style="width:100%" />
+</div>
+<br />
+<div>
+    <label>Body</label><br />
+    <textarea rows="15" style="width:100%" @bind="_body"></textarea>
+</div>
+<br />
+<div>
+    <label>
+        <input type="checkbox" @bind="_published" /> Published
+    </label>
+</div>
+<br />
+<button @onclick="SaveAsync">Save</button>
+&nbsp;
+<a href="/admin/posts">Cancel</a>
+
+@code {
+    [Parameter] public int? Id { get; set; }
+
+    private string _title = "";
+    private string _slug = "";
+    private string _body = "";
+    private bool _published;
+    private bool _slugManuallyEdited;
+    private string? _error;
+    private bool _isNew => Id is null;
+    private Post? _existing;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id is not null)
+        {
+            _existing = await PostService.GetByIdAsync(Id.Value);
+            if (_existing is not null)
+            {
+                _title = _existing.Title;
+                _slug = _existing.Slug;
+                _body = _existing.Body;
+                _published = _existing.PublishedAt.HasValue;
+                _slugManuallyEdited = true; // Don't overwrite slug when editing existing post
+            }
+        }
+    }
+
+    private void OnTitleInput(ChangeEventArgs e)
+    {
+        _title = e.Value?.ToString() ?? "";
+        if (!_slugManuallyEdited)
+            _slug = GenerateSlug(_title);
+    }
+
+    private void OnSlugInput(ChangeEventArgs e)
+    {
+        _slug = e.Value?.ToString() ?? "";
+        _slugManuallyEdited = true;
+    }
+
+    private static string GenerateSlug(string title) =>
+        System.Text.RegularExpressions.Regex.Replace(
+            title.ToLowerInvariant().Replace(' ', '-'),
+            @"[^a-z0-9-]", "").Trim('-');
+
+    private async Task SaveAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_title)) { _error = "Title is required."; return; }
+        if (string.IsNullOrWhiteSpace(_slug))  { _error = "Slug is required."; return; }
+        if (string.IsNullOrWhiteSpace(_body))  { _error = "Body is required."; return; }
+
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var userId = authState.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "";
+
+        if (_isNew)
+        {
+            var post = new Post
+            {
+                Title = _title,
+                Slug = _slug,
+                Body = _body,
+                AuthorId = userId,
+                PublishedAt = _published ? DateTime.UtcNow : null
+            };
+            await PostService.CreateAsync(post);
+        }
+        else if (_existing is not null)
+        {
+            _existing.Title = _title;
+            _existing.Slug = _slug;
+            _existing.Body = _body;
+            _existing.PublishedAt = _published
+                ? (_existing.PublishedAt ?? DateTime.UtcNow)  // Preserve original publish time if re-publishing
+                : null;
+            await PostService.UpdateAsync(_existing);
+        }
+
+        Nav.NavigateTo("/admin/posts");
+    }
+}
