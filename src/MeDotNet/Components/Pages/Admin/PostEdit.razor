@@ -2,6 +2,7 @@
 @page "/admin/posts/{Id:int}"
 @attribute [Authorize]
 @rendermode InteractiveServer
+@using Microsoft.EntityFrameworkCore
 @inject PostService PostService
 @inject NavigationManager Nav
 @inject AuthenticationStateProvider AuthStateProvider
@@ -64,6 +65,10 @@
                 _published = _existing.PublishedAt.HasValue;
                 _slugManuallyEdited = true; // Don't overwrite slug when editing existing post
             }
+            else
+            {
+                _error = "This post no longer exists.";
+            }
         }
     }
 
@@ -94,27 +99,39 @@
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var userId = authState.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "";
 
-        if (_isNew)
+        try
         {
-            var post = new Post
+            if (_isNew)
             {
-                Title = _title,
-                Slug = _slug,
-                Body = _body,
-                AuthorId = userId,
-                PublishedAt = _published ? DateTime.UtcNow : null
-            };
-            await PostService.CreateAsync(post);
+                var post = new Post
+                {
+                    Title = _title,
+                    Slug = _slug,
+                    Body = _body,
+                    AuthorId = userId,
+                    PublishedAt = _published ? DateTime.UtcNow : null
+                };
+                await PostService.CreateAsync(post);
+            }
+            else if (_existing is not null)
+            {
+                _existing.Title = _title;
+                _existing.Slug = _slug;
+                _existing.Body = _body;
+                _existing.PublishedAt = _published
+                    ? (_existing.PublishedAt ?? DateTime.UtcNow)  // Preserve original publish time if re-publishing
+                    : null;
+                await PostService.UpdateAsync(_existing);
+            }
+            else
+            {
+                return;
+            }
         }
-        else if (_existing is not null)
+        catch (DbUpdateException)
         {
-            _existing.Title = _title;
-            _existing.Slug = _slug;
-            _existing.Body = _body;
-            _existing.PublishedAt = _published
-                ? (_existing.PublishedAt ?? DateTime.UtcNow)  // Preserve original publish time if re-publishing
-                : null;
-            await PostService.UpdateAsync(_existing);
+            _error = "A post with this slug already exists. Please choose a different slug.";
+            return;
         }
 
         Nav.NavigateTo("/admin/posts");
