@@ -9,37 +9,25 @@
 @implements IDisposable
 
 <PageTitle>@(_isNew ? "New Post" : "Edit Post") — Admin</PageTitle>
-<h1>@(_isNew ? "New Post" : "Edit Post")</h1>
+<MudText Typo="Typo.h4" GutterBottom="true">@(_isNew ? "New Post" : "Edit Post")</MudText>
 
 @if (_error is not null)
 {
-    <p style="color:red">@_error</p>
+    <MudAlert Severity="Severity.Error" Class="mb-4">@_error</MudAlert>
 }
 
-<div>
-    <label>Title</label><br />
-    <input type="text" value="@_title" @oninput="OnTitleInput" style="width:100%" />
+<MudTextField T="string" Label="Title" Value="_title" ValueChanged="OnTitleChanged"
+              Immediate="true" Variant="Variant.Outlined" Class="mb-4" />
+<MudTextField T="string" Label="Slug" Value="_slug" ValueChanged="OnSlugChanged"
+              Immediate="true" Variant="Variant.Outlined" Class="mb-4" />
+<MudTextField T="string" Label="Body" @bind-Value="_body" Lines="15"
+              Variant="Variant.Outlined" Class="mb-4" />
+<MudSwitch @bind-Value="_published" Label="Published" Color="Color.Primary" Class="mb-4" />
+
+<div class="d-flex gap-4">
+    <MudButton OnClick="SaveAsync" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+    <MudButton Href="/admin/posts" Variant="Variant.Text">Cancel</MudButton>
 </div>
-<br />
-<div>
-    <label>Slug</label><br />
-    <input type="text" value="@_slug" @oninput="OnSlugInput" style="width:100%" />
-</div>
-<br />
-<div>
-    <label>Body</label><br />
-    <textarea rows="15" style="width:100%" @bind="_body"></textarea>
-</div>
-<br />
-<div>
-    <label>
-        <input type="checkbox" @bind="_published" /> Published
-    </label>
-</div>
-<br />
-<button @onclick="SaveAsync">Save</button>
-&nbsp;
-<a href="/admin/posts">Cancel</a>
 
 @code {
     [Parameter] public int? Id { get; set; }
@@ -75,18 +63,16 @@
         }
     }
 
-    public void Dispose() => _loader?.Dispose();
-
-    private void OnTitleInput(ChangeEventArgs e)
+    private void OnTitleChanged(string value)
     {
-        _title = e.Value?.ToString() ?? "";
+        _title = value;
         if (!_slugManuallyEdited)
             _slug = GenerateSlug(_title);
     }
 
-    private void OnSlugInput(ChangeEventArgs e)
+    private void OnSlugChanged(string value)
     {
-        _slug = e.Value?.ToString() ?? "";
+        _slug = value;
         _slugManuallyEdited = true;
     }
 
@@ -124,7 +110,7 @@
                 _existing.Slug = _slug;
                 _existing.Body = _body;
                 _existing.PublishedAt = _published
-                    ? (_existing.PublishedAt ?? DateTime.UtcNow)  // Preserve original publish time if re-publishing
+                    ? (_existing.PublishedAt ?? DateTime.UtcNow)
                     : null;
                 await PostService.UpdateAsync(_existing);
             }
@@ -141,4 +127,6 @@
 
         Nav.NavigateTo("/admin/posts");
     }
+
+    public void Dispose() => _loader?.Dispose();
 }

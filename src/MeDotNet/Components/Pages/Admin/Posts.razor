@@ -1,52 +1,56 @@
 @page "/admin/posts"
 @attribute [Authorize]
 @inject PostService PostService
-@inject IJSRuntime JS
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
 @inject PersistentComponentState ApplicationState
 @implements IDisposable
 
 <PageTitle>Posts — Admin</PageTitle>
 
-<h1>Posts</h1>
-<a href="/admin/posts/new">New Post</a>
+<div class="d-flex align-center mb-4">
+    <MudText Typo="Typo.h4">Posts</MudText>
+    <MudSpacer />
+    <MudButton Href="/admin/posts/new" Variant="Variant.Filled" Color="Color.Primary"
+               StartIcon="@Icons.Material.Filled.Add">New Post</MudButton>
+</div>
 
 @if (_posts is null)
 {
-    <p>Loading…</p>
+    <MudProgressCircular Indeterminate="true" />
 }
 else if (_posts.Count == 0)
 {
-    <p>No posts yet.</p>
+    <MudText>No posts yet.</MudText>
 }
 else
 {
-    <table>
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>Slug</th>
-                <th>Status</th>
-                <th>Created</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var post in _posts)
-            {
-                <tr>
-                    <td>@post.Title</td>
-                    <td>@post.Slug</td>
-                    <td>@(post.PublishedAt.HasValue ? "Published" : "Draft")</td>
-                    <td>@post.CreatedAt.ToString("yyyy-MM-dd")</td>
-                    <td>
-                        <a href="/admin/posts/@post.Id">Edit</a>
-                        &nbsp;
-                        <button @onclick="() => DeleteAsync(post.Id)">Delete</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <MudTable Items="_posts" Hover="true" Elevation="1">
+        <HeaderContent>
+            <MudTh>Title</MudTh>
+            <MudTh>Slug</MudTh>
+            <MudTh>Status</MudTh>
+            <MudTh>Created</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Title">@context.Title</MudTd>
+            <MudTd DataLabel="Slug">@context.Slug</MudTd>
+            <MudTd DataLabel="Status">
+                <MudChip T="string" Size="Size.Small"
+                         Color="@(context.PublishedAt.HasValue ? Color.Success : Color.Default)">
+                    @(context.PublishedAt.HasValue ? "Published" : "Draft")
+                </MudChip>
+            </MudTd>
+            <MudTd DataLabel="Created">@context.CreatedAt.ToString("yyyy-MM-dd")</MudTd>
+            <MudTd>
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
+                               Href="@($"/admin/posts/{context.Id}")" aria-label="Edit" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error"
+                               OnClick="() => DeleteAsync(context)" aria-label="Delete" />
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
 }
 
 @code {
@@ -59,14 +63,20 @@ else
         _posts = await _loader.LoadAsync("admin-posts", () => PostService.GetAllAsync());
     }
 
-    public void Dispose() => _loader?.Dispose();
-
-    private async Task DeleteAsync(int id)
+    private async Task DeleteAsync(Post post)
     {
-        if (await JS.InvokeAsync<bool>("confirm", "Delete this post?"))
+        var confirmed = await DialogService.ShowMessageBoxAsync(
+            "Delete post",
+            $"Delete \"{post.Title}\"? This cannot be undone.",
+            yesText: "Delete", cancelText: "Cancel");
+
+        if (confirmed == true)
         {
-            await PostService.DeleteAsync(id);
+            await PostService.DeleteAsync(post.Id);
             _posts = await PostService.GetAllAsync();
+            Snackbar.Add("Post deleted.", Severity.Success);
         }
     }
+
+    public void Dispose() => _loader?.Dispose();
 }
