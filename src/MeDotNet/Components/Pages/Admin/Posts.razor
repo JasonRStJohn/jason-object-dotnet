@@ -2,6 +2,8 @@
 @attribute [Authorize]
 @inject PostService PostService
 @inject IJSRuntime JS
+@inject PersistentComponentState ApplicationState
+@implements IDisposable
 
 <PageTitle>Posts — Admin</PageTitle>
 
@@ -49,9 +51,15 @@ else
 
 @code {
     private List<Post>? _posts;
+    private PersistentLoader? _loader;
 
-    protected override async Task OnInitializedAsync() =>
-        _posts = await PostService.GetAllAsync();
+    protected override async Task OnInitializedAsync()
+    {
+        _loader = new PersistentLoader(ApplicationState);
+        _posts = await _loader.LoadAsync("admin-posts", () => PostService.GetAllAsync());
+    }
+
+    public void Dispose() => _loader?.Dispose();
 
     private async Task DeleteAsync(int id)
     {

@@ -5,6 +5,8 @@
 @inject PostService PostService
 @inject NavigationManager Nav
 @inject AuthenticationStateProvider AuthStateProvider
+@inject PersistentComponentState ApplicationState
+@implements IDisposable
 
 <PageTitle>@(_isNew ? "New Post" : "Edit Post") — Admin</PageTitle>
 <h1>@(_isNew ? "New Post" : "Edit Post")</h1>
@@ -50,19 +52,21 @@
     private string? _error;
     private bool _isNew => Id is null;
     private Post? _existing;
+    private PersistentLoader? _loader;
 
     protected override async Task OnInitializedAsync()
     {
+        _loader = new PersistentLoader(ApplicationState);
         if (Id is not null)
         {
-            _existing = await PostService.GetByIdAsync(Id.Value);
+            _existing = await _loader.LoadAsync($"post-edit-{Id}", () => PostService.GetByIdAsync(Id.Value));
             if (_existing is not null)
             {
                 _title = _existing.Title;
                 _slug = _existing.Slug;
                 _body = _existing.Body;
                 _published = _existing.PublishedAt.HasValue;
-                _slugManuallyEdited = true; // Don't overwrite slug when editing existing post
+                _slugManuallyEdited = true;
             }
             else
             {
@@ -70,6 +74,8 @@
             }
         }
     }
+
+    public void Dispose() => _loader?.Dispose();
 
     private void OnTitleInput(ChangeEventArgs e)
     {

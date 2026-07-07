@@ -1,5 +1,7 @@
 @page "/posts"
 @inject PostService PostService
+@inject PersistentComponentState ApplicationState
+@implements IDisposable
 
 <PageTitle>Blog</PageTitle>
 <h1>Blog</h1>
@@ -26,10 +28,16 @@ else
 
 @code {
     private List<Post>? _posts;
+    private PersistentLoader? _loader;
 
-    protected override async Task OnInitializedAsync() =>
-        _posts = await PostService.GetPublishedAsync();
+    protected override async Task OnInitializedAsync()
+    {
+        _loader = new PersistentLoader(ApplicationState);
+        _posts = await _loader.LoadAsync("public-posts", () => PostService.GetPublishedAsync());
+    }
 
     private static string Excerpt(string body) =>
         body.Length <= 150 ? body : body[..150] + "…";
+
+    public void Dispose() => _loader?.Dispose();
 }
