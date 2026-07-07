@@ -21,7 +21,11 @@
             <AuthorizeView>
                 <Authorized>
                     <MudNavLink Href="admin/posts" Icon="@Icons.Material.Filled.EditNote">Manage Posts</MudNavLink>
-                    <MudNavLink Href="account/logout" Icon="@Icons.Material.Filled.Logout">Logout</MudNavLink>
+                    <form method="post" action="/account/logout" class="d-flex px-4 py-2">
+                        <AntiforgeryToken />
+                        <MudButton ButtonType="ButtonType.Submit" StartIcon="@Icons.Material.Filled.Logout"
+                                   FullWidth="true" Class="justify-start">Logout</MudButton>
+                    </form>
                 </Authorized>
                 <NotAuthorized>
                     <MudNavLink Href="account/login" Icon="@Icons.Material.Filled.Login">Login</MudNavLink>
