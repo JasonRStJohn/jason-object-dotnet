@@ -1,0 +1,88 @@
+@page "/projects"
+
+<PageTitle>Projects — JasonObject</PageTitle>
+
+<h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">Projects</h1>
+
+<MudText Typo="Typo.body1" Class="mb-6">
+    Nine projects, newest first. The employer-built systems can't be linked, but they're the bulk
+    of the story — ask me about any of them.
+</MudText>
+
+@foreach (var project in _projects)
+{
+    <MudCard Class="mb-4" Elevation="1">
+        <MudCardContent>
+            <h2 class="mud-typography mud-typography-h6">@project.Title</h2>
+            <MudText Typo="Typo.caption" Class="d-block mb-2">@project.Meta</MudText>
+            <MudText Typo="Typo.body1">@project.Body</MudText>
+            @if (project.Employer)
+            {
+                <MudText Typo="Typo.caption" Class="d-block mt-2 mud-text-secondary">
+                    Built at my current employer — not publicly available.
+                </MudText>
+            }
+        </MudCardContent>
+        @if (project.LinkHref is not null)
+        {
+            <MudCardActions>
+                <MudButton Href="@project.LinkHref" Target="_blank" Variant="Variant.Text"
+                           Color="Color.Primary" EndIcon="@Icons.Material.Filled.OpenInNew">
+                    @project.LinkText
+                </MudButton>
+            </MudCardActions>
+        }
+    </MudCard>
+}
+
+@code {
+    private record ProjectEntry(string Title, string Meta, string Body, string? LinkText, string? LinkHref, bool Employer);
+
+    private static readonly ProjectEntry[] _projects =
+    [
+        new("jasonobject.work — this site",
+            "Personal, 2026 · Blazor Web App, .NET 9, EF Core, ASP.NET Identity, MudBlazor, Docker",
+            "The site you're reading, built as a working demonstration of AI-assisted engineering: every phase ran brainstorm → spec → implementation plan → agent-executed tasks, with code review gating each one. Blazor Web App with a hand-rolled CMS, EF Core, Identity auth, and MudBlazor, shipping via Docker.",
+            "Source on GitHub", "https://github.com/JasonRStJohn/jason-object-dotnet", false),
+
+        new("Job Management Platform 2.0",
+            "Employer · .NET Core, Vue, Nuxt",
+            "Lead developer and architect of the company's flagship rebuild — job creation, dynamic workflow management, and progress tracking on a modern stack, with inventory and production reporting on the roadmap.",
+            null, null, true),
+
+        new("Automation scripting engine",
+            "Employer · C#, JSON instruction sets",
+            "A modular automation language that consumes JSON instruction sets to process mailing lists and artwork into personalized, USPS-sorted mail files for the production floor. My favorite part: a workflow that generates its own instructions from defined criteria.",
+            null, null, true),
+
+        new("Ballot production & tracking",
+            "Employer · Vue, .NET Framework",
+            "Primary developer on a high-velocity system carrying election ballot orders from intake through production, then tracking mail pieces to voters and back to boards of elections. It leaned hard on the automation engine above — and the pace taught me a lot about technical debt, by way of the flexibility it cost that engine.",
+            null, null, true),
+
+        new("Client Portal 2.0",
+            "Employer · Vue",
+            "One of three developers who salvaged an outsourced client portal — inherited stack choices and all — reorganizing the codebase into something maintainable enough to hand off for continued development.",
+            null, null, true),
+
+        new("Multi-workflow job system",
+            "Employer · C#",
+            "My first major C# project: re-architected a single-workflow job system so one job could run multiple template-generated workflows, with steps and ordering editable by management on the fly.",
+            null, null, true),
+
+        new("Reactive invoicing system",
+            "Employer · Vue, .NET Framework",
+            "Asked to make invoicing \"look like PayPal\" in a jQuery shop, I introduced Vue instead — CDN-loaded, no build step, but reactive. It seeded the modern front-end stack the company now uses everywhere.",
+            null, null, true),
+
+        new("CateredTo",
+            "Infinity Graphics · WordPress, PHP",
+            "A menu-editing plugin for a catering business that ballooned into a full quoting system with invoice generation. In the long run it shouldn't have been a WordPress plugin — and it should have taught me more about scope creep than it did.",
+            "Source on GitHub", "https://github.com/JasonRStJohn/catered-to", false),
+
+        new("AGFTC website",
+            "Infinity Graphics · WordPress (underscores base)",
+            "My first theme written mostly from scratch, with hand-built support for multiple post types, for the Adirondack/Glens Falls Transportation Council. The organization has since been reorganized, so the live site's days may be numbered.",
+            "agftc.org", "https://agftc.org", false),
+    ];
+}
