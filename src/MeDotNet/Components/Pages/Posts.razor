@@ -4,7 +4,7 @@
 @implements IDisposable
 
 <PageTitle>Blog</PageTitle>
-<MudText Typo="Typo.h3" GutterBottom="true">Blog</MudText>
+<h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">Blog</h1>
 
 @if (_posts is null)
 {
@@ -20,7 +20,7 @@ else
     {
         <MudCard Class="mb-6" Elevation="1">
             <MudCardContent>
-                <MudLink Href="@($"/posts/{post.Slug}")" Typo="Typo.h5">@post.Title</MudLink>
+                <MudText Typo="Typo.h5"><MudLink Href="@($"/posts/{post.Slug}")" Typo="Typo.h5">@post.Title</MudLink></MudText>
                 <MudText Typo="Typo.caption" Class="d-block mb-2">
                     @post.PublishedAt!.Value.ToString("MMMM d, yyyy")
                 </MudText>

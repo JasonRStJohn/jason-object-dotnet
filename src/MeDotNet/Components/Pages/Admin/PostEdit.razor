@@ -9,7 +9,7 @@
 @implements IDisposable
 
 <PageTitle>@(_isNew ? "New Post" : "Edit Post") — Admin</PageTitle>
-<MudText Typo="Typo.h4" GutterBottom="true">@(_isNew ? "New Post" : "Edit Post")</MudText>
+<h1 class="mud-typography mud-typography-h4 mud-typography-gutterbottom">@(_isNew ? "New Post" : "Edit Post")</h1>
 
 @if (_error is not null)
 {
