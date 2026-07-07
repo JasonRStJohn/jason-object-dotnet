@@ -3,12 +3,34 @@
 @inject PersistentComponentState ApplicationState
 @implements IDisposable
 
-<PageTitle>MeDotNet</PageTitle>
+<PageTitle>JasonObject — Jason St. John</PageTitle>
 
-<MudPaper Class="pa-6 mb-8" Elevation="1">
-    <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">MeDotNet</h1>
-    <MudText Typo="Typo.body1">Personal site and blog, built with Blazor.</MudText>
+<MudPaper Class="pa-6 mb-6" Elevation="1">
+    <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">Jason St. John</h1>
+    <p class="mud-typography mud-typography-h5 mud-typography-gutterbottom">
+        Lead full-stack developer. I teach machines to build software.
+    </p>
+    <MudText Typo="Typo.body1">
+        Eight years architecting production .NET and Vue/Nuxt platforms — and a teaching background
+        that turns out to be the sharpest tool in AI-assisted engineering. Directing coding agents is
+        an instruction problem: decomposition, scaffolding, feedback, and knowing whether the system
+        misunderstood or just lacked context. I've spent my whole career getting good at exactly that.
+    </MudText>
 </MudPaper>
+
+<MudPaper Class="pa-4 mb-4" Elevation="1">
+    <MudText Typo="Typo.body1">
+        <b>This site is the demo.</b> A Blazor Web App — EF Core, Identity, MudBlazor, Docker —
+        designed, specced, and built by directing AI coding agents through plan-driven development,
+        with every task reviewed before it landed.
+        <MudLink Href="https://github.com/JasonRStJohn/jason-object-dotnet" Target="_blank">Read the code →</MudLink>
+    </MudText>
+</MudPaper>
+
+<div class="d-flex gap-4 mb-8">
+    <MudButton Href="/about" Variant="Variant.Filled" Color="Color.Primary">About me</MudButton>
+    <MudButton Href="/projects" Variant="Variant.Outlined" Color="Color.Primary">See the projects</MudButton>
+</div>
 
 <h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">Recent posts</h2>
 
