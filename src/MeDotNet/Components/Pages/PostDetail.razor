@@ -1,28 +1,39 @@
 @page "/posts/{Slug}"
 @inject PostService PostService
+@inject PersistentComponentState ApplicationState
+@implements IDisposable
 
 <PageTitle>@(_post?.Title ?? "Not Found")</PageTitle>
 
 @if (_post is null)
 {
-    <h1>Post not found.</h1>
+    <h1 class="mud-typography mud-typography-h4">Post not found.</h1>
+    <MudButton Href="/posts" Variant="Variant.Text" StartIcon="@Icons.Material.Filled.ArrowBack" Class="mt-4">
+        Back to blog
+    </MudButton>
 }
 else
 {
-    <h1>@_post.Title</h1>
-    <time>@_post.PublishedAt!.Value.ToString("MMMM d, yyyy")</time>
-    <p style="white-space:pre-wrap">@_post.Body</p>
+    <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">@_post.Title</h1>
+    <MudText Typo="Typo.caption" Class="d-block mb-6">
+        @_post.PublishedAt!.Value.ToString("MMMM d, yyyy")
+    </MudText>
+    <MudText Typo="Typo.body1" Style="white-space: pre-wrap">@_post.Body</MudText>
 }
 
 @code {
     [Parameter] public string Slug { get; set; } = "";
     [CascadingParameter] HttpContext? HttpContext { get; set; }
     private Post? _post;
+    private PersistentLoader? _loader;
 
     protected override async Task OnInitializedAsync()
     {
-        _post = await PostService.GetBySlugAsync(Slug);
+        _loader = new PersistentLoader(ApplicationState);
+        _post = await _loader.LoadAsync($"post-{Slug}", () => PostService.GetBySlugAsync(Slug));
         if (_post is null && HttpContext is not null)
             HttpContext.Response.StatusCode = 404;
     }
+
+    public void Dispose() => _loader?.Dispose();
 }

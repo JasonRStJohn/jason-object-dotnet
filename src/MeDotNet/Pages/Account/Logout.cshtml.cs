@@ -13,6 +13,8 @@ public class LogoutModel : PageModel
         _authService = authService;
     }
 
+    public IActionResult OnGet() => LocalRedirect("/");
+
     public async Task<IActionResult> OnPostAsync()
     {
         await _authService.SignOutAsync();

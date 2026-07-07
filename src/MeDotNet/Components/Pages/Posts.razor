@@ -1,35 +1,47 @@
 @page "/posts"
 @inject PostService PostService
+@inject PersistentComponentState ApplicationState
+@implements IDisposable
 
 <PageTitle>Blog</PageTitle>
-<h1>Blog</h1>
+<h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">Blog</h1>
 
 @if (_posts is null)
 {
-    <p>Loading…</p>
+    <MudProgressCircular Indeterminate="true" />
 }
 else if (_posts.Count == 0)
 {
-    <p>No posts yet.</p>
+    <MudText>No posts yet.</MudText>
 }
 else
 {
     @foreach (var post in _posts)
     {
-        <article style="margin-bottom:2rem">
-            <h2><a href="/posts/@post.Slug">@post.Title</a></h2>
-            <time>@post.PublishedAt!.Value.ToString("MMMM d, yyyy")</time>
-            <p>@Excerpt(post.Body)</p>
-        </article>
+        <MudCard Class="mb-6" Elevation="1">
+            <MudCardContent>
+                <MudText Typo="Typo.h5"><MudLink Href="@($"/posts/{post.Slug}")" Typo="Typo.h5">@post.Title</MudLink></MudText>
+                <MudText Typo="Typo.caption" Class="d-block mb-2">
+                    @post.PublishedAt!.Value.ToString("MMMM d, yyyy")
+                </MudText>
+                <MudText Typo="Typo.body1">@Excerpt(post.Body)</MudText>
+            </MudCardContent>
+        </MudCard>
     }
 }
 
 @code {
     private List<Post>? _posts;
+    private PersistentLoader? _loader;
 
-    protected override async Task OnInitializedAsync() =>
-        _posts = await PostService.GetPublishedAsync();
+    protected override async Task OnInitializedAsync()
+    {
+        _loader = new PersistentLoader(ApplicationState);
+        _posts = await _loader.LoadAsync("public-posts", () => PostService.GetPublishedAsync());
+    }
 
     private static string Excerpt(string body) =>
         body.Length <= 150 ? body : body[..150] + "…";
+
+    public void Dispose() => _loader?.Dispose();
 }

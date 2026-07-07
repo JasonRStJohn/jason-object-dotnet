@@ -17,6 +17,9 @@ public class LoginModel : PageModel
     [BindProperty]
     public InputModel Input { get; set; } = new();
 
+    [BindProperty(SupportsGet = true)]
+    public string? ReturnUrl { get; set; }
+
     public class InputModel
     {
         [Required, EmailAddress]
@@ -33,7 +36,7 @@ public class LoginModel : PageModel
 
         var result = await _authService.SignInAsync(Input.Email, Input.Password);
         if (result.Success)
-            return LocalRedirect("/admin/posts");
+            return LocalRedirect(Url.IsLocalUrl(ReturnUrl) ? ReturnUrl! : "/admin/posts");
 
         ModelState.AddModelError(string.Empty, result.ErrorMessage!);
         return Page();

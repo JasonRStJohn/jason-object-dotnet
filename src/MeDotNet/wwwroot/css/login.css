@@ -1,0 +1,92 @@
+:root {
+    color-scheme: light dark;
+    --mud-primary: #594ae2;
+    --surface: #ffffff;
+    --text: rgba(0, 0, 0, 0.87);
+    --border: rgba(0, 0, 0, 0.23);
+    --page-bg: #f5f5f5;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --surface: #1e1e2d;
+        --text: rgba(255, 255, 255, 0.87);
+        --border: rgba(255, 255, 255, 0.3);
+        --page-bg: #151521;
+    }
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Roboto', sans-serif;
+    background: var(--page-bg);
+    color: var(--text);
+}
+
+.login-card {
+    background: var(--surface);
+    border-radius: 8px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 24rem;
+}
+
+.login-card h1 {
+    margin: 0 0 1.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-align: center;
+}
+
+.login-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.login-card label {
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+}
+
+.login-card input:not([type="hidden"]) {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 1rem;
+    padding: 0.75rem;
+}
+
+.login-card input:focus {
+    border-color: var(--mud-primary);
+    outline: 1px solid var(--mud-primary);
+}
+
+.login-card button {
+    background: var(--mud-primary);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    text-transform: uppercase;
+}
+
+.login-card button:hover {
+    filter: brightness(1.1);
+}
+
+.login-error {
+    color: #f44336;
+    font-size: 0.8rem;
+}

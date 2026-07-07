@@ -5,6 +5,7 @@ using MeDotNet.Data;
 using MeDotNet.Models;
 using MeDotNet.Services.Auth;
 using MeDotNet.Services.Posts;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddRazorPages();
+
+builder.Services.AddMudServices();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -105,11 +108,5 @@ app.UseAntiforgery();
 app.MapRazorPages();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
-
-app.MapGet("/account/logout", async (SignInManager<ApplicationUser> signInManager) =>
-{
-    await signInManager.SignOutAsync();
-    return Results.LocalRedirect("/");
-});
 
 app.Run();
