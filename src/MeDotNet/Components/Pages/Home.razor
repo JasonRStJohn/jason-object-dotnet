@@ -1,7 +1,51 @@
-﻿@page "/"
+@page "/"
+@inject PostService PostService
+@inject PersistentComponentState ApplicationState
+@implements IDisposable
 
-<PageTitle>Home</PageTitle>
+<PageTitle>MeDotNet</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudPaper Class="pa-6 mb-8" Elevation="1">
+    <MudText Typo="Typo.h3" GutterBottom="true">MeDotNet</MudText>
+    <MudText Typo="Typo.body1">Personal site and blog, built with Blazor.</MudText>
+</MudPaper>
 
-Welcome to your new app.
+<MudText Typo="Typo.h5" GutterBottom="true">Recent posts</MudText>
+
+@if (_recent is null)
+{
+    <MudProgressCircular Indeterminate="true" />
+}
+else if (_recent.Count == 0)
+{
+    <MudText>No posts yet.</MudText>
+}
+else
+{
+    @foreach (var post in _recent)
+    {
+        <MudCard Class="mb-4" Elevation="1">
+            <MudCardContent>
+                <MudLink Href="@($"/posts/{post.Slug}")" Typo="Typo.h6">@post.Title</MudLink>
+                <MudText Typo="Typo.caption">@post.PublishedAt!.Value.ToString("MMMM d, yyyy")</MudText>
+            </MudCardContent>
+        </MudCard>
+    }
+    <MudButton Href="/posts" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward" Class="mt-2">
+        View all posts
+    </MudButton>
+}
+
+@code {
+    private List<Post>? _recent;
+    private PersistentLoader? _loader;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loader = new PersistentLoader(ApplicationState);
+        _recent = await _loader.LoadAsync("home-recent",
+            async () => (await PostService.GetPublishedAsync()).Take(3).ToList());
+    }
+
+    public void Dispose() => _loader?.Dispose();
+}

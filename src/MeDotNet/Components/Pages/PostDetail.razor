@@ -7,13 +7,18 @@
 
 @if (_post is null)
 {
-    <h1>Post not found.</h1>
+    <MudText Typo="Typo.h4">Post not found.</MudText>
+    <MudButton Href="/posts" Variant="Variant.Text" StartIcon="@Icons.Material.Filled.ArrowBack" Class="mt-4">
+        Back to blog
+    </MudButton>
 }
 else
 {
-    <h1>@_post.Title</h1>
-    <time>@_post.PublishedAt!.Value.ToString("MMMM d, yyyy")</time>
-    <p style="white-space:pre-wrap">@_post.Body</p>
+    <MudText Typo="Typo.h3" GutterBottom="true">@_post.Title</MudText>
+    <MudText Typo="Typo.caption" Class="d-block mb-6">
+        @_post.PublishedAt!.Value.ToString("MMMM d, yyyy")
+    </MudText>
+    <MudText Typo="Typo.body1" Style="white-space: pre-wrap">@_post.Body</MudText>
 }
 
 @code {
