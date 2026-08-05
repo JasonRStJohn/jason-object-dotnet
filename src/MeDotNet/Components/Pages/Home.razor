@@ -1,62 +1,62 @@
 @page "/"
+@using MeDotNet.Models
 @inject PostService PostService
 @inject PersistentComponentState ApplicationState
 @implements IDisposable
 
 <PageTitle>JasonObject — Jason St. John</PageTitle>
 
-<MudPaper Class="pa-6 mb-6" Elevation="1">
-    <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">Jason St. John</h1>
-    <p class="mud-typography mud-typography-h5 mud-typography-gutterbottom">
-        Lead full-stack developer. I teach machines to build software.
-    </p>
-    <MudText Typo="Typo.body1">
-        Eight years architecting production .NET and Vue/Nuxt platforms — and a teaching background
-        that turns out to be the sharpest tool in AI-assisted engineering. Directing coding agents is
-        an instruction problem: decomposition, scaffolding, feedback, and knowing whether the system
-        misunderstood or just lacked context. I've spent my whole career getting good at exactly that.
-    </MudText>
-</MudPaper>
+<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-1">
+    Jason St. John — lead full-stack developer, Upstate New York
+</MudText>
 
-<MudPaper Class="pa-4 mb-4" Elevation="1">
-    <MudText Typo="Typo.body1">
-        <b>This site is the demo.</b> A Blazor Web App — EF Core, Identity, MudBlazor, Docker —
-        designed, specced, and built by directing AI coding agents through plan-driven development,
-        with every task reviewed before it landed.
-        <MudLink Href="https://github.com/JasonRStJohn/jason-object-dotnet" Target="_blank">Read the code →</MudLink>
-    </MudText>
-</MudPaper>
+<h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom" style="max-width: 22ch">
+    I sit between the people paying for software and the machines writing it.
+</h1>
 
-<div class="d-flex gap-4 mb-8">
-    <MudButton Href="/about" Variant="Variant.Filled" Color="Color.Primary">About me</MudButton>
-    <MudButton Href="/projects" Variant="Variant.Outlined" Color="Color.Primary">See the projects</MudButton>
-</div>
+<MudText Typo="Typo.body1" Class="mb-10" Style="max-width: 68ch">
+    Eight years architecting production .NET and Vue/Nuxt platforms, and a decade of teaching
+    before that. Directing AI agents is an instruction problem: decomposition, scaffolding,
+    feedback, and telling the difference between a model that misunderstood and one that simply
+    wasn't given enough. Below is the record of doing it.
+</MudText>
 
-<h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">Recent posts</h2>
+<MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4">Latest from the record</MudText>
 
-@if (_recent is null)
-{
-    <MudProgressCircular Indeterminate="true" />
-}
-else if (_recent.Count == 0)
-{
-    <MudText>No posts yet.</MudText>
-}
-else
-{
-    @foreach (var post in _recent)
-    {
-        <MudCard Class="mb-4" Elevation="1">
-            <MudCardContent>
-                <MudText Typo="Typo.h6"><MudLink Href="@($"/posts/{post.Slug}")" Typo="Typo.h6">@post.Title</MudLink></MudText>
-                <MudText Typo="Typo.caption">@post.PublishedAt!.Value.ToString("MMMM d, yyyy")</MudText>
-            </MudCardContent>
-        </MudCard>
-    }
-    <MudButton Href="/posts" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward" Class="mt-2">
-        View all posts
-    </MudButton>
-}
+<MudGrid Spacing="6">
+    <MudItem xs="12" md="8">
+        @if (_recent is null)
+        {
+            <MudProgressCircular Indeterminate="true" />
+        }
+        else if (_recent.Count == 0)
+        {
+            <MudText>The record starts soon.</MudText>
+        }
+        else
+        {
+            @foreach (var entry in _recent)
+            {
+                <RecordEntryRow Entry="entry" />
+            }
+            <MudButton Href="/notes" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward">
+                Read the whole record
+            </MudButton>
+        }
+    </MudItem>
+
+    <MudItem xs="12" md="4">
+        <MudPaper Class="pa-4" Elevation="1">
+            <MudImage Src="/img/jason-st-john.jpg" Alt="Jason St. John" Fluid="true" Class="rounded mb-3" />
+            <MudText Typo="Typo.body2" Class="mb-3">
+                Open to lead and staff engineering roles — and taking on contract work now.
+            </MudText>
+            <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">
+                Work with me
+            </MudButton>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 
 @code {
     private List<Post>? _recent;
