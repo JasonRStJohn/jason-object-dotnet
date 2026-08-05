@@ -36,7 +36,7 @@ public class MarkdownRendererTests
     {
         var html = MarkdownRenderer.ToHtml("<script>alert('x')</script>");
 
-        html.Should().NotContain("<script>alert('x')</script>");
+        html.Should().NotContain("<script");
     }
 
     [Fact]
