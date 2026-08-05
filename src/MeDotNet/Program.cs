@@ -106,6 +106,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();
 
+// Legacy blog routes — preserved so existing links survive the rename to /notes
+app.MapGet("/posts", () => Results.Redirect("/notes", permanent: true));
+app.MapGet("/posts/{slug}", (string slug) => Results.Redirect($"/notes/{slug}", permanent: true));
+
 app.MapRazorPages();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

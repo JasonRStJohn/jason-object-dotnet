@@ -1,0 +1,97 @@
+@page "/notes"
+@using MeDotNet.Models
+@inject PostService PostService
+@inject NavigationManager Nav
+@inject PersistentComponentState ApplicationState
+@implements IDisposable
+
+<PageTitle>The Record — JasonObject</PageTitle>
+
+<h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">The Record</h1>
+<MudText Typo="Typo.body1" Class="mb-6">
+    Specs, plans, post-mortems and notes from real builds — including the parts that went wrong.
+</MudText>
+
+<div class="d-flex flex-wrap gap-2 mb-2">
+    <MudChip T="string" Variant="@(_kind is null ? Variant.Filled : Variant.Outlined)"
+             Color="Color.Primary" OnClick="@(() => ApplyFilter(null, _project))">All</MudChip>
+    @foreach (var kind in _allKinds)
+    {
+        var captured = kind;
+        <MudChip T="string" Variant="@(_kind == captured ? Variant.Filled : Variant.Outlined)"
+                 Color="Color.Primary" OnClick="@(() => ApplyFilter(captured, _project))">
+            @captured.Label()
+        </MudChip>
+    }
+</div>
+
+@if (_projects is { Count: > 0 })
+{
+    <div class="d-flex flex-wrap gap-2 mb-6">
+        @foreach (var project in _projects)
+        {
+            var captured = project;
+            <MudChip T="string" Size="Size.Small"
+                     Variant="@(_project == captured ? Variant.Filled : Variant.Outlined)"
+                     Color="Color.Default" OnClick="@(() => ApplyFilter(_kind, _project == captured ? null : captured))">
+                @captured
+            </MudChip>
+        }
+    </div>
+}
+
+@if (_entries is null)
+{
+    <MudProgressCircular Indeterminate="true" />
+}
+else if (_entries.Count == 0)
+{
+    <MudText Class="my-8">
+        Nothing here with those filters yet.
+        <MudLink Href="/notes">Clear the filters</MudLink> to see everything in the record.
+    </MudText>
+}
+else
+{
+    @foreach (var entry in _entries)
+    {
+        <RecordEntryRow Entry="entry" />
+    }
+}
+
+@code {
+    [SupplyParameterFromQuery(Name = "kind")] public string? KindFilter { get; set; }
+    [SupplyParameterFromQuery(Name = "project")] public string? ProjectFilter { get; set; }
+
+    private static readonly PostKind[] _allKinds =
+        [PostKind.Spec, PostKind.Plan, PostKind.PostMortem, PostKind.Note];
+
+    private List<Post>? _entries;
+    private List<string>? _projects;
+    private PostKind? _kind;
+    private string? _project;
+    private PersistentLoader? _loader;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loader = new PersistentLoader(ApplicationState);
+        _projects = await _loader.LoadAsync("record-projects", () => PostService.GetProjectsAsync());
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _kind = PostKindDisplay.TryParseFilter(KindFilter, out var parsed) ? parsed : null;
+        _project = string.IsNullOrWhiteSpace(ProjectFilter) ? null : ProjectFilter;
+        _entries = await PostService.GetPublishedAsync(_kind, _project);
+    }
+
+    private void ApplyFilter(PostKind? kind, string? project)
+    {
+        var query = new List<string>();
+        if (kind is not null) query.Add($"kind={PostKindDisplay.FilterName(kind.Value)}");
+        if (!string.IsNullOrWhiteSpace(project)) query.Add($"project={Uri.EscapeDataString(project)}");
+        Nav.NavigateTo(query.Count == 0 ? "/notes" : $"/notes?{string.Join("&", query)}");
+    }
+
+    public void Dispose() => _loader?.Dispose();
+}

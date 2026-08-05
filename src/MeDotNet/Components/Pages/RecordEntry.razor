@@ -1,0 +1,49 @@
+@page "/notes/{Slug}"
+@using MeDotNet.Models
+@inject PostService PostService
+@inject PersistentComponentState ApplicationState
+@implements IDisposable
+
+<PageTitle>@($"{_post?.Title ?? "Not Found"} — JasonObject")</PageTitle>
+
+@if (_post is null)
+{
+    <h1 class="mud-typography mud-typography-h4">Entry not found.</h1>
+    <MudButton Href="/notes" Variant="Variant.Text" StartIcon="@Icons.Material.Filled.ArrowBack" Class="mt-4">
+        Back to the record
+    </MudButton>
+}
+else
+{
+    <div class="d-flex align-center gap-3 mb-2">
+        <MudChip T="string" Size="Size.Small" Style="@($"background-color:{_post.Kind.RailColor()};color:#fff;font-weight:700;letter-spacing:.08em;")">
+            @_post.Kind.Label()
+        </MudChip>
+        <MudText Typo="Typo.caption">
+            @(_post.Project is not null ? $"{_post.Project} · " : "")@_post.PublishedAt!.Value.ToString("d MMMM yyyy")
+        </MudText>
+    </div>
+    <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">@_post.Title</h1>
+    @if (!string.IsNullOrWhiteSpace(_post.Summary))
+    {
+        <MudText Typo="Typo.h6" Class="mud-text-secondary mb-6">@_post.Summary</MudText>
+    }
+    <MudText Typo="Typo.body1" Style="white-space: pre-wrap">@_post.Body</MudText>
+}
+
+@code {
+    [Parameter] public string Slug { get; set; } = "";
+    [CascadingParameter] HttpContext? HttpContext { get; set; }
+    private Post? _post;
+    private PersistentLoader? _loader;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loader = new PersistentLoader(ApplicationState);
+        _post = await _loader.LoadAsync($"note-{Slug}", () => PostService.GetBySlugAsync(Slug));
+        if (_post is null && HttpContext is not null)
+            HttpContext.Response.StatusCode = 404;
+    }
+
+    public void Dispose() => _loader?.Dispose();
+}
