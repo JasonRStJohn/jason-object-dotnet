@@ -11,25 +11,18 @@
                        OnClick="ToggleDrawer" aria-label="Toggle navigation" />
         <MudText Typo="Typo.h6" Class="ml-2">JasonObject</MudText>
         <MudSpacer />
-        <MudButton Href="/work" Variant="Variant.Outlined" Color="Color.Inherit" Class="mr-3 d-none d-sm-flex">
+        <MudButton Href="/work" Variant="Variant.Outlined" Color="Color.Inherit" Class="mr-3">
             Work with me
         </MudButton>
-        <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit"
-                       Href="https://github.com/JasonRStJohn" Target="_blank" aria-label="GitHub" Class="d-none d-sm-flex" />
-        <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn" Color="Color.Inherit"
-                       Href="https://www.linkedin.com/in/jasonrstjohn" Target="_blank" aria-label="LinkedIn" Class="d-none d-sm-flex" />
-        <MudIconButton Icon="@Icons.Material.Filled.Email" Color="Color.Inherit"
-                       Href="mailto:jasonrstjohn@gmail.com" aria-label="Email" Class="d-none d-sm-flex" />
         <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
                        Color="Color.Inherit" OnClick="ToggleDarkMode" aria-label="Toggle dark mode" />
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Class="d-flex flex-column">
         <MudNavMenu>
             <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
             <MudNavLink Href="notes" Icon="@Icons.Material.Filled.Article">The Record</MudNavLink>
             <MudNavLink Href="projects" Icon="@Icons.Material.Filled.Code">Projects</MudNavLink>
             <MudNavLink Href="about" Icon="@Icons.Material.Filled.Person">About</MudNavLink>
-            <MudNavLink Href="work" Icon="@Icons.Material.Filled.Handshake">Work with me</MudNavLink>
             <AuthorizeView>
                 <Authorized>
                     <MudNavLink Href="admin/posts" Icon="@Icons.Material.Filled.EditNote">Manage Posts</MudNavLink>
@@ -44,6 +37,17 @@
                 </NotAuthorized>
             </AuthorizeView>
         </MudNavMenu>
+        <div class="mt-auto pa-4">
+            <MudDivider Class="mb-3" />
+            <div class="d-flex justify-center gap-2">
+                <MudIconButton Icon="@Icons.Custom.Brands.GitHub"
+                               Href="https://github.com/JasonRStJohn" Target="_blank" aria-label="GitHub" />
+                <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn"
+                               Href="https://www.linkedin.com/in/jasonrstjohn" Target="_blank" aria-label="LinkedIn" />
+                <MudIconButton Icon="@Icons.Material.Filled.Email"
+                               Href="mailto:jasonrstjohn@gmail.com" aria-label="Email" />
+            </div>
+        </div>
     </MudDrawer>
     <MudMainContent>
         <MudContainer MaxWidth="MaxWidth.Medium" Class="py-8">
