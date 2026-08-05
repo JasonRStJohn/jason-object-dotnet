@@ -264,4 +264,17 @@ public class PostServiceTests
 
         result.Should().BeEmpty();
     }
+
+    [Fact]
+    public async Task GetProjectsAsync_ExcludesWhitespaceOnlyProjects()
+    {
+        var db = CreateDb();
+        var svc = new PostService(db);
+        await svc.CreateAsync(MakeEntry("Blank", PostKind.Note, "   "));
+        await svc.CreateAsync(MakeEntry("Real", PostKind.Spec, "JasonObject"));
+
+        var result = await svc.GetProjectsAsync();
+
+        result.Should().Equal("JasonObject");
+    }
 }

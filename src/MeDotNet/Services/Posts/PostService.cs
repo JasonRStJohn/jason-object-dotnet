@@ -69,7 +69,7 @@ public class PostService(IDbContextFactory<AppDbContext> dbFactory)
     {
         await using var db = await dbFactory.CreateDbContextAsync();
         return await db.Posts.AsNoTracking()
-            .Where(p => p.PublishedAt != null && p.Project != null && p.Project != "")
+            .Where(p => p.PublishedAt != null && p.Project != null && p.Project.Trim() != "")
             .Select(p => p.Project!)
             .Distinct()
             .OrderBy(p => p)
