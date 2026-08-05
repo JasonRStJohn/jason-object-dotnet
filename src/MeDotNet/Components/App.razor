@@ -35,7 +35,17 @@
 </html>
 
 @code {
-    private string CanonicalUrl => (Configuration["Site:CanonicalUrl"] ?? string.Empty).TrimEnd('/');
+    private const string FallbackCanonicalUrl = "https://jasonobject.work";
 
-    private string SocialCardImageUrl => $"{CanonicalUrl}/img/social-card.jpg";
+    private string CanonicalUrl = string.Empty;
+    private string SocialCardImageUrl = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        var configuredUrl = Configuration["Site:CanonicalUrl"];
+        var baseUrl = string.IsNullOrWhiteSpace(configuredUrl) ? FallbackCanonicalUrl : configuredUrl;
+
+        CanonicalUrl = baseUrl.TrimEnd('/');
+        SocialCardImageUrl = $"{CanonicalUrl}/img/social-card.jpg";
+    }
 }
