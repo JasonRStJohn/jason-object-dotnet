@@ -21,3 +21,6 @@ appsettings.Local.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Image working directory (originals, not shipped)
+ImagePool/

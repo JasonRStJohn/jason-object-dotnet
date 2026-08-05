@@ -3,7 +3,7 @@
 @inject PersistentComponentState ApplicationState
 @implements IDisposable
 
-<PageTitle>@(_post?.Title ?? "Not Found")</PageTitle>
+<PageTitle>@($"{_post?.Title ?? "Not Found"} — JasonObject")</PageTitle>
 
 @if (_post is null)
 {
