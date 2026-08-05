@@ -10,7 +10,7 @@ Change what jasonobject.work is *for*. It currently reads as a portfolio-plus-bl
 
 The reframe: **jasonobject.work is a working record of directing AI agents to build production software.** Not a résumé, not a blog — a body of evidence. Both asks live on it; neither is what the site *is*. That is what lets one site serve two audiences: visitors self-select against evidence rather than being asked to classify themselves.
 
-The stack does not change. .NET 8 Blazor Server, MudBlazor, EF Core, Identity, SQL Server, Docker Compose — all retained.
+The stack does not change. .NET 9 Blazor Server, MudBlazor 9.6, EF Core 9, Identity, SQL Server, Docker Compose — all retained.
 
 ## Why this shape
 
