@@ -24,3 +24,7 @@ Thumbs.db
 
 # Image working directory (originals, not shipped)
 ImagePool/
+
+# Source material — see docs/SOURCES.md. Contains PII; this repo is public.
+docs/*.txt
+docs/*.jpg
