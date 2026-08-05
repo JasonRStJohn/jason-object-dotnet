@@ -1,7 +1,6 @@
 @page "/notes"
 @using MeDotNet.Models
 @inject PostService PostService
-@inject NavigationManager Nav
 @inject PersistentComponentState ApplicationState
 @implements IDisposable
 
@@ -14,12 +13,13 @@
 
 <div class="d-flex flex-wrap gap-2 mb-2">
     <MudChip T="string" Variant="@(_kind is null ? Variant.Filled : Variant.Outlined)"
-             Color="Color.Primary" OnClick="@(() => ApplyFilter(null, _project))">All</MudChip>
+             Color="Color.Primary" Href="@FilterUrl(null, _project)">All</MudChip>
     @foreach (var kind in _allKinds)
     {
         var captured = kind;
-        <MudChip T="string" Variant="@(_kind == captured ? Variant.Filled : Variant.Outlined)"
-                 Color="Color.Primary" OnClick="@(() => ApplyFilter(captured, _project))">
+        var isActive = _kind == captured;
+        <MudChip T="string" Variant="@(isActive ? Variant.Filled : Variant.Outlined)"
+                 Color="Color.Primary" Href="@FilterUrl(isActive ? null : captured, _project)">
             @captured.Label()
         </MudChip>
     }
@@ -31,9 +31,10 @@
         @foreach (var project in _projects)
         {
             var captured = project;
+            var isActive = string.Equals(_project, captured, StringComparison.OrdinalIgnoreCase);
             <MudChip T="string" Size="Size.Small"
-                     Variant="@(_project == captured ? Variant.Filled : Variant.Outlined)"
-                     Color="Color.Default" OnClick="@(() => ApplyFilter(_kind, _project == captured ? null : captured))">
+                     Variant="@(isActive ? Variant.Filled : Variant.Outlined)"
+                     Color="Color.Default" Href="@FilterUrl(_kind, isActive ? null : captured)">
                 @captured
             </MudChip>
         }
@@ -46,10 +47,17 @@
 }
 else if (_entries.Count == 0)
 {
-    <MudText Class="my-8">
-        Nothing here with those filters yet.
-        <MudLink Href="/notes">Clear the filters</MudLink> to see everything in the record.
-    </MudText>
+    @if (_kind is null && _project is null)
+    {
+        <MudText Class="my-8">The record starts soon.</MudText>
+    }
+    else
+    {
+        <MudText Class="my-8">
+            Nothing here with those filters yet.
+            <MudLink Href="/notes">Clear the filters</MudLink> to see everything in the record.
+        </MudText>
+    }
 }
 else
 {
@@ -85,12 +93,12 @@ else
         _entries = await PostService.GetPublishedAsync(_kind, _project);
     }
 
-    private void ApplyFilter(PostKind? kind, string? project)
+    private static string FilterUrl(PostKind? kind, string? project)
     {
         var query = new List<string>();
         if (kind is not null) query.Add($"kind={PostKindDisplay.FilterName(kind.Value)}");
         if (!string.IsNullOrWhiteSpace(project)) query.Add($"project={Uri.EscapeDataString(project)}");
-        Nav.NavigateTo(query.Count == 0 ? "/notes" : $"/notes?{string.Join("&", query)}");
+        return query.Count == 0 ? "/notes" : $"/notes?{string.Join("&", query)}";
     }
 
     public void Dispose() => _loader?.Dispose();

@@ -35,7 +35,7 @@
                 }
                 @if (project.RecordProject is not null)
                 {
-                    <MudButton Href="@($"/notes?project={project.RecordProject}")" Variant="Variant.Text"
+                    <MudButton Href="@($"/notes?project={Uri.EscapeDataString(project.RecordProject!)}")" Variant="Variant.Text"
                                Color="Color.Primary" EndIcon="@Icons.Material.Filled.ArrowForward">
                         Read the record
                     </MudButton>
