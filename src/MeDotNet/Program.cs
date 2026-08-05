@@ -14,6 +14,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddRazorPages();
 
+// MudBlazor Components
 builder.Services.AddMudServices();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
