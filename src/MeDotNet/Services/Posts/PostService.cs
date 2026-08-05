@@ -12,13 +12,20 @@ public class PostService(IDbContextFactory<AppDbContext> dbFactory)
         return await db.Posts.AsNoTracking().OrderByDescending(p => p.CreatedAt).ToListAsync();
     }
 
-    public async Task<List<Post>> GetPublishedAsync()
+    public Task<List<Post>> GetPublishedAsync() => GetPublishedAsync(null, null);
+
+    public async Task<List<Post>> GetPublishedAsync(PostKind? kind, string? project)
     {
         await using var db = await dbFactory.CreateDbContextAsync();
-        return await db.Posts.AsNoTracking()
-                .Where(p => p.PublishedAt != null)
-                .OrderByDescending(p => p.CreatedAt)
-                .ToListAsync();
+        var query = db.Posts.AsNoTracking().Where(p => p.PublishedAt != null);
+
+        if (kind is not null)
+            query = query.Where(p => p.Kind == kind);
+
+        if (!string.IsNullOrWhiteSpace(project))
+            query = query.Where(p => p.Project == project);
+
+        return await query.OrderByDescending(p => p.CreatedAt).ToListAsync();
     }
 
     public async Task<Post?> GetByIdAsync(int id)
@@ -56,5 +63,16 @@ public class PostService(IDbContextFactory<AppDbContext> dbFactory)
             db.Posts.Remove(post);
             await db.SaveChangesAsync();
         }
+    }
+
+    public async Task<List<string>> GetProjectsAsync()
+    {
+        await using var db = await dbFactory.CreateDbContextAsync();
+        return await db.Posts.AsNoTracking()
+            .Where(p => p.PublishedAt != null && p.Project != null && p.Project != "")
+            .Select(p => p.Project!)
+            .Distinct()
+            .OrderBy(p => p)
+            .ToListAsync();
     }
 }
