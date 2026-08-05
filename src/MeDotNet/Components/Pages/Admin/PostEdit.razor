@@ -2,6 +2,7 @@
 @page "/admin/posts/{Id:int}"
 @attribute [Authorize]
 @using Microsoft.EntityFrameworkCore
+@using MeDotNet.Models
 @inject PostService PostService
 @inject NavigationManager Nav
 @inject AuthenticationStateProvider AuthStateProvider
@@ -20,6 +21,18 @@
               Immediate="true" Variant="Variant.Outlined" Class="mb-4" />
 <MudTextField T="string" Label="Slug" Value="_slug" ValueChanged="OnSlugChanged"
               Immediate="true" Variant="Variant.Outlined" Class="mb-4" />
+<MudSelect T="PostKind" Label="Kind" @bind-Value="_kind" Variant="Variant.Outlined" Class="mb-4">
+    <MudSelectItem T="PostKind" Value="PostKind.Note">Note</MudSelectItem>
+    <MudSelectItem T="PostKind" Value="PostKind.Spec">Spec</MudSelectItem>
+    <MudSelectItem T="PostKind" Value="PostKind.Plan">Plan</MudSelectItem>
+    <MudSelectItem T="PostKind" Value="PostKind.PostMortem">Post-mortem</MudSelectItem>
+</MudSelect>
+<MudTextField T="string" Label="Project" @bind-Value="_project"
+              HelperText="Optional. e.g. JasonObject, ClaudePress, Whindancer"
+              Variant="Variant.Outlined" Class="mb-4" />
+<MudTextField T="string" Label="Summary" @bind-Value="_summary"
+              HelperText="One line shown under the title in the record."
+              Variant="Variant.Outlined" Class="mb-4" />
 <MudTextField T="string" Label="Body" @bind-Value="_body" Lines="15"
               Variant="Variant.Outlined" Class="mb-4" />
 <MudSwitch @bind-Value="_published" Label="Published" Color="Color.Primary" Class="mb-4" />
@@ -36,6 +49,9 @@
     private string _slug = "";
     private string _body = "";
     private bool _published;
+    private PostKind _kind = PostKind.Note;
+    private string _project = "";
+    private string _summary = "";
     private bool _slugManuallyEdited;
     private string? _error;
     private bool _isNew => Id is null;
@@ -54,6 +70,9 @@
                 _slug = _existing.Slug;
                 _body = _existing.Body;
                 _published = _existing.PublishedAt.HasValue;
+                _kind = _existing.Kind;
+                _project = _existing.Project ?? "";
+                _summary = _existing.Summary ?? "";
                 _slugManuallyEdited = true;
             }
             else
@@ -99,6 +118,9 @@
                     Title = _title,
                     Slug = _slug,
                     Body = _body,
+                    Kind = _kind,
+                    Project = string.IsNullOrWhiteSpace(_project) ? null : _project.Trim(),
+                    Summary = string.IsNullOrWhiteSpace(_summary) ? null : _summary.Trim(),
                     AuthorId = userId,
                     PublishedAt = _published ? DateTime.UtcNow : null
                 };
@@ -109,6 +131,9 @@
                 _existing.Title = _title;
                 _existing.Slug = _slug;
                 _existing.Body = _body;
+                _existing.Kind = _kind;
+                _existing.Project = string.IsNullOrWhiteSpace(_project) ? null : _project.Trim();
+                _existing.Summary = string.IsNullOrWhiteSpace(_summary) ? null : _summary.Trim();
                 _existing.PublishedAt = _published
                     ? (_existing.PublishedAt ?? DateTime.UtcNow)
                     : null;
