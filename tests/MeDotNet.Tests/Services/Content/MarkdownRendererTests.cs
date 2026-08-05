@@ -142,4 +142,22 @@ public class MarkdownRendererTests
 
         html.Should().NotContain("src=\"javascript:");
     }
+
+    [Fact]
+    public void ToHtml_DataSchemeImage_IsNeutralised()
+    {
+        var html = MarkdownRenderer.ToHtml("![x](data:image/svg+xml;base64,PHN2ZyBvbmxvYWQ9YWxlcnQoMSkgLz4=)");
+
+        html.Should().Contain("src=\"#\"");
+        html.Should().NotContain("src=\"data:");
+    }
+
+    [Fact]
+    public void ToHtml_EmptyLinkDestination_DoesNotThrowAndRendersWithEmptyHref()
+    {
+        var html = MarkdownRenderer.ToHtml("[text]()");
+
+        html.Should().NotBeNull();
+        html.Should().Contain("<a href=\"\">text</a>");
+    }
 }

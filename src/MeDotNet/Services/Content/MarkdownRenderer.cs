@@ -45,11 +45,12 @@ public static class MarkdownRenderer
     }
 
     /// <summary>
-    /// Allowlist check: a URL is safe if, after stripping ASCII control characters
-    /// (which browsers strip before parsing the scheme, and which Markdig will happily
-    /// decode into the URL from entities like "&amp;#9;") and surrounding whitespace, it
-    /// either has no scheme at all (relative/anchor URLs like "/img/x.jpg", "../thing",
-    /// "#section") or its scheme is one of http, https, mailto (compared case-insensitively).
+    /// Allowlist check: a URL is safe if, after stripping all control characters
+    /// (a deliberate superset of what the WHATWG URL spec requires; the spec requires
+    /// stripping only ASCII tab, CR, LF, and leading/trailing C0-control-or-space, but
+    /// being over-inclusive here fails safe) and surrounding whitespace, it either has
+    /// no scheme at all (relative/anchor URLs like "/img/x.jpg", "../thing", "#section")
+    /// or its scheme is one of http, https, mailto (compared case-insensitively).
     /// Everything else - javascript:, data:, vbscript:, file:, etc - is rejected.
     /// </summary>
     private static bool IsSafeUrl(string? url)
