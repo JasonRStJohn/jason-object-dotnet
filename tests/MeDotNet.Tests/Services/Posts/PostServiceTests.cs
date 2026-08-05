@@ -128,4 +128,36 @@ public class PostServiceTests
         var all = await svc.GetAllAsync();
         all.Should().BeEmpty();
     }
+
+    [Fact]
+    public async Task CreateAsync_DefaultsKindToNote()
+    {
+        var db = CreateDb();
+        var svc = new PostService(db);
+
+        await svc.CreateAsync(MakePost("No Kind Given"));
+
+        var all = await svc.GetAllAsync();
+        all[0].Kind.Should().Be(PostKind.Note);
+        all[0].Project.Should().BeNull();
+        all[0].Summary.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task CreateAsync_PersistsKindProjectAndSummary()
+    {
+        var db = CreateDb();
+        var svc = new PostService(db);
+        var post = MakePost("Phase 4 Spec", published: true);
+        post.Kind = PostKind.Spec;
+        post.Project = "JasonObject";
+        post.Summary = "The spec that decided what this site says.";
+
+        await svc.CreateAsync(post);
+
+        var all = await svc.GetAllAsync();
+        all[0].Kind.Should().Be(PostKind.Spec);
+        all[0].Project.Should().Be("JasonObject");
+        all[0].Summary.Should().Be("The spec that decided what this site says.");
+    }
 }
