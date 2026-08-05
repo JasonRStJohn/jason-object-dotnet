@@ -49,7 +49,7 @@ Rejected alternatives:
 
 ### Navigation
 
-App bar title stays **JasonObject**. Drawer items become: **Home · The Record · Projects · About**, then the existing `AuthorizeView` block (Manage Posts, Logout / Login) unchanged. The app bar gains a **Work with me** button, visually distinct from the nav links. GitHub / LinkedIn / Email icon links and the dark-mode toggle stay as they are.
+App bar title stays **JasonObject**. Drawer items become: **Home · The Record · Projects · About**, then the existing `AuthorizeView` block (Manage Posts, Logout / Login) unchanged. The app bar gains a **Work with me** button, visually distinct from the nav links. The dark-mode toggle stays in the app bar; the GitHub / LinkedIn / Email icon links were moved out of the app bar into a pinned block at the bottom of the drawer (a deviation made in response to app-bar crowding on small screens).
 
 `Blog` disappears as a nav item. `/posts` and `/posts/{slug}` routes are **retained and redirected** to `/notes` and `/notes/{slug}` so nothing already linked breaks.
 

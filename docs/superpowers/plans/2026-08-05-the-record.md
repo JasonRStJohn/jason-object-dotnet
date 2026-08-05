@@ -67,7 +67,7 @@
 
 The spec's testing section asks for a test that `/posts` redirects to `/notes` preserving the slug. The test project has no `Microsoft.AspNetCore.Mvc.Testing` reference and no `WebApplicationFactory` harness, and `Program.cs` runs `db.Database.MigrateAsync()` plus admin seeding at startup — so standing up an in-process host would require a live SQL Server. Building that harness is disproportionate to verifying two redirect lines.
 
-**Decision:** redirects are verified manually with `curl` in Task 4, Step 12. Every other item in the spec's testing section is covered by automated tests. This is a deliberate, documented deviation.
+**Decision:** redirects are verified manually with `curl` in Task 4, Step 12. Two items in the spec's testing section are not covered by automated tests: the `/posts` → `/notes` redirect, verified manually with `curl` as above, and the empty-filter state's message, which has no UI test harness to exercise it and is verified only by review. This is a deliberate, documented deviation.
 
 ---
 
