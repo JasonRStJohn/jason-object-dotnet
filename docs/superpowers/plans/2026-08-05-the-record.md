@@ -739,29 +739,29 @@ Expected: PASS
 - [ ] **Step 9: Start the app**
 
 Run: `docker compose up -d --build`
-Wait for the container to become healthy: `docker compose logs -f medotnet` until you see the "Now listening on" line, then Ctrl-C out of the log tail.
+Wait for the container to become healthy: `docker compose logs -f app` until you see the "Now listening on" line, then Ctrl-C out of the log tail.
 
 - [ ] **Step 10: Verify the record page renders**
 
-Run: `curl -s localhost:8080/notes | grep -c "The Record"`
+Run: `curl -s localhost:5000/notes | grep -c "The Record"`
 Expected: a count of 1 or more
 
 - [ ] **Step 11: Verify filtering is linkable**
 
-Run: `curl -s "localhost:8080/notes?kind=postmortem" | grep -qi "post-mortem\|Nothing here" && echo OK`
+Run: `curl -s "localhost:5000/notes?kind=postmortem" | grep -qi "post-mortem\|Nothing here" && echo OK`
 Expected: `OK` — the page renders either matching entries or the empty-filter message, not an error
 
 - [ ] **Step 12: Verify the legacy redirects (manual, see "A note on test coverage")**
 
 ```bash
-curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' localhost:8080/posts
-curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' localhost:8080/posts/some-slug
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' localhost:5000/posts
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' localhost:5000/posts/some-slug
 ```
 
 Expected:
 ```
-301 http://localhost:8080/notes
-301 http://localhost:8080/notes/some-slug
+301 http://localhost:5000/notes
+301 http://localhost:5000/notes/some-slug
 ```
 
 - [ ] **Step 13: Commit**
@@ -878,7 +878,7 @@ Expected: PASS
 
 - [ ] **Step 4: Verify the hero renders**
 
-Run: `docker compose up -d --build && sleep 15 && curl -s localhost:8080/ | grep -c "machines writing it"`
+Run: `docker compose up -d --build && sleep 15 && curl -s localhost:5000/ | grep -c "machines writing it"`
 Expected: 1 or more
 
 - [ ] **Step 5: Commit**
@@ -970,7 +970,7 @@ Expected: SUCCESS
 
 - [ ] **Step 4: Verify the page renders and the third block is present**
 
-Run: `docker compose up -d --build && sleep 15 && curl -s localhost:8080/work | grep -c "not the tooling, the practice"`
+Run: `docker compose up -d --build && sleep 15 && curl -s localhost:5000/work | grep -c "not the tooling, the practice"`
 Expected: 1
 
 - [ ] **Step 5: Run the test suite**
@@ -1179,10 +1179,10 @@ Expected: SUCCESS
 
 - [ ] **Step 8: Verify**
 
-Run: `docker compose up -d --build && sleep 15 && curl -s localhost:8080/about | grep -c "briefing the C-suite"`
+Run: `docker compose up -d --build && sleep 15 && curl -s localhost:5000/about | grep -c "briefing the C-suite"`
 Expected: 1
 
-Run: `curl -s localhost:8080/projects | grep -c "Read the record"`
+Run: `curl -s localhost:5000/projects | grep -c "Read the record"`
 Expected: 1 or more
 
 - [ ] **Step 9: Run the test suite**
@@ -1278,7 +1278,7 @@ In `src/MeDotNet/Components/App.razor`, inside `<head>`, add after the existing 
 
 ```bash
 docker compose up -d --build && sleep 15
-curl -s -o /dev/null -w '%{http_code} %{content_type} %{size_download}\n' localhost:8080/img/jason-st-john.jpg
+curl -s -o /dev/null -w '%{http_code} %{content_type} %{size_download}\n' localhost:5000/img/jason-st-john.jpg
 ```
 
 Expected: `200 image/jpeg` and a size under 250000
