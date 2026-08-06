@@ -28,3 +28,8 @@ ImagePool/
 # Source material — see docs/SOURCES.md. Contains PII; this repo is public.
 docs/*.txt
 docs/*.jpg
+
+# Editor swap files — a swapfile of .env holds the same secrets .env does
+*.swp
+*.swo
+*~

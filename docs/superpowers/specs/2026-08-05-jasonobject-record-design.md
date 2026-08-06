@@ -37,6 +37,7 @@ Rejected alternatives:
 | Entry images | **None.** No featured-image column, no upload path. Visual interest comes from rails, chips and framing lines |
 | Consulting offer | Stated as an invitation on `/work`, not a service catalogue. No pricing |
 | Publishing model | Hand-curated via existing CMS. No auto-publishing from the repo |
+| Client references | **Describe, never name.** No business name, owner name, town, or live URL for freelance clients — even where the client site is publicly reachable. Discretion is itself a selling point to a prospective client; naming a client who never agreed to be a reference costs more than the credibility it buys |
 | Stack | Unchanged |
 
 ## Prerequisites
