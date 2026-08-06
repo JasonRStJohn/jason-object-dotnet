@@ -126,3 +126,29 @@ html, body {
     border-left: 4px solid var(--mud-palette-lines-default);
     color: var(--mud-palette-text-secondary);
 }
+/* ---------------------------------------------------------------------------
+   Float utilities.
+
+   NOTE: this project has NO Tailwind. MudBlazor supplies the spacing utilities
+   (ma-/mb-/mr-/mx-/my- on a 4px scale — note `ma-`, not Tailwind's `m-`), but
+   it ships no float utilities at all, so these are defined here.
+
+   Float is used deliberately rather than a grid: it is the only layout method
+   where text sits beside the image and then reclaims the full width once it
+   clears the bottom. A grid would keep the text in a narrow column all the way
+   down.
+   --------------------------------------------------------------------------- */
+
+/* Only float once there is room. Below this width a ~420px image would squeeze
+   the body copy into an unreadably narrow gutter, so it stacks instead. */
+@media (min-width: 900px) {
+    .float-left {
+        float: left;
+        margin-right: 24px;
+    }
+}
+
+/* Start a block below any float rather than wrapping into the gap beside it. */
+.clear-float {
+    clear: both;
+}

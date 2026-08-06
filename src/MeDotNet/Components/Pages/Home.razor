@@ -14,6 +14,16 @@
     I sit between the people paying for software and the machines writing it.
 </h1>
 
+<MudPaper Class="pa-4 mb-6 float-left" Elevation="1" Style="max-width: 320px">
+    <MudImage Src="/img/jason-st-john.jpg" Alt="Jason St. John" Fluid="true" Width="800" Height="1099" Class="rounded mb-3" />
+    <MudText Typo="Typo.body2" Class="mb-3">
+        Open to lead and staff engineering roles — and taking on contract work now.
+    </MudText>
+    <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">
+        Work with me
+    </MudButton>
+</MudPaper>
+
 <MudText Typo="Typo.body1" Class="mb-10" Style="max-width: 68ch">
     Eight years architecting production .NET and Vue/Nuxt platforms, and a decade of teaching
     before that. Directing AI agents is an instruction problem: decomposition, scaffolding,
@@ -21,10 +31,8 @@
     wasn't given enough. Below is the record of doing it.
 </MudText>
 
-<MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4">Latest from the record</MudText>
+<MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4 clear-float">Latest from the record</MudText>
 
-<MudGrid Spacing="6">
-    <MudItem xs="12" md="8">
         @if (_recent is null)
         {
             <MudProgressCircular Indeterminate="true" />
@@ -43,20 +51,6 @@
                 Read the whole record
             </MudButton>
         }
-    </MudItem>
-
-    <MudItem xs="12" md="4">
-        <MudPaper Class="pa-4" Elevation="1">
-            <MudImage Src="/img/jason-st-john.jpg" Alt="Jason St. John" Fluid="true" Width="800" Height="1099" Class="rounded mb-3" />
-            <MudText Typo="Typo.body2" Class="mb-3">
-                Open to lead and staff engineering roles — and taking on contract work now.
-            </MudText>
-            <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Primary" FullWidth="true">
-                Work with me
-            </MudButton>
-        </MudPaper>
-    </MudItem>
-</MudGrid>
 
 @code {
     private List<Post>? _recent;
