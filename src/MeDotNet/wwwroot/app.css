@@ -152,3 +152,20 @@ html, body {
 .clear-float {
     clear: both;
 }
+
+/* ---------------------------------------------------------------------------
+   Focus ring on the page heading after navigation
+   ---------------------------------------------------------------------------
+   Routes.razor uses <FocusOnNavigate Selector="h1" />, which moves focus to the
+   page heading on every route change so screen readers announce the new page.
+   That is worth keeping. The side effect is that the browser paints a focus
+   outline around the h1 for mouse users too, which reads as a stray box hugging
+   the heading text and disappears on the next click.
+
+   :focus-visible is the browser's own judgement about whether focus arrived by
+   keyboard. Suppressing the ring only when it did NOT keeps keyboard users'
+   outlines fully intact.
+   --------------------------------------------------------------------------- */
+h1:focus:not(:focus-visible) {
+    outline: none;
+}
