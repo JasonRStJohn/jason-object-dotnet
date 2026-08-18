@@ -166,6 +166,56 @@ html, body {
    keyboard. Suppressing the ring only when it did NOT keeps keyboard users'
    outlines fully intact.
    --------------------------------------------------------------------------- */
-h1:focus:not(:focus-visible) {
+:focus:not(:focus-visible) {
     outline: none;
 }
+
+/* FocusOnNavigate sets tabindex="-1" on its target to make it focusable at all.
+   Belt and braces: those elements are never keyboard-reachable on purpose, so they
+   should never paint a ring. */
+[tabindex="-1"]:focus {
+    outline: none;
+}
+
+/* ---------------------------------------------------------------------------
+   The bio block: JSON card beside the prose
+   ---------------------------------------------------------------------------
+   Grid rather than float. A floated card let the bio ride up beside the record
+   above it; a grid keeps both columns on one row and clears the floats above
+   exactly once.
+   --------------------------------------------------------------------------- */
+.bio-block {
+    clear: both;
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 1.75rem;
+}
+
+@media (min-width: 900px) {
+    .bio-block {
+        grid-template-columns: minmax(0, auto) 1fr;
+        gap: 2.25rem;
+        align-items: start;
+    }
+}
+
+/* No full border and no scrollbar. A single accent rule on the left reads as a
+   code block without boxing the content in; the JSON is hand-wrapped short
+   enough that it never needs to scroll. */
+.json-card pre {
+    margin: 0;
+    padding: 0.25rem 0 0.25rem 1.1rem;
+    border-left: 3px solid var(--mud-palette-primary);
+    background: none;
+    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    overflow: visible;
+    white-space: pre;
+}
+
+/* Punctuation recedes; keys and values carry the colour. */
+.json-card .j-p { color: var(--mud-palette-text-disabled); }
+.json-card .j-k { color: var(--mud-palette-primary); }
+.json-card .j-s { color: var(--mud-palette-tertiary); }
+.json-card .j-n { color: var(--mud-palette-secondary); }

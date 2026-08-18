@@ -90,3 +90,38 @@ body {
     color: #f44336;
     font-size: 0.8rem;
 }
+
+/* Used by the change-password page, which reuses this card. */
+.login-success {
+    color: #4caf50;
+    font-size: 0.9rem;
+    margin: 0 0 1rem;
+}
+
+.login-note {
+    color: var(--text);
+    opacity: 0.7;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    margin: 1rem 0 0;
+}
+
+.login-note code {
+    font-family: ui-monospace, Consolas, monospace;
+    font-size: 0.78rem;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    background: rgba(127, 127, 127, 0.18);
+}
+
+.login-card a {
+    color: var(--mud-primary);
+    font-size: 0.85rem;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.login-card a:hover {
+    text-decoration: underline;
+}

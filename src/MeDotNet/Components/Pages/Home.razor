@@ -6,15 +6,21 @@
 
 <PageTitle>JasonObject — Jason St. John</PageTitle>
 
-<h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom" style="max-width: 20ch">
-    My first computer didn't play games.
+@* One heading only. The hook is the h1; the line under it is a sentence, not a
+   sub-heading, and the byline is a caption. Stacking three descending type sizes
+   read as three headers in a row.
+
+   The line breaks are deliberate, not wrapping: the hook lands harder split across
+   two lines, and the payoff separates the childhood fact from the thesis it sets up. *@
+<h1 class="mud-typography mud-typography-h3" style="margin-bottom: 0.5rem">
+    My first computer<br />didn't play games.
 </h1>
 
-<MudText Typo="Typo.h6" Class="mb-2" Style="max-width: 48ch">
-    So I learned BASIC and taught it to. We've been teaching each other ever since.
+<MudText Typo="Typo.body1" Class="mb-3" Style="font-size: 1.15rem; line-height: 1.6">
+    So I learned BASIC and taught it to.<br />We've been teaching each other ever since.
 </MudText>
 
-<MudText Typo="Typo.subtitle1" Class="mud-text-secondary mb-6">
+<MudText Typo="Typo.caption" Class="mud-text-secondary d-block mb-8">
     Jason St. John · lead full-stack developer · Upstate New York
 </MudText>
 
@@ -22,15 +28,9 @@
     <MudImage Src="/img/jason-st-john.jpg" Alt="Jason St. John" Fluid="true" Width="800" Height="1099" Class="rounded" />
 </MudPaper>
 
-<MudText Typo="Typo.body1" Class="mb-10" Style="max-width: 68ch">
-    Eight years architecting production .NET and Vue/Nuxt platforms, a few years teaching
-    school before that. Directing AI agents is an instruction problem: decomposition,
-    scaffolding, feedback, and telling the difference between a model that misunderstood and
-    one that wasn't given enough. Lately the teaching runs both ways; an agent is walking me
-    through Rust. Below is the record.
-</MudText>
-
-<MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4 clear-float">Latest from the record</MudText>
+@* The record sits beside the photo, where the bio used to. It is the point of the
+   site, so it gets the prominent slot; the bio moved below and full width. *@
+<MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4">Latest from the record</MudText>
 
         @if (_recent is null)
         {
@@ -50,6 +50,43 @@
                 Read the whole record
             </MudButton>
         }
+
+@* The site is called JasonObject. Rendering him as an actual object is the joke the
+   name has been setting up, and it doubles as a scannable TLDR of the prose beside it.
+   It is valid JSON on purpose: a developer will check, and a broken one would cost more
+   than it earns. Every value is true. *@
+@* Grid, not float. A float let the bio ride up beside the record instead of
+   staying put; a grid pins both columns to the same row and clears everything
+   above it once. Long values are broken across lines so the block never needs a
+   horizontal scrollbar. *@
+<div class="bio-block">
+    <div class="json-card">
+        <pre aria-label="Summary of Jason St. John as a JSON object"><span class="j-p">{</span>
+  <span class="j-k">"name"</span><span class="j-p">:</span> <span class="j-s">"Jason R. St. John"</span><span class="j-p">,</span>
+  <span class="j-k">"role"</span><span class="j-p">:</span> <span class="j-s">"lead full-stack developer"</span><span class="j-p">,</span>
+  <span class="j-k">"years"</span><span class="j-p">:</span> <span class="j-n">12</span><span class="j-p">,</span>
+  <span class="j-k">"builds"</span><span class="j-p">:</span>
+    <span class="j-s">"the internal tools others work in"</span><span class="j-p">,</span>
+  <span class="j-k">"stack"</span><span class="j-p">:</span> <span class="j-p">[</span>
+    <span class="j-s">".NET"</span><span class="j-p">,</span> <span class="j-s">"Vue"</span><span class="j-p">,</span> <span class="j-s">"Nuxt"</span><span class="j-p">,</span>
+    <span class="j-s">"TypeScript"</span><span class="j-p">,</span> <span class="j-s">"AWS"</span>
+  <span class="j-p">],</span>
+  <span class="j-k">"method"</span><span class="j-p">:</span>
+    <span class="j-s">"spec, plan, implement, review"</span><span class="j-p">,</span>
+  <span class="j-k">"learning"</span><span class="j-p">:</span> <span class="j-p">[</span><span class="j-s">"Rust"</span><span class="j-p">,</span> <span class="j-s">"Svelte"</span><span class="j-p">],</span>
+  <span class="j-k">"taughtBy"</span><span class="j-p">:</span> <span class="j-s">"an agent, currently"</span><span class="j-p">,</span>
+  <span class="j-k">"dogs"</span><span class="j-p">:</span> <span class="j-n">2</span>
+<span class="j-p">}</span></pre>
+    </div>
+
+    <MudText Typo="Typo.body1">
+        Eight years architecting production .NET and Vue/Nuxt platforms, a few years teaching
+        school before that. Directing AI agents is an instruction problem: decomposition,
+        scaffolding, feedback, and telling the difference between a model that misunderstood
+        and one that wasn't given enough. Lately the teaching runs both ways; an agent is
+        walking me through Rust.
+    </MudText>
+</div>
 
 @code {
     private List<Post>? _recent;
