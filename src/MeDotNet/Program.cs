@@ -14,6 +14,10 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddRazorPages();
 
+// Needed so the statically-rendered root and the layout can read the `theme`
+// cookie at render time and paint the correct light/dark theme on the first byte.
+builder.Services.AddHttpContextAccessor();
+
 // MudBlazor Components
 builder.Services.AddMudServices();
 
@@ -100,11 +104,17 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();
+
+// MapStaticAssets (not UseStaticFiles) so build-time fingerprinting is active:
+// @Assets["app.css"] resolves to a content-hashed URL that changes whenever the
+// file changes. Cloudflare caches CSS by URL for hours, so without the hash a
+// style change stays invisible on the public apex until the cache expires. The
+// hash makes every deploy a fresh URL — an automatic cache-bust.
+app.MapStaticAssets();
 
 // Legacy blog routes — preserved so existing links survive the rename to /notes
 app.MapGet("/posts", () => Results.Redirect("/notes", permanent: true));

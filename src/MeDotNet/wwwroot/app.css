@@ -178,22 +178,23 @@ html, body {
 }
 
 /* ---------------------------------------------------------------------------
-   The bio block: JSON card beside the prose
+   The hero columns: photo beside the JSON object
    ---------------------------------------------------------------------------
-   Grid rather than float. A floated card let the bio ride up beside the record
-   above it; a grid keeps both columns on one row and clears the floats above
-   exactly once.
+   Grid rather than float, so the photo and the object stay locked on one row down
+   to the phone breakpoint (600px, MudBlazor's sm) and then stack. The photo column
+   is capped at its intrinsic width; the object takes the rest. Tablets (>=600px)
+   keep the two columns, which is the intent. The prose bio and the record sit
+   full width below this row.
    --------------------------------------------------------------------------- */
-.bio-block {
-    clear: both;
-    margin-top: 2.5rem;
+.hero-cols {
+    margin-top: 1.5rem;
     display: grid;
     gap: 1.75rem;
 }
 
-@media (min-width: 900px) {
-    .bio-block {
-        grid-template-columns: minmax(0, auto) 1fr;
+@media (min-width: 600px) {
+    .hero-cols {
+        grid-template-columns: minmax(0, 320px) 1fr;
         gap: 2.25rem;
         align-items: start;
     }
@@ -219,3 +220,17 @@ html, body {
 .json-card .j-k { color: var(--mud-palette-primary); }
 .json-card .j-s { color: var(--mud-palette-tertiary); }
 .json-card .j-n { color: var(--mud-palette-secondary); }
+
+/* ---------------------------------------------------------------------------
+   App-bar CTA: full label with room, compact "Contact" on phones
+   ---------------------------------------------------------------------------
+   Pure CSS swap (not MudHidden) so both buttons render server-side and the right
+   one shows on the first paint. Hide the compact one by default; below 600px hide
+   the wide one and reveal the compact. inline-flex matches MudButton's root.
+   --------------------------------------------------------------------------- */
+.cta-compact { display: none; }
+
+@media (max-width: 599.98px) {
+    .cta-wide { display: none; }
+    .cta-compact { display: inline-flex; }
+}

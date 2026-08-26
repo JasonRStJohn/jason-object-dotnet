@@ -21,7 +21,7 @@ else
             @_post.Kind.Label()
         </MudChip>
         <MudText Typo="Typo.caption">
-            @(_post.Project is not null ? $"{_post.Project} · " : "")@_post.PublishedAt!.Value.ToString("d MMMM yyyy")
+            @(_post.Project is not null ? $"{_post.Project} · " : "")@SiteTime.FormatDate(_post.PublishedAt!.Value)
         </MudText>
     </div>
     <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">@_post.Title</h1>

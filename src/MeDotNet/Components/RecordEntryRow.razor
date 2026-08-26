@@ -6,7 +6,7 @@
             @Entry.Kind.Label()
         </MudChip>
         <MudText Typo="Typo.caption">
-            @(Entry.Project is not null ? $"{Entry.Project} · " : "")@Entry.PublishedAt!.Value.ToString("d MMMM yyyy")
+            @(Entry.Project is not null ? $"{Entry.Project} · " : "")@SiteTime.FormatDate(Entry.PublishedAt!.Value)
         </MudText>
     </div>
     <MudText Typo="Typo.h6" Class="mb-1">
