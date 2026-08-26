@@ -203,6 +203,13 @@ html, body {
 /* No full border and no scrollbar. A single accent rule on the left reads as a
    code block without boxing the content in; the JSON is hand-wrapped short
    enough that it never needs to scroll. */
+/* Drop the whole card (not the <pre>) down so the object reads as vertically
+   centred against the taller photo beside it. Padding here keeps the <pre>'s
+   left-accent rail hugging the text instead of stretching up through empty space. */
+.json-card {
+    padding-top: 2em;
+}
+
 .json-card pre {
     margin: 0;
     padding: 0.25rem 0 0.25rem 1.1rem;
