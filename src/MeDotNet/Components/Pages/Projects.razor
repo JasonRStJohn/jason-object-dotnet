@@ -5,8 +5,8 @@
 <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">Projects</h1>
 
 <MudText Typo="Typo.body1" Class="mb-6">
-    Nine projects, newest first. The employer-built systems can't be linked, but they're the bulk
-    of the story — ask me about any of them.
+    Newest and most AI-directed first. The employer-built systems can't be linked, but they're
+    the bulk of the story — ask me about any of them.
 </MudText>
 
 @foreach (var project in _projects)
@@ -23,27 +23,37 @@
                 </MudText>
             }
         </MudCardContent>
-        @if (project.LinkHref is not null)
+        @if (project.LinkHref is not null || project.RecordProject is not null)
         {
             <MudCardActions>
-                <MudButton Href="@project.LinkHref" Target="_blank" Variant="Variant.Text"
-                           Color="Color.Primary" EndIcon="@Icons.Material.Filled.OpenInNew">
-                    @project.LinkText
-                </MudButton>
+                @if (project.LinkHref is not null)
+                {
+                    <MudButton Href="@project.LinkHref" Target="_blank" Variant="Variant.Text"
+                               Color="Color.Primary" EndIcon="@Icons.Material.Filled.OpenInNew">
+                        @project.LinkText
+                    </MudButton>
+                }
+                @if (project.RecordProject is not null)
+                {
+                    <MudButton Href="@($"/notes?project={Uri.EscapeDataString(project.RecordProject!)}")" Variant="Variant.Text"
+                               Color="Color.Primary" EndIcon="@Icons.Material.Filled.ArrowForward">
+                        Read the record
+                    </MudButton>
+                }
             </MudCardActions>
         }
     </MudCard>
 }
 
 @code {
-    private record ProjectEntry(string Title, string Meta, string Body, string? LinkText, string? LinkHref, bool Employer);
+    private record ProjectEntry(string Title, string Meta, string Body, string? LinkText, string? LinkHref, bool Employer, string? RecordProject = null);
 
     private static readonly ProjectEntry[] _projects =
     [
         new("jasonobject.work — this site",
             "Personal, 2026 · Blazor Web App, .NET 9, EF Core, ASP.NET Identity, MudBlazor, Docker",
             "The site you're reading, built as a working demonstration of AI-assisted engineering: every phase ran brainstorm → spec → implementation plan → agent-executed tasks, with code review gating each one. Blazor Web App with a hand-rolled CMS, EF Core, Identity auth, and MudBlazor, shipping via Docker.",
-            "Source on GitHub", "https://github.com/JasonRStJohn/jason-object-dotnet", false),
+            "Source on GitHub", "https://github.com/JasonRStJohn/jason-object-dotnet", false, RecordProject: "JasonObject"),
 
         new("Job Management Platform 2.0",
             "Employer · .NET Core, Vue, Nuxt",

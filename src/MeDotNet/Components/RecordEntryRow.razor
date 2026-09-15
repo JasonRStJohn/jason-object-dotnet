@@ -1,0 +1,24 @@
+@using MeDotNet.Models
+
+<div style="border-left: 3px solid @Entry.Kind.RailColor(); padding: 2px 0 2px 16px;" class="mb-6">
+    <div class="d-flex align-center gap-3 mb-1">
+        <MudChip T="string" Size="Size.Small" Style="@($"background-color:{Entry.Kind.RailColor()};color:#fff;font-weight:700;letter-spacing:.08em;")">
+            @Entry.Kind.Label()
+        </MudChip>
+        <MudText Typo="Typo.caption">
+            @(Entry.Project is not null ? $"{Entry.Project} · " : "")@Entry.PublishedAt!.Value.ToString("d MMMM yyyy")
+        </MudText>
+    </div>
+    <MudText Typo="Typo.h6" Class="mb-1">
+        <MudLink Href="@($"/notes/{Entry.Slug}")" Typo="Typo.h6">@Entry.Title</MudLink>
+    </MudText>
+    @if (ShowSummary && !string.IsNullOrWhiteSpace(Entry.Summary))
+    {
+        <MudText Typo="Typo.body2" Class="mud-text-secondary">@Entry.Summary</MudText>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired] public Post Entry { get; set; } = default!;
+    [Parameter] public bool ShowSummary { get; set; } = true;
+}

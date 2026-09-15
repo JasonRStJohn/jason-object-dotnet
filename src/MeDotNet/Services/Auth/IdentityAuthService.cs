@@ -38,6 +38,23 @@ public class IdentityAuthService : IAuthService
     public async Task SignOutAsync() =>
         await _signInManager.SignOutAsync();
 
+    public async Task<AuthResult> ChangePasswordAsync(
+        ClaimsPrincipal principal, string currentPassword, string newPassword)
+    {
+        var user = await _userManager.GetUserAsync(principal);
+        if (user is null)
+            return new AuthResult(false, "Not signed in.");
+
+        var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+        if (!result.Succeeded)
+            return new AuthResult(false, string.Join(" ", result.Errors.Select(e => e.Description)));
+
+        // The security stamp changes on a password change, which would otherwise
+        // invalidate the current cookie and silently sign the user out mid-request.
+        await _signInManager.RefreshSignInAsync(user);
+        return new AuthResult(true);
+    }
+
     public async Task<ApplicationUser?> GetCurrentUserAsync(ClaimsPrincipal principal) =>
         await _userManager.GetUserAsync(principal);
 }

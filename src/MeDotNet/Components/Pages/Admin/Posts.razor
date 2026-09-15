@@ -1,5 +1,6 @@
 @page "/admin/posts"
 @attribute [Authorize]
+@using MeDotNet.Models
 @inject PostService PostService
 @inject IDialogService DialogService
 @inject ISnackbar Snackbar
@@ -29,6 +30,7 @@ else
         <HeaderContent>
             <MudTh>Title</MudTh>
             <MudTh>Slug</MudTh>
+            <MudTh>Kind</MudTh>
             <MudTh>Status</MudTh>
             <MudTh>Created</MudTh>
             <MudTh></MudTh>
@@ -36,6 +38,7 @@ else
         <RowTemplate>
             <MudTd DataLabel="Title">@context.Title</MudTd>
             <MudTd DataLabel="Slug">@context.Slug</MudTd>
+            <MudTd DataLabel="Kind">@context.Kind.Label()</MudTd>
             <MudTd DataLabel="Status">
                 <MudChip T="string" Size="Size.Small"
                          Color="@(context.PublishedAt.HasValue ? Color.Success : Color.Default)">

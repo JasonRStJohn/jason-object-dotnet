@@ -9,6 +9,7 @@ services:
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=MeDotNet;User Id=sa;Password=${SA_PASSWORD};TrustServerCertificate=True
       - ADMIN_EMAIL=${ADMIN_EMAIL}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - Site__CanonicalUrl=${SITE_CANONICAL_URL:-https://jasonobject.work}
     depends_on:
       sqlserver:
         condition: service_healthy

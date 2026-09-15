@@ -1,62 +1,92 @@
 @page "/"
+@using MeDotNet.Models
 @inject PostService PostService
 @inject PersistentComponentState ApplicationState
 @implements IDisposable
 
 <PageTitle>JasonObject — Jason St. John</PageTitle>
 
-<MudPaper Class="pa-6 mb-6" Elevation="1">
-    <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">Jason St. John</h1>
-    <p class="mud-typography mud-typography-h5 mud-typography-gutterbottom">
-        Lead full-stack developer. I teach machines to build software.
-    </p>
-    <MudText Typo="Typo.body1">
-        Eight years architecting production .NET and Vue/Nuxt platforms — and a teaching background
-        that turns out to be the sharpest tool in AI-assisted engineering. Directing coding agents is
-        an instruction problem: decomposition, scaffolding, feedback, and knowing whether the system
-        misunderstood or just lacked context. I've spent my whole career getting good at exactly that.
-    </MudText>
+@* One heading only. The hook is the h1; the line under it is a sentence, not a
+   sub-heading, and the byline is a caption. Stacking three descending type sizes
+   read as three headers in a row.
+
+   The line breaks are deliberate, not wrapping: the hook lands harder split across
+   two lines, and the payoff separates the childhood fact from the thesis it sets up. *@
+<h1 class="mud-typography mud-typography-h3" style="margin-bottom: 0.5rem">
+    My first computer<br />didn't play games.
+</h1>
+
+<MudText Typo="Typo.body1" Class="mb-3" Style="font-size: 1.15rem; line-height: 1.6">
+    So I learned BASIC and taught it to.<br />We've been teaching each other ever since.
+</MudText>
+
+<MudText Typo="Typo.caption" Class="mud-text-secondary d-block mb-8">
+    Jason St. John · lead full-stack developer · Upstate New York
+</MudText>
+
+<MudPaper Class="pa-4 mb-6 float-left" Elevation="1" Style="max-width: 320px">
+    <MudImage Src="/img/jason-st-john.jpg" Alt="Jason St. John" Fluid="true" Width="800" Height="1099" Class="rounded" />
 </MudPaper>
 
-<MudPaper Class="pa-4 mb-4" Elevation="1">
-    <MudText Typo="Typo.body1">
-        <b>This site is the demo.</b> A Blazor Web App — EF Core, Identity, MudBlazor, Docker —
-        designed, specced, and built by directing AI coding agents through plan-driven development,
-        with every task reviewed before it landed.
-        <MudLink Href="https://github.com/JasonRStJohn/jason-object-dotnet" Target="_blank">Read the code →</MudLink>
-    </MudText>
-</MudPaper>
+@* The record sits beside the photo, where the bio used to. It is the point of the
+   site, so it gets the prominent slot; the bio moved below and full width. *@
+<MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4">Latest from the record</MudText>
 
-<div class="d-flex gap-4 mb-8">
-    <MudButton Href="/about" Variant="Variant.Filled" Color="Color.Primary">About me</MudButton>
-    <MudButton Href="/projects" Variant="Variant.Outlined" Color="Color.Primary">See the projects</MudButton>
+        @if (_recent is null)
+        {
+            <MudProgressCircular Indeterminate="true" />
+        }
+        else if (_recent.Count == 0)
+        {
+            <MudText>The record starts soon.</MudText>
+        }
+        else
+        {
+            @foreach (var entry in _recent)
+            {
+                <RecordEntryRow Entry="entry" />
+            }
+            <MudButton Href="/notes" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward">
+                Read the whole record
+            </MudButton>
+        }
+
+@* The site is called JasonObject. Rendering him as an actual object is the joke the
+   name has been setting up, and it doubles as a scannable TLDR of the prose beside it.
+   It is valid JSON on purpose: a developer will check, and a broken one would cost more
+   than it earns. Every value is true. *@
+@* Grid, not float. A float let the bio ride up beside the record instead of
+   staying put; a grid pins both columns to the same row and clears everything
+   above it once. Long values are broken across lines so the block never needs a
+   horizontal scrollbar. *@
+<div class="bio-block">
+    <div class="json-card">
+        <pre aria-label="Summary of Jason St. John as a JSON object"><span class="j-p">{</span>
+  <span class="j-k">"name"</span><span class="j-p">:</span> <span class="j-s">"Jason R. St. John"</span><span class="j-p">,</span>
+  <span class="j-k">"role"</span><span class="j-p">:</span> <span class="j-s">"lead full-stack developer"</span><span class="j-p">,</span>
+  <span class="j-k">"years"</span><span class="j-p">:</span> <span class="j-n">12</span><span class="j-p">,</span>
+  <span class="j-k">"builds"</span><span class="j-p">:</span>
+    <span class="j-s">"the internal tools others work in"</span><span class="j-p">,</span>
+  <span class="j-k">"stack"</span><span class="j-p">:</span> <span class="j-p">[</span>
+    <span class="j-s">".NET"</span><span class="j-p">,</span> <span class="j-s">"Vue"</span><span class="j-p">,</span> <span class="j-s">"Nuxt"</span><span class="j-p">,</span>
+    <span class="j-s">"TypeScript"</span><span class="j-p">,</span> <span class="j-s">"AWS"</span>
+  <span class="j-p">],</span>
+  <span class="j-k">"method"</span><span class="j-p">:</span>
+    <span class="j-s">"spec, plan, implement, review"</span><span class="j-p">,</span>
+  <span class="j-k">"learning"</span><span class="j-p">:</span> <span class="j-p">[</span><span class="j-s">"Rust"</span><span class="j-p">,</span> <span class="j-s">"Svelte"</span><span class="j-p">],</span>
+  <span class="j-k">"taughtBy"</span><span class="j-p">:</span> <span class="j-s">"an agent, currently"</span><span class="j-p">,</span>
+  <span class="j-k">"dogs"</span><span class="j-p">:</span> <span class="j-n">2</span>
+<span class="j-p">}</span></pre>
+    </div>
+
+    <MudText Typo="Typo.body1">
+        Eight years architecting production .NET and Vue/Nuxt platforms, a few years teaching
+        school before that. Directing AI agents is an instruction problem: decomposition,
+        scaffolding, feedback, and telling the difference between a model that misunderstood
+        and one that wasn't given enough. Lately the teaching runs both ways; an agent is
+        walking me through Rust.
+    </MudText>
 </div>
-
-<h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">Recent posts</h2>
-
-@if (_recent is null)
-{
-    <MudProgressCircular Indeterminate="true" />
-}
-else if (_recent.Count == 0)
-{
-    <MudText>No posts yet.</MudText>
-}
-else
-{
-    @foreach (var post in _recent)
-    {
-        <MudCard Class="mb-4" Elevation="1">
-            <MudCardContent>
-                <MudText Typo="Typo.h6"><MudLink Href="@($"/posts/{post.Slug}")" Typo="Typo.h6">@post.Title</MudLink></MudText>
-                <MudText Typo="Typo.caption">@post.PublishedAt!.Value.ToString("MMMM d, yyyy")</MudText>
-            </MudCardContent>
-        </MudCard>
-    }
-    <MudButton Href="/posts" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward" Class="mt-2">
-        View all posts
-    </MudButton>
-}
 
 @code {
     private List<Post>? _recent;

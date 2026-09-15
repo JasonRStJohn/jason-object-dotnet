@@ -37,6 +37,7 @@ Rejected alternatives:
 | Entry images | **None.** No featured-image column, no upload path. Visual interest comes from rails, chips and framing lines |
 | Consulting offer | Stated as an invitation on `/work`, not a service catalogue. No pricing |
 | Publishing model | Hand-curated via existing CMS. No auto-publishing from the repo |
+| Client references | **Describe, never name.** No business name, owner name, town, or live URL for freelance clients — even where the client site is publicly reachable. Discretion is itself a selling point to a prospective client; naming a client who never agreed to be a reference costs more than the credibility it buys |
 | Stack | Unchanged |
 
 ## Prerequisites
@@ -49,7 +50,7 @@ Rejected alternatives:
 
 ### Navigation
 
-App bar title stays **JasonObject**. Drawer items become: **Home · The Record · Projects · About**, then the existing `AuthorizeView` block (Manage Posts, Logout / Login) unchanged. The app bar gains a **Work with me** button, visually distinct from the nav links. GitHub / LinkedIn / Email icon links and the dark-mode toggle stay as they are.
+App bar title stays **JasonObject**. Drawer items become: **Home · The Record · Projects · About**, then the existing `AuthorizeView` block (Manage Posts, Logout / Login) unchanged. The app bar gains a **Work with me** button, visually distinct from the nav links. The dark-mode toggle stays in the app bar; the GitHub / LinkedIn / Email icon links were moved out of the app bar into a pinned block at the bottom of the drawer (a deviation made in response to app-bar crowding on small screens).
 
 `Blog` disappears as a nav item. `/posts` and `/posts/{slug}` routes are **retained and redirected** to `/notes` and `/notes/{slug}` so nothing already linked breaks.
 

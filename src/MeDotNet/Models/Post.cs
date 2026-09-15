@@ -6,6 +6,9 @@ public class Post
     public required string Title { get; set; }
     public required string Slug { get; set; }
     public required string Body { get; set; }
+    public PostKind Kind { get; set; } = PostKind.Note;
+    public string? Project { get; set; }
+    public string? Summary { get; set; }
     public DateTime? PublishedAt { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public required string AuthorId { get; set; }
