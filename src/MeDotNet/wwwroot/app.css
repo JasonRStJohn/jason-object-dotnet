@@ -1,5 +1,7 @@
 html, body {
     margin: 0;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 #blazor-error-ui {
@@ -196,36 +198,53 @@ html, body {
    full width below this row.
    --------------------------------------------------------------------------- */
 .hero-cols {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     display: grid;
+    grid-template-columns: minmax(0, 1fr);
     gap: 2rem;
 }
 
-@media (min-width: 768px) {
+.hero-cols > * {
+    min-width: 0;
+}
+
+@media (min-width: 960px) {
     .hero-cols {
-        grid-template-columns: 1fr 1fr;
+        margin-top: 2rem;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         gap: 3rem;
         align-items: start;
     }
 }
 
 /* No full border and no scrollbar. A single accent rule on the left reads as a
-   code block without boxing the content in; the JSON is hand-wrapped short
-   enough that it never needs to scroll. */
+   code block without boxing the content in; pre-wrap lets long values wrap on
+   narrow phones instead of blowing out the grid track width. */
 .json-card {
     padding-top: 0;
+    max-width: 100%;
 }
 
 .json-card pre {
     margin: 0;
-    padding: 0.25rem 0 0.25rem 1.1rem;
+    padding: 0.25rem 0 0.25rem 0.9rem;
     border-left: 3px solid var(--mud-palette-primary);
     background: none;
     font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
-    font-size: 0.85rem;
-    line-height: 1.7;
-    overflow: visible;
-    white-space: pre;
+    font-size: 0.8rem;
+    line-height: 1.65;
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+@media (min-width: 600px) {
+    .json-card pre {
+        padding-left: 1.1rem;
+        font-size: 0.85rem;
+        line-height: 1.7;
+    }
 }
 
 /* Punctuation recedes; keys and values carry the colour. */
@@ -233,6 +252,34 @@ html, body {
 .json-card .j-k { color: var(--mud-palette-primary); }
 .json-card .j-s { color: var(--mud-palette-tertiary); }
 .json-card .j-n { color: var(--mud-palette-secondary); }
+
+/* Allow MudChips inside main content to wrap cleanly on narrow phone screens
+   instead of forcing horizontal overflow with white-space: nowrap. */
+.mud-main-content .mud-chip {
+    max-width: 100%;
+    height: auto;
+    min-height: 26px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.mud-main-content .mud-chip .mud-chip-content {
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 1.35;
+}
+
+@media (max-width: 599.98px) {
+    h1.mud-typography-h3 {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    h2.mud-typography-h5 {
+        font-size: 1.25rem;
+        line-height: 1.3;
+    }
+}
 
 /* ---------------------------------------------------------------------------
    App-bar CTA: full label with room, compact "Contact" on phones
@@ -251,13 +298,13 @@ html, body {
 /* ---------------------------------------------------------------------------
    Responsive top-bar navigation (desktop links vs mobile drawer button)
    ---------------------------------------------------------------------------
-   Pure CSS media queries so server-side prerender paints the right controls
-   immediately without waiting for client-side breakpoint measurement.
+   Aligned to MudBlazor's md breakpoint (960px) so the horizontal nav links only
+   show when there is ample width alongside the brand and CTA button.
    --------------------------------------------------------------------------- */
 .nav-mobile-only { display: none; }
 .nav-desktop-only { display: inline-flex; }
 
-@media (max-width: 767.98px) {
+@media (max-width: 959.98px) {
     .nav-mobile-only { display: inline-flex; }
     .nav-desktop-only { display: none; }
 }
