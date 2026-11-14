@@ -6,7 +6,7 @@
 
 <PageTitle>JasonObject - Jason St. John</PageTitle>
 
-<div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-3">
+<div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-4">
     <MudChip T="string" Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="ma-0">
         Available for Contract &amp; Architecture Work · Upstate NY &amp; Remote
     </MudChip>
@@ -19,14 +19,36 @@
     My first computer<br />didn't play games.
 </h1>
 
-<MudText Typo="Typo.body1" Class="mb-3" Style="font-size: 1.15rem; line-height: 1.6">
+<MudText Typo="Typo.body1" Class="mb-4" Style="font-size: 1.15rem; line-height: 1.6">
     So I learned BASIC and taught it to.<br />We've been teaching each other ever since.
 </MudText>
 
 <div class="hero-cols">
-    <MudPaper Class="pa-4" Elevation="1" Style="max-width: 320px">
-        <MudImage Src="/img/jason-st-john.jpg" Alt="Jason St. John" Fluid="true" Width="800" Height="1099" Class="rounded" />
-    </MudPaper>
+    <div class="d-flex flex-column justify-space-between">
+        <MudText Typo="Typo.body1" Style="line-height: 1.75">
+            Twelve years of development, most recently eight years architecting production .NET
+            and Vue/Nuxt platforms, with a few years teaching school before that. Directing AI agents
+            is an instruction problem: decomposition, scaffolding, feedback, and telling the
+            difference between a model that misunderstood and one that wasn't given enough. Lately
+            the teaching runs both ways; an agent is walking me through Rust.
+        </MudText>
+
+        <div class="mt-6">
+            <div class="d-flex flex-wrap align-center gap-3 mb-2">
+                <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Primary"
+                           EndIcon="@Icons.Material.Filled.ArrowForward">
+                    Work with me
+                </MudButton>
+                <MudButton Href="/projects" Variant="Variant.Outlined" Color="Color.Primary">
+                    Browse projects
+                </MudButton>
+            </div>
+            <MudText Typo="Typo.caption" Class="mud-text-secondary d-block">
+                Taking on contract architecture, platform builds, and legacy migrations, and open to the right lead role.
+            </MudText>
+        </div>
+    </div>
+
     <div class="json-card">
         <pre aria-label="Summary of Jason St. John as a JSON object"><span class="j-p">{</span>
   <span class="j-k">"name"</span><span class="j-p">:</span> <span class="j-s">"Jason R. St. John"</span><span class="j-p">,</span>
@@ -47,28 +69,7 @@
     </div>
 </div>
 
-<MudText Typo="Typo.body1" Class="mt-8">
-    Twelve years of development, most recently eight years architecting production .NET
-    and Vue/Nuxt platforms, with a few years teaching school before that. Directing AI agents
-    is an instruction problem: decomposition, scaffolding, feedback, and telling the
-    difference between a model that misunderstood and one that wasn't given enough. Lately
-    the teaching runs both ways; an agent is walking me through Rust.
-</MudText>
-
-<div class="d-flex flex-wrap align-center gap-3 mt-5">
-    <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Primary"
-               EndIcon="@Icons.Material.Filled.ArrowForward">
-        Work with me
-    </MudButton>
-    <MudButton Href="/projects" Variant="Variant.Outlined" Color="Color.Primary">
-        Browse projects
-    </MudButton>
-    <MudText Typo="Typo.caption" Class="mud-text-secondary">
-        Taking on contract architecture, platform builds, and legacy migrations, and open to the right lead role.
-    </MudText>
-</div>
-
-<MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4 mt-8">Latest from the record</MudText>
+<MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4 mt-10">Latest from the record</MudText>
 
 @if (_recent is null)
 {

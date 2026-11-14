@@ -196,15 +196,15 @@ html, body {
    full width below this row.
    --------------------------------------------------------------------------- */
 .hero-cols {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     display: grid;
-    gap: 1.75rem;
+    gap: 2rem;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
     .hero-cols {
-        grid-template-columns: minmax(0, 320px) 1fr;
-        gap: 2.25rem;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
         align-items: start;
     }
 }
@@ -212,11 +212,8 @@ html, body {
 /* No full border and no scrollbar. A single accent rule on the left reads as a
    code block without boxing the content in; the JSON is hand-wrapped short
    enough that it never needs to scroll. */
-/* Drop the whole card (not the <pre>) down so the object reads as vertically
-   centred against the taller photo beside it. Padding here keeps the <pre>'s
-   left-accent rail hugging the text instead of stretching up through empty space. */
 .json-card {
-    padding-top: 2em;
+    padding-top: 0;
 }
 
 .json-card pre {
