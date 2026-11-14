@@ -14,6 +14,11 @@ services:
       sqlserver:
         condition: service_healthy
     restart: unless-stopped
+    volumes:
+      # Persist DataProtection keys across rebuilds so `up --build` stops
+      # invalidating sessions/antiforgery tokens (the sporadic Blazor refresh
+      # modal). Program.cs points PersistKeysToFileSystem at /keys.
+      - ./dataprotection-keys:/keys
     networks:
       - internal
 

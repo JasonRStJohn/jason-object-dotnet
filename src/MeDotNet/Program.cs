@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MeDotNet.Components;
@@ -20,6 +21,15 @@ builder.Services.AddHttpContextAccessor();
 
 // MudBlazor Components
 builder.Services.AddMudServices();
+
+// Persist DataProtection keys to a bind mount so a `docker compose up --build`
+// no longer generates a fresh key ring and invalidates every open session and
+// antiforgery token (the "Blazor reconnect / refresh" modal). The keys live in
+// /keys, mounted from ./dataprotection-keys on the host. SetApplicationName pins
+// the key-ring purpose so keys keep decrypting across rebuilds and rename-safe.
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo("/keys"))
+    .SetApplicationName("MeDotNet");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
