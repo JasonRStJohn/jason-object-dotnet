@@ -4,14 +4,17 @@
 @inject PersistentComponentState ApplicationState
 @implements IDisposable
 
-<PageTitle>JasonObject — Jason St. John</PageTitle>
+<PageTitle>JasonObject - Jason St. John</PageTitle>
 
-@* One heading only. The hook is the h1; the line under it is a sentence, not a
-   sub-heading, and the byline is a caption. Stacking three descending type sizes
-   read as three headers in a row.
+<div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-3">
+    <MudChip T="string" Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="ma-0">
+        Available for Contract &amp; Architecture Work · Upstate NY &amp; Remote
+    </MudChip>
+    <MudText Typo="Typo.caption" Class="mud-text-secondary">
+        Lead Software Architect · Full-Stack Engineer · M.Ed.
+    </MudText>
+</div>
 
-   The line breaks are deliberate, not wrapping: the hook lands harder split across
-   two lines, and the payoff separates the childhood fact from the thesis it sets up. *@
 <h1 class="mud-typography mud-typography-h3" style="margin-bottom: 0.5rem">
     My first computer<br />didn't play games.
 </h1>
@@ -20,11 +23,6 @@
     So I learned BASIC and taught it to.<br />We've been teaching each other ever since.
 </MudText>
 
-@* Photo and the JSON object side by side. The object is the joke the site name sets
-   up and a scannable TLDR of the bio below; it is valid JSON on purpose, and every
-   value is true. Grid, not float, so the two stay locked on one row down to the phone
-   breakpoint, then stack. The record moved to the bottom: it is sparse for now and has
-   not earned the prominent slot. *@
 <div class="hero-cols">
     <MudPaper Class="pa-4" Elevation="1" Style="max-width: 320px">
         <MudImage Src="/img/jason-st-john.jpg" Alt="Jason St. John" Fluid="true" Width="800" Height="1099" Class="rounded" />
@@ -49,21 +47,27 @@
     </div>
 </div>
 
-@* Bio prose, full width under the photo/object row. *@
 <MudText Typo="Typo.body1" Class="mt-8">
     Twelve years of development, most recently eight years architecting production .NET
-    and Vue/Nuxt platforms, a few years teaching school before that. Directing AI agents
+    and Vue/Nuxt platforms, with a few years teaching school before that. Directing AI agents
     is an instruction problem: decomposition, scaffolding, feedback, and telling the
     difference between a model that misunderstood and one that wasn't given enough. Lately
     the teaching runs both ways; an agent is walking me through Rust.
 </MudText>
 
-<MudText Typo="Typo.body1" Class="mt-4">
-    Taking on contract architecture, platform builds, and legacy migrations now—and open to the
-    right lead engineering role. <MudLink Href="/work">See the problems I solve →</MudLink>
-</MudText>
+<div class="d-flex flex-wrap align-center gap-3 mt-5">
+    <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Primary"
+               EndIcon="@Icons.Material.Filled.ArrowForward">
+        Work with me
+    </MudButton>
+    <MudButton Href="/projects" Variant="Variant.Outlined" Color="Color.Primary">
+        Browse projects
+    </MudButton>
+    <MudText Typo="Typo.caption" Class="mud-text-secondary">
+        Taking on contract architecture, platform builds, and legacy migrations, and open to the right lead role.
+    </MudText>
+</div>
 
-@* The record, full width at the bottom until it grows enough to reclaim a top slot. *@
 <MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4 mt-8">Latest from the record</MudText>
 
 @if (_recent is null)

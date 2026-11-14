@@ -250,3 +250,75 @@ html, body {
     .cta-wide { display: none; }
     .cta-compact { display: inline-flex; }
 }
+
+/* ---------------------------------------------------------------------------
+   Responsive top-bar navigation (desktop links vs mobile drawer button)
+   ---------------------------------------------------------------------------
+   Pure CSS media queries so server-side prerender paints the right controls
+   immediately without waiting for client-side breakpoint measurement.
+   --------------------------------------------------------------------------- */
+.nav-mobile-only { display: none; }
+.nav-desktop-only { display: inline-flex; }
+
+@media (max-width: 767.98px) {
+    .nav-mobile-only { display: inline-flex; }
+    .nav-desktop-only { display: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   Dark-mode architectural / Chasma arena grid & background ships
+   --------------------------------------------------------------------------- */
+.chasma-bg-grid,
+.chasma-arena-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+    display: none;
+}
+
+html[data-theme="dark"] .chasma-bg-grid {
+    display: block;
+    opacity: 0.045;
+    background-image:
+        linear-gradient(#94a3b8 1px, transparent 1px),
+        linear-gradient(90deg, #94a3b8 1px, transparent 1px);
+    background-size: 44px 44px;
+}
+
+html[data-theme="dark"] .chasma-arena-layer {
+    display: block;
+}
+
+.chasma-ship {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0.32;
+    will-change: transform;
+    filter: drop-shadow(0 0 4px rgba(148, 163, 184, 0.25));
+}
+
+.chasma-flame {
+    animation: chasma-flicker 0.14s infinite alternate;
+}
+
+@keyframes chasma-flicker {
+    from { opacity: 0.45; transform: scaleY(0.85); }
+    to   { opacity: 0.95; transform: scaleY(1.15); }
+}
+
+/* Keep layout content above the fixed background grid and ships */
+.mud-layout {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.site-footer {
+    margin-top: auto;
+    border-top: 1px solid var(--mud-palette-lines-default);
+}

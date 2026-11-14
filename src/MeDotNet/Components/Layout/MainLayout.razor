@@ -12,32 +12,36 @@
 <MudLayout>
     <MudAppBar Elevation="1">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
-                       OnClick="ToggleDrawer" aria-label="Toggle navigation" />
-        <MudText Typo="Typo.h6" Class="ml-2">JasonObject</MudText>
+                       OnClick="ToggleDrawer" aria-label="Toggle navigation" Class="nav-mobile-only mr-1" />
+        <MudLink Href="/" Underline="Underline.None" Color="Color.Inherit" Class="d-flex align-center">
+            <MudText Typo="Typo.h6" Class="ml-1">JasonObject</MudText>
+        </MudLink>
         <MudSpacer />
-        @* "Work with me" needs room; on a phone it overflows the app bar, so below
-           600px it becomes a compact "Contact". Pure CSS (not MudHidden) so both
-           render server-side and the right one shows on the first paint — MudHidden
-           defers to a client-measured breakpoint and would pop the button in late. *@
-        <MudButton Href="/work" Variant="Variant.Outlined" Color="Color.Inherit" Class="mr-3 cta-wide">
+        <div class="nav-desktop-only align-center gap-1 mr-3">
+            <MudButton Href="/" Variant="Variant.Text" Color="Color.Inherit">Home</MudButton>
+            <MudButton Href="/notes" Variant="Variant.Text" Color="Color.Inherit">The Record</MudButton>
+            <MudButton Href="/projects" Variant="Variant.Text" Color="Color.Inherit">Projects</MudButton>
+            <MudButton Href="/about" Variant="Variant.Text" Color="Color.Inherit">About</MudButton>
+        </div>
+        <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Primary" Class="mr-3 cta-wide">
             Work with me
         </MudButton>
-        <MudButton Href="/work" Variant="Variant.Outlined" Color="Color.Inherit" Size="Size.Small" Class="mr-2 cta-compact">
+        <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mr-2 cta-compact">
             Contact
         </MudButton>
         <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
                        Color="Color.Inherit" OnClick="ToggleDarkMode" aria-label="Toggle dark mode" />
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Class="d-flex flex-column">
+
+    <MudDrawer @bind-Open="_drawerOpen" Variant="DrawerVariant.Temporary" Elevation="1" Class="d-flex flex-column">
         <MudNavMenu>
             <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
             <MudNavLink Href="notes" Icon="@Icons.Material.Filled.Article">The Record</MudNavLink>
             <MudNavLink Href="projects" Icon="@Icons.Material.Filled.Code">Projects</MudNavLink>
             <MudNavLink Href="about" Icon="@Icons.Material.Filled.Person">About</MudNavLink>
+            <MudNavLink Href="work" Icon="@Icons.Material.Filled.WorkOutline">Work with me</MudNavLink>
         </MudNavMenu>
         <div class="mt-auto pa-4">
-            @* Account links sit at the foot of the drawer, kept apart from the site
-               menu above. *@
             <MudDivider Class="mb-2" />
             <MudNavMenu>
                 <AuthorizeView>
@@ -66,10 +70,34 @@
             </div>
         </div>
     </MudDrawer>
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Medium" Class="py-8">
+
+    <MudMainContent Class="d-flex flex-column flex-grow-1">
+        <MudContainer MaxWidth="MaxWidth.Medium" Class="py-8 flex-grow-1">
             @Body
         </MudContainer>
+        <footer class="site-footer py-4 px-4">
+            <MudContainer MaxWidth="MaxWidth.Medium" Class="d-flex flex-wrap align-center justify-space-between gap-2">
+                <MudText Typo="Typo.caption" Class="mud-text-secondary">
+                    Jason R. St. John · jasonobject.work · .NET, Vue/Nuxt &amp; AI Systems Architecture
+                </MudText>
+                <div class="d-flex align-center gap-2">
+                    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Size="Size.Small"
+                                   Href="https://github.com/JasonRStJohn" Target="_blank" aria-label="GitHub" />
+                    <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn" Size="Size.Small"
+                                   Href="https://www.linkedin.com/in/jasonrstjohn" Target="_blank" aria-label="LinkedIn" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Email" Size="Size.Small"
+                                   Href="mailto:jasonrstjohn@gmail.com" aria-label="Email" />
+                    <AuthorizeView>
+                        <Authorized>
+                            <MudLink Href="/admin/posts" Typo="Typo.caption" Class="ml-2">Admin</MudLink>
+                        </Authorized>
+                        <NotAuthorized>
+                            <MudLink Href="/account/login" Typo="Typo.caption" Class="ml-2 mud-text-secondary">Login</MudLink>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </div>
+            </MudContainer>
+        </footer>
     </MudMainContent>
 </MudLayout>
 
@@ -83,14 +111,11 @@
     private const string ThemeStateKey = "isDarkMode";
 
     private bool _isDarkMode;
-    private bool _drawerOpen = true;
+    private bool _drawerOpen;
     private PersistingComponentStateSubscription _persistSubscription;
 
     protected override void OnInitialized()
     {
-        // Carry the theme from prerender into the interactive circuit. Reading the
-        // cookie only works during prerender (HttpContext is null in the circuit),
-        // so we persist the resolved value and take it back on the interactive pass.
         _persistSubscription = AppState.RegisterOnPersisting(PersistTheme);
 
         if (AppState.TryTakeFromJson<bool>(ThemeStateKey, out var restored))
@@ -99,8 +124,6 @@
         }
         else
         {
-            // Prerender: default to dark unless the visitor explicitly chose light.
-            // App.razor sets the same value on <html data-theme> for a flash-free paint.
             _isDarkMode = HttpContextAccessor.HttpContext?.Request.Cookies["theme"] != "light";
         }
     }
@@ -116,7 +139,6 @@
     private async Task ToggleDarkMode()
     {
         _isDarkMode = !_isDarkMode;
-        // Persist to a cookie so the next full load renders this choice flash-free.
         await JS.InvokeVoidAsync("jasonObjectTheme.set", _isDarkMode);
     }
 

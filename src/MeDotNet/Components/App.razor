@@ -35,6 +35,10 @@
 </head>
 
 <body>
+    @* Subtle dark-mode arena grid and occasional Chasma ships (pointer-events: none, hidden in light mode). *@
+    <div class="chasma-bg-grid" aria-hidden="true"></div>
+    <div id="chasma-arena-layer" class="chasma-arena-layer" aria-hidden="true"></div>
+
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
@@ -50,6 +54,141 @@
                 } catch (e) { /* cookies blocked: fall back to session-only theme */ }
             }
         };
+
+        window.jasonObjectClipboard = {
+            copy: async function (text) {
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(text);
+                        return true;
+                    }
+                } catch (e) { }
+                try {
+                    var ta = document.createElement("textarea");
+                    ta.value = text;
+                    ta.style.position = "fixed";
+                    ta.style.opacity = "0";
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand("copy");
+                    document.body.removeChild(ta);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            },
+            scrollToId: function (id) {
+                var el = document.getElementById(id);
+                if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        };
+
+        /* Occasional Chasma ships flying across the dark-mode grid.
+           Uses the exact polygon vertices from Chasma's player.py:
+           - Main hull: (-10, -10), (10, -10), (0, 20) in SHIP_GRAY
+           - Tail chevron: (-10, -10), (10, -10), (0, -3) in player color
+           - Thruster flame: (-4, -10), (4, -10), (0, -18) in red/orange */
+        (function () {
+            if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+            var playerColors = ["#facc15", "#ef4444", "#3b82f6", "#10b981"];
+
+            function spawnShip(delayMs, preset) {
+                setTimeout(function () {
+                    if (document.documentElement.dataset.theme === "light" || document.hidden) return;
+                    var layer = document.getElementById("chasma-arena-layer");
+                    if (!layer) return;
+
+                    var vw = window.innerWidth;
+                    var vh = window.innerHeight;
+                    var margin = 48;
+
+                    var startX, startY, endX, endY;
+                    if (preset) {
+                        startX = preset.startX;
+                        startY = preset.startY;
+                        endX = preset.endX;
+                        endY = preset.endY;
+                    } else {
+                        var edge = Math.floor(Math.random() * 4);
+                        if (edge === 0) { // left -> right
+                            startX = -margin; startY = vh * (0.15 + Math.random() * 0.7);
+                            endX = vw + margin; endY = vh * (0.15 + Math.random() * 0.7);
+                        } else if (edge === 1) { // right -> left
+                            startX = vw + margin; startY = vh * (0.15 + Math.random() * 0.7);
+                            endX = -margin; endY = vh * (0.15 + Math.random() * 0.7);
+                        } else if (edge === 2) { // bottom -> top
+                            startX = vw * (0.15 + Math.random() * 0.7); startY = vh + margin;
+                            endX = vw * (0.15 + Math.random() * 0.7); endY = -margin;
+                        } else { // top -> bottom
+                            startX = vw * (0.15 + Math.random() * 0.7); startY = -margin;
+                            endX = vw * (0.15 + Math.random() * 0.7); endY = vh + margin;
+                        }
+                    }
+
+                    var dx = endX - startX;
+                    var dy = endY - startY;
+                    var dist = Math.sqrt(dx * dx + dy * dy);
+                    var speedPxPerSec = 115 + Math.random() * 45;
+                    var durationMs = Math.round((dist / speedPxPerSec) * 1000);
+
+                    // SVG nose points to (0, -20) in screen coords, so heading 0deg = straight up
+                    var angleDeg = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+                    var color = (preset && preset.color) || playerColors[Math.floor(Math.random() * playerColors.length)];
+
+                    var el = document.createElement("div");
+                    el.className = "chasma-ship";
+                    el.style.transform = "translate3d(" + startX + "px, " + startY + "px, 0) rotate(" + angleDeg + "deg)";
+                    el.style.transition = "transform " + durationMs + "ms linear";
+
+                    // Note: SVG Y is inverted relative to Arcade, so nose is at (0, -20) and tail at (-10, 10)..(10, 10)
+                    el.innerHTML =
+                        '<svg width="22" height="32" viewBox="-14 -24 28 48" xmlns="http://www.w3.org/2000/svg">' +
+                        '<polygon class="chasma-flame" points="-4,10 4,10 0,20" fill="#ef4444" />' +
+                        '<polygon points="-10,10 10,10 0,-20" fill="#888e99" />' +
+                        '<polygon points="-10,10 10,10 0,3" fill="' + color + '" />' +
+                        '</svg>';
+
+                    layer.appendChild(el);
+
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
+                            el.style.transform = "translate3d(" + endX + "px, " + endY + "px, 0) rotate(" + angleDeg + "deg)";
+                        });
+                    });
+
+                    setTimeout(function () {
+                        if (el.parentNode) el.parentNode.removeChild(el);
+                    }, durationMs + 200);
+
+                    // 30% chance a second ship is chasing it 650ms behind
+                    if (!preset && Math.random() < 0.3) {
+                        var chaseColor = playerColors[(playerColors.indexOf(color) + 1) % playerColors.length];
+                        spawnShip(650, {
+                            startX: startX + (Math.random() * 24 - 12),
+                            startY: startY + (Math.random() * 24 - 12),
+                            endX: endX + (Math.random() * 24 - 12),
+                            endY: endY + (Math.random() * 24 - 12),
+                            color: chaseColor
+                        });
+                    }
+                }, delayMs || 0);
+            }
+
+            function scheduleNext(initial) {
+                var wait = initial ? 2500 : (14000 + Math.random() * 14000);
+                setTimeout(function () {
+                    spawnShip(0);
+                    scheduleNext(false);
+                }, wait);
+            }
+
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", function () { scheduleNext(true); });
+            } else {
+                scheduleNext(true);
+            }
+        })();
     </script>
 </body>
 

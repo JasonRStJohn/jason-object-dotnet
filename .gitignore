@@ -36,3 +36,6 @@ docs/*.jpg
 
 # DataProtection keys (bind-mounted crypto material — never commit)
 dataprotection-keys/
+
+# Local Taildrop / mockup scratch folders
+jasonrstjohn-gmail.com-*/

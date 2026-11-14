@@ -1,18 +1,25 @@
 @page "/work"
+@inject IJSRuntime JS
+@inject ISnackbar Snackbar
 
-<PageTitle>Work with me — JasonObject</PageTitle>
+<PageTitle>Work with me - JasonObject</PageTitle>
 
 <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">Work with me</h1>
 
 <MudText Typo="Typo.body1" Class="mb-6">
-    I take on contract architecture and development work—and I'm open to the right lead or principal
+    I take on contract architecture and development work, and I'm open to the right lead or principal
     engineering role. Below are the three problems people usually bring me in to solve.
 </MudText>
 
 <MudPaper Class="pa-6 mb-4" Elevation="1">
-    <h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">
-        1. Curated AI Harnesses &amp; Workflow Architecture
-    </h2>
+    <div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-2">
+        <h2 class="mud-typography mud-typography-h5">
+            1. Curated AI Harnesses &amp; Workflow Architecture
+        </h2>
+        <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Info" Class="ma-0">
+            Architecture / Sprint
+        </MudChip>
+    </div>
     <MudText Typo="Typo.body1" Class="mb-3">
         <strong>The problem:</strong> Organizations adopting AI usually get stuck between two bad options:
         pasting sensitive context into raw chat windows with no guardrails, or buying black-box "agent"
@@ -21,19 +28,30 @@
     <MudText Typo="Typo.body1" Class="mb-3">
         <strong>How I approach it:</strong> Directing models reliably is an instruction and systems-architecture
         problem. I build constrained, multi-stage harnesses that sit between your existing systems of record
-        (ERPs, databases, internal APIs) and the people making decisions—separating context assembly,
-        generation, and cold verification so outputs are auditable and repeatable.
+        (ERPs, databases, internal APIs) and the people making decisions. Separating context assembly,
+        generation, and cold verification keeps outputs auditable and repeatable.
     </MudText>
-    <MudButton Href="/projects#ai-systems" Variant="Variant.Text" Color="Color.Primary"
-               EndIcon="@Icons.Material.Filled.ArrowForward" Class="px-0">
-        See the AI harness &amp; workflow systems
-    </MudButton>
+    <div class="d-flex flex-wrap align-center gap-3">
+        <MudButton Href="/projects?category=ai-systems" Variant="Variant.Text" Color="Color.Primary"
+                   EndIcon="@Icons.Material.Filled.ArrowForward" Class="px-0">
+            See the AI harness &amp; workflow systems
+        </MudButton>
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small"
+                   OnClick="@(() => SelectTrackAndScroll(Tracks[0]))">
+            Ask about this track
+        </MudButton>
+    </div>
 </MudPaper>
 
 <MudPaper Class="pa-6 mb-4" Elevation="1">
-    <h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">
-        2. Custom Line-of-Business &amp; Civic Software
-    </h2>
+    <div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-2">
+        <h2 class="mud-typography mud-typography-h5">
+            2. Custom Line-of-Business &amp; Civic Software
+        </h2>
+        <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" Class="ma-0">
+            Project / Fractional Lead
+        </MudChip>
+    </div>
     <MudText Typo="Typo.body1" Class="mb-3">
         <strong>The problem:</strong> Operations teams, startups, and municipalities regularly outgrow
         spreadsheets and off-the-shelf SaaS, or get trapped paying steep licensing fees for rigid legacy
@@ -41,40 +59,63 @@
     </MudText>
     <MudText Typo="Typo.body1" Class="mb-3">
         <strong>How I approach it:</strong> I architect and ship custom web platforms and automation engines
-        in .NET, C#, Vue/Nuxt, and SQL—from multi-workflow production systems and airspace tooling to civic
+        in .NET, C#, Vue/Nuxt, and SQL, from multi-workflow production systems and airspace tooling to civic
         utilities and operational dashboards. Clean data models, permissions that match the floor, and
         codebases another engineer can actually maintain.
     </MudText>
-    <MudButton Href="/projects#platforms" Variant="Variant.Text" Color="Color.Primary"
-               EndIcon="@Icons.Material.Filled.ArrowForward" Class="px-0">
-        See the platform &amp; line-of-business builds
-    </MudButton>
+    <div class="d-flex flex-wrap align-center gap-3">
+        <MudButton Href="/projects?category=platforms" Variant="Variant.Text" Color="Color.Primary"
+                   EndIcon="@Icons.Material.Filled.ArrowForward" Class="px-0">
+            See the platform &amp; line-of-business builds
+        </MudButton>
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small"
+                   OnClick="@(() => SelectTrackAndScroll(Tracks[1]))">
+            Ask about this track
+        </MudButton>
+    </div>
 </MudPaper>
 
 <MudPaper Class="pa-6 mb-6" Elevation="1">
-    <h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">
-        3. Legacy Web &amp; Fleet Migrations
-    </h2>
+    <div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-2">
+        <h2 class="mud-typography mud-typography-h5">
+            3. Legacy Web &amp; Fleet Migrations
+        </h2>
+        <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Success" Class="ma-0">
+            Fixed-Scope / Retainer
+        </MudChip>
+    </div>
     <MudText Typo="Typo.body1" Class="mb-3">
         <strong>The problem:</strong> Small businesses, public library systems, and local governments often
-        run on aging WordPress installs buried under twenty plugins—slow, fragile on update day, and
+        run on aging WordPress installs buried under twenty plugins. They are slow, fragile on update day, and
         confusing for staff who just need to post an agenda, a catalog update, or an event.
     </MudText>
     <MudText Typo="Typo.body1" Class="mb-3">
         <strong>How I approach it:</strong> I built <strong>ClaudePress</strong> (which currently underlies five
-        live production sites, plus vertical layers like <strong>PawPress</strong>)—a fast, model-agnostic Nuxt 3 +
+        live production sites, plus vertical layers like <strong>PawPress</strong>). It is a fast, model-agnostic Nuxt 3 +
         PocketBase stack with an admin interface tailored to the organization's actual content, paired with an
         automated migration pipeline that moves sites off WordPress without billing for a hundred hours of
         hand-copying.
     </MudText>
-    <MudButton Href="/projects#claudepress" Variant="Variant.Text" Color="Color.Primary"
-               EndIcon="@Icons.Material.Filled.ArrowForward" Class="px-0">
-        See the web platforms &amp; migrations
-    </MudButton>
+    <div class="d-flex flex-wrap align-center gap-3">
+        <MudButton Href="/projects?category=claudepress" Variant="Variant.Text" Color="Color.Primary"
+                   EndIcon="@Icons.Material.Filled.ArrowForward" Class="px-0">
+            See the web platforms &amp; migrations
+        </MudButton>
+        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Small"
+                   OnClick="@(() => SelectTrackAndScroll(Tracks[2]))">
+            Ask about this track
+        </MudButton>
+    </div>
 </MudPaper>
 
-<MudPaper Class="pa-6 mb-8" Elevation="1">
-    <h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">How we can work together</h2>
+<MudPaper Class="pa-6 mb-6" Elevation="1">
+    <div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-2">
+        <h2 class="mud-typography mud-typography-h5">How we can work together</h2>
+        <MudButton Variant="Variant.Text" Color="Color.Primary" Size="Size.Small"
+                   OnClick="@(() => SelectTrackAndScroll(Tracks[3]))">
+            Ask about a leadership role
+        </MudButton>
+    </div>
     <MudText Typo="Typo.body1" Class="mb-3">
         <strong>Contract &amp; Architecture:</strong> Available for scoped system builds, ERP and AI harness
         architecture, fractional technical leadership, and single-site or fleet web migrations.
@@ -85,8 +126,62 @@
     </MudText>
 </MudPaper>
 
-<h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">Get in touch</h2>
-<MudText Typo="Typo.body1" Class="mb-3">The fastest way to reach me is email.</MudText>
+<div id="inquiry">
+    <MudPaper Class="pa-6 mb-8" Elevation="2">
+        <h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">Start a conversation</h2>
+        <MudText Typo="Typo.body2" Class="mud-text-secondary mb-4">
+            Pick a track and timeline below to format a quick note, then open it in your email client or copy it
+            to your clipboard. Or skip the form and email <MudLink Href="mailto:jasonrstjohn@gmail.com">jasonrstjohn@gmail.com</MudLink> directly.
+        </MudText>
+
+        <MudText Typo="Typo.caption" Class="d-block mb-1">1. What are you looking to solve?</MudText>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            @foreach (var track in Tracks)
+            {
+                var captured = track;
+                var isSelected = _selectedTrack == captured;
+                <MudChip T="string" Variant="@(isSelected ? Variant.Filled : Variant.Outlined)"
+                         Color="Color.Primary" OnClick="@(() => _selectedTrack = captured)" Class="ma-0">
+                    @captured
+                </MudChip>
+            }
+        </div>
+
+        <MudText Typo="Typo.caption" Class="d-block mb-1">2. Timeline or scope</MudText>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+            @foreach (var timeline in Timelines)
+            {
+                var captured = timeline;
+                var isSelected = _selectedTimeline == captured;
+                <MudChip T="string" Size="Size.Small" Variant="@(isSelected ? Variant.Filled : Variant.Outlined)"
+                         Color="Color.Secondary" OnClick="@(() => _selectedTimeline = captured)" Class="ma-0">
+                    @captured
+                </MudChip>
+            }
+        </div>
+
+        <div class="d-flex flex-column gap-4 mb-4">
+            <MudTextField @bind-Value="_senderName" Label="Your name or organization (optional)"
+                          Variant="Variant.Outlined" Margin="Margin.Dense" />
+            <MudTextField @bind-Value="_brief" Label="Short summary of the problem or role (optional)"
+                          Variant="Variant.Outlined" Lines="3"
+                          Placeholder="What are you building, migrating, or hiring for?" />
+        </div>
+
+        <div class="d-flex flex-wrap align-center gap-3">
+            <MudButton Href="@MailtoHref" Variant="Variant.Filled" Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Email">
+                Open in Email Client
+            </MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.ContentCopy" OnClick="CopyInquiryAsync">
+                Copy Inquiry &amp; Email Address
+            </MudButton>
+        </div>
+    </MudPaper>
+</div>
+
+<h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">Direct links</h2>
 <MudList T="string" Dense="true">
     <MudListItem T="string" Icon="@Icons.Material.Filled.Email">
         <MudLink Href="mailto:jasonrstjohn@gmail.com">jasonrstjohn@gmail.com</MudLink>
@@ -98,3 +193,61 @@
         <MudLink Href="https://www.linkedin.com/in/jasonrstjohn" Target="_blank">linkedin.com/in/jasonrstjohn</MudLink>
     </MudListItem>
 </MudList>
+
+@code {
+    private static readonly string[] Tracks =
+    [
+        "AI Harness & Workflow Architecture",
+        "Custom Platform / .NET / Vue Build",
+        "Legacy Web / ClaudePress Migration",
+        "Full-Time / Fractional Leadership"
+    ];
+
+    private static readonly string[] Timelines =
+    [
+        "Immediate / Next 30 Days",
+        "Q1 / Q2 Roadmap",
+        "Full-Time Role",
+        "Exploratory Conversation"
+    ];
+
+    private string _selectedTrack = Tracks[0];
+    private string _selectedTimeline = Timelines[0];
+    private string _senderName = "";
+    private string _brief = "";
+
+    private string FormattedSubject =>
+        string.IsNullOrWhiteSpace(_senderName)
+            ? $"[jasonobject.work] {_selectedTrack}"
+            : $"[jasonobject.work] {_selectedTrack} ({_senderName.Trim()})";
+
+    private string FormattedBody =>
+        $"Hi Jason,\n\n" +
+        $"Track: {_selectedTrack}\n" +
+        $"Timeline: {_selectedTimeline}\n" +
+        (string.IsNullOrWhiteSpace(_senderName) ? "" : $"From: {_senderName.Trim()}\n") +
+        $"\n{(string.IsNullOrWhiteSpace(_brief) ? "[Add a quick note here]" : _brief.Trim())}\n";
+
+    private string MailtoHref =>
+        $"mailto:jasonrstjohn@gmail.com?subject={Uri.EscapeDataString(FormattedSubject)}&body={Uri.EscapeDataString(FormattedBody)}";
+
+    private async Task SelectTrackAndScroll(string track)
+    {
+        _selectedTrack = track;
+        await JS.InvokeVoidAsync("jasonObjectClipboard.scrollToId", "inquiry");
+    }
+
+    private async Task CopyInquiryAsync()
+    {
+        var payload = $"To: jasonrstjohn@gmail.com\nSubject: {FormattedSubject}\n\n{FormattedBody}";
+        var copied = await JS.InvokeAsync<bool>("jasonObjectClipboard.copy", payload);
+        if (copied)
+        {
+            Snackbar.Add("Copied inquiry and email address (jasonrstjohn@gmail.com) to clipboard.", Severity.Success);
+        }
+        else
+        {
+            Snackbar.Add("Could not access clipboard. Email jasonrstjohn@gmail.com directly.", Severity.Warning);
+        }
+    }
+}
