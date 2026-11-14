@@ -1,6 +1,6 @@
 @inject IConfiguration Configuration
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="@(_isDarkMode ? "dark" : "light")">
 
 <head>
     <meta charset="utf-8" />
@@ -21,8 +21,16 @@
     <link href="_content/MudBlazor/MudBlazor.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["MeDotNet.styles.css"]" />
+    @* Paint the page background on the first byte so there is no light->dark
+       flash before MudBlazor's theme CSS applies. data-theme is set on <html>
+       from the `theme` cookie (default dark). Values match MudBlazor's default
+       Background palette. *@
+    <style>
+        html[data-theme="dark"], html[data-theme="dark"] body { background-color: #32333d; }
+        html[data-theme="light"], html[data-theme="light"] body { background-color: #ffffff; }
+    </style>
     <ImportMap />
-    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="icon" type="image/png" href="@Assets["favicon.png"]" />
     <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 
@@ -30,6 +38,19 @@
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
     <script src="_content/MudBlazor/MudBlazor.min.js"></script>
+    @* Persist the theme choice so the server can render it flash-free on the next
+       load. Called from the layout's dark-mode toggle. *@
+    <script>
+        window.jasonObjectTheme = {
+            set: function (isDark) {
+                try {
+                    document.cookie = "theme=" + (isDark ? "dark" : "light") +
+                        "; path=/; max-age=31536000; SameSite=Lax";
+                    document.documentElement.dataset.theme = isDark ? "dark" : "light";
+                } catch (e) { /* cookies blocked: fall back to session-only theme */ }
+            }
+        };
+    </script>
 </body>
 
 </html>
@@ -37,8 +58,14 @@
 @code {
     private const string FallbackCanonicalUrl = "https://jasonobject.work";
 
+    // App.razor renders as static SSR, so HttpContext is available as a cascading
+    // parameter here — this is what lets us read the theme cookie before paint.
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
     private string CanonicalUrl = string.Empty;
     private string SocialCardImageUrl = string.Empty;
+    private bool _isDarkMode;
 
     protected override void OnInitialized()
     {
@@ -47,5 +74,8 @@
 
         CanonicalUrl = baseUrl.TrimEnd('/');
         SocialCardImageUrl = $"{CanonicalUrl}/img/social-card.jpg";
+
+        // Default to dark unless the visitor has explicitly chosen light.
+        _isDarkMode = HttpContext?.Request.Cookies["theme"] != "light";
     }
 }

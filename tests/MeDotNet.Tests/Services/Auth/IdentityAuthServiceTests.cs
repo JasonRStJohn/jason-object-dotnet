@@ -117,4 +117,61 @@ public class IdentityAuthServiceTests
 
         result.Should().BeNull();
     }
+
+    [Fact]
+    public async Task ChangePasswordAsync_ReturnsSuccessAndRefreshesSignIn_WhenCurrentPasswordIsCorrect()
+    {
+        var user = new ApplicationUser { Id = "1", Email = "admin@medotnet.dev" };
+        _userManagerMock
+            .Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+            .ReturnsAsync(user);
+        _userManagerMock
+            .Setup(x => x.ChangePasswordAsync(user, "old-password", "new-password"))
+            .ReturnsAsync(IdentityResult.Success);
+        _signInManagerMock
+            .Setup(x => x.RefreshSignInAsync(user))
+            .Returns(Task.CompletedTask);
+
+        var result = await _authService.ChangePasswordAsync(
+            new ClaimsPrincipal(), "old-password", "new-password");
+
+        result.Success.Should().BeTrue();
+        // The security stamp changes on a password change; without a refresh the
+        // current cookie would be invalidated and silently sign the user out.
+        _signInManagerMock.Verify(x => x.RefreshSignInAsync(user), Times.Once);
+    }
+
+    [Fact]
+    public async Task ChangePasswordAsync_ReturnsFailureWithoutRefresh_WhenCurrentPasswordIsWrong()
+    {
+        var user = new ApplicationUser { Id = "1", Email = "admin@medotnet.dev" };
+        var errors = new[] { new IdentityError { Description = "Incorrect password." } };
+        _userManagerMock
+            .Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+            .ReturnsAsync(user);
+        _userManagerMock
+            .Setup(x => x.ChangePasswordAsync(user, It.IsAny<string>(), It.IsAny<string>()))
+            .ReturnsAsync(IdentityResult.Failed(errors));
+
+        var result = await _authService.ChangePasswordAsync(
+            new ClaimsPrincipal(), "wrong-password", "new-password");
+
+        result.Success.Should().BeFalse();
+        result.ErrorMessage.Should().Be("Incorrect password.");
+        _signInManagerMock.Verify(x => x.RefreshSignInAsync(It.IsAny<ApplicationUser>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task ChangePasswordAsync_ReturnsFailure_WhenNotSignedIn()
+    {
+        _userManagerMock
+            .Setup(x => x.GetUserAsync(It.IsAny<ClaimsPrincipal>()))
+            .ReturnsAsync((ApplicationUser?)null);
+
+        var result = await _authService.ChangePasswordAsync(
+            new ClaimsPrincipal(), "old-password", "new-password");
+
+        result.Success.Should().BeFalse();
+        result.ErrorMessage.Should().Be("Not signed in.");
+    }
 }

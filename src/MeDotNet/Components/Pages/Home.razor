@@ -20,53 +20,22 @@
     So I learned BASIC and taught it to.<br />We've been teaching each other ever since.
 </MudText>
 
-<MudText Typo="Typo.caption" Class="mud-text-secondary d-block mb-8">
-    Jason St. John · lead full-stack developer · Upstate New York
-</MudText>
-
-<MudPaper Class="pa-4 mb-6 float-left" Elevation="1" Style="max-width: 320px">
-    <MudImage Src="/img/jason-st-john.jpg" Alt="Jason St. John" Fluid="true" Width="800" Height="1099" Class="rounded" />
-</MudPaper>
-
-@* The record sits beside the photo, where the bio used to. It is the point of the
-   site, so it gets the prominent slot; the bio moved below and full width. *@
-<MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4">Latest from the record</MudText>
-
-        @if (_recent is null)
-        {
-            <MudProgressCircular Indeterminate="true" />
-        }
-        else if (_recent.Count == 0)
-        {
-            <MudText>The record starts soon.</MudText>
-        }
-        else
-        {
-            @foreach (var entry in _recent)
-            {
-                <RecordEntryRow Entry="entry" />
-            }
-            <MudButton Href="/notes" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward">
-                Read the whole record
-            </MudButton>
-        }
-
-@* The site is called JasonObject. Rendering him as an actual object is the joke the
-   name has been setting up, and it doubles as a scannable TLDR of the prose beside it.
-   It is valid JSON on purpose: a developer will check, and a broken one would cost more
-   than it earns. Every value is true. *@
-@* Grid, not float. A float let the bio ride up beside the record instead of
-   staying put; a grid pins both columns to the same row and clears everything
-   above it once. Long values are broken across lines so the block never needs a
-   horizontal scrollbar. *@
-<div class="bio-block">
+@* Photo and the JSON object side by side. The object is the joke the site name sets
+   up and a scannable TLDR of the bio below; it is valid JSON on purpose, and every
+   value is true. Grid, not float, so the two stay locked on one row down to the phone
+   breakpoint, then stack. The record moved to the bottom: it is sparse for now and has
+   not earned the prominent slot. *@
+<div class="hero-cols">
+    <MudPaper Class="pa-4" Elevation="1" Style="max-width: 320px">
+        <MudImage Src="/img/jason-st-john.jpg" Alt="Jason St. John" Fluid="true" Width="800" Height="1099" Class="rounded" />
+    </MudPaper>
     <div class="json-card">
         <pre aria-label="Summary of Jason St. John as a JSON object"><span class="j-p">{</span>
   <span class="j-k">"name"</span><span class="j-p">:</span> <span class="j-s">"Jason R. St. John"</span><span class="j-p">,</span>
   <span class="j-k">"role"</span><span class="j-p">:</span> <span class="j-s">"lead full-stack developer"</span><span class="j-p">,</span>
-  <span class="j-k">"years"</span><span class="j-p">:</span> <span class="j-n">12</span><span class="j-p">,</span>
+  <span class="j-k">"yearsInTech"</span><span class="j-p">:</span> <span class="j-n">12</span><span class="j-p">,</span>
   <span class="j-k">"builds"</span><span class="j-p">:</span>
-    <span class="j-s">"the internal tools others work in"</span><span class="j-p">,</span>
+    <span class="j-s">"platforms, AI harnesses, and the tools others work in"</span><span class="j-p">,</span>
   <span class="j-k">"stack"</span><span class="j-p">:</span> <span class="j-p">[</span>
     <span class="j-s">".NET"</span><span class="j-p">,</span> <span class="j-s">"Vue"</span><span class="j-p">,</span> <span class="j-s">"Nuxt"</span><span class="j-p">,</span>
     <span class="j-s">"TypeScript"</span><span class="j-p">,</span> <span class="j-s">"AWS"</span>
@@ -78,15 +47,43 @@
   <span class="j-k">"dogs"</span><span class="j-p">:</span> <span class="j-n">2</span>
 <span class="j-p">}</span></pre>
     </div>
-
-    <MudText Typo="Typo.body1">
-        Eight years architecting production .NET and Vue/Nuxt platforms, a few years teaching
-        school before that. Directing AI agents is an instruction problem: decomposition,
-        scaffolding, feedback, and telling the difference between a model that misunderstood
-        and one that wasn't given enough. Lately the teaching runs both ways; an agent is
-        walking me through Rust.
-    </MudText>
 </div>
+
+@* Bio prose, full width under the photo/object row. *@
+<MudText Typo="Typo.body1" Class="mt-8">
+    Twelve years of development, most recently eight years architecting production .NET
+    and Vue/Nuxt platforms, a few years teaching school before that. Directing AI agents
+    is an instruction problem: decomposition, scaffolding, feedback, and telling the
+    difference between a model that misunderstood and one that wasn't given enough. Lately
+    the teaching runs both ways; an agent is walking me through Rust.
+</MudText>
+
+<MudText Typo="Typo.body1" Class="mt-4">
+    Taking on contract architecture, platform builds, and legacy migrations now—and open to the
+    right lead engineering role. <MudLink Href="/work">See the problems I solve →</MudLink>
+</MudText>
+
+@* The record, full width at the bottom until it grows enough to reclaim a top slot. *@
+<MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4 mt-8">Latest from the record</MudText>
+
+@if (_recent is null)
+{
+    <MudProgressCircular Indeterminate="true" />
+}
+else if (_recent.Count == 0)
+{
+    <MudText>The record starts soon.</MudText>
+}
+else
+{
+    @foreach (var entry in _recent)
+    {
+        <RecordEntryRow Entry="entry" />
+    }
+    <MudButton Href="/notes" Variant="Variant.Text" EndIcon="@Icons.Material.Filled.ArrowForward">
+        Read the whole record
+    </MudButton>
+}
 
 @code {
     private List<Post>? _recent;

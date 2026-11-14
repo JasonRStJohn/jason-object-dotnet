@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MeDotNet.Components;
@@ -14,8 +15,21 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddRazorPages();
 
+// Needed so the statically-rendered root and the layout can read the `theme`
+// cookie at render time and paint the correct light/dark theme on the first byte.
+builder.Services.AddHttpContextAccessor();
+
 // MudBlazor Components
 builder.Services.AddMudServices();
+
+// Persist DataProtection keys to a bind mount so a `docker compose up --build`
+// no longer generates a fresh key ring and invalidates every open session and
+// antiforgery token (the "Blazor reconnect / refresh" modal). The keys live in
+// /keys, mounted from ./dataprotection-keys on the host. SetApplicationName pins
+// the key-ring purpose so keys keep decrypting across rebuilds and rename-safe.
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo("/keys"))
+    .SetApplicationName("MeDotNet");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -100,11 +114,17 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();
+
+// MapStaticAssets (not UseStaticFiles) so build-time fingerprinting is active:
+// @Assets["app.css"] resolves to a content-hashed URL that changes whenever the
+// file changes. Cloudflare caches CSS by URL for hours, so without the hash a
+// style change stays invisible on the public apex until the cache expires. The
+// hash makes every deploy a fresh URL — an automatic cache-bust.
+app.MapStaticAssets();
 
 // Legacy blog routes — preserved so existing links survive the rename to /notes
 app.MapGet("/posts", () => Results.Redirect("/notes", permanent: true));

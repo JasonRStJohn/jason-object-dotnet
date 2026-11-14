@@ -33,3 +33,6 @@ docs/*.jpg
 *.swp
 *.swo
 *~
+
+# DataProtection keys (bind-mounted crypto material — never commit)
+dataprotection-keys/
