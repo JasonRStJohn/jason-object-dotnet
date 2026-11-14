@@ -5,7 +5,7 @@
 @inject PersistentComponentState ApplicationState
 @implements IDisposable
 
-<PageTitle>@($"{_post?.Title ?? "Not Found"} — JasonObject")</PageTitle>
+<PageTitle>@($"{_post?.Title ?? "Not Found"} - JasonObject")</PageTitle>
 
 @if (_post is null)
 {
@@ -36,12 +36,21 @@ else
     [Parameter] public string Slug { get; set; } = "";
     [CascadingParameter] HttpContext? HttpContext { get; set; }
     private Post? _post;
+    private string? _loadedSlug;
     private PersistentLoader? _loader;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         _loader = new PersistentLoader(ApplicationState);
-        _post = await _loader.LoadAsync($"note-{Slug}", () => PostService.GetBySlugAsync(Slug));
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (_loadedSlug == Slug)
+            return;
+
+        _loadedSlug = Slug;
+        _post = await _loader!.LoadAsync($"note-{Slug}", () => PostService.GetBySlugAsync(Slug));
         if (_post is null && HttpContext is not null)
             HttpContext.Response.StatusCode = 404;
     }
