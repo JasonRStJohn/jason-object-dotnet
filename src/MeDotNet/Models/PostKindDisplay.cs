@@ -10,12 +10,16 @@ public static class PostKindDisplay
         _ => "NOTE"
     };
 
-    public static string RailColor(this PostKind kind) => kind switch
+    /// <summary>
+    /// The CSS class that styles this kind (wwwroot/app.css): an accent colour plus a
+    /// distinct outline style, so the kind never depends on colour alone.
+    /// </summary>
+    public static string CssClass(this PostKind kind) => kind switch
     {
-        PostKind.Spec => "#7a5cff",
-        PostKind.Plan => "#7a5cff",
-        PostKind.PostMortem => "#d4763a",
-        _ => "#2fb47c"
+        PostKind.Spec => "fm-kind-spec",
+        PostKind.Plan => "fm-kind-plan",
+        PostKind.PostMortem => "fm-kind-postmortem",
+        _ => "fm-kind-note"
     };
 
     public static string FilterName(PostKind kind) => kind switch

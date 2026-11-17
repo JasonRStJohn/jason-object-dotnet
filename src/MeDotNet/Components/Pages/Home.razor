@@ -6,52 +6,45 @@
 
 <PageTitle>JasonObject - Jason St. John</PageTitle>
 
-<div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-4">
-    <MudChip T="string" Size="Size.Small" Color="Color.Success" Variant="Variant.Outlined" Class="ma-0">
-        Available for Contract &amp; Architecture Work · Upstate NY &amp; Remote
-    </MudChip>
-    <div class="d-flex flex-column gap-1">
-        <MudText Typo="Typo.subtitle2" Style="font-weight: 600; line-height: 1.25">
-            Jason R. St. John
-        </MudText>
-        <MudText Typo="Typo.caption" Class="mud-text-secondary d-flex align-center gap-2" Style="line-height: 1.2">
-            <svg width="13" height="10" viewBox="-12 -11 34 22" aria-hidden="true" style="flex-shrink: 0">
+<div class="fm-id mb-5">
+    <MudText Typo="Typo.subtitle1" Class="fm-id-name">Jason R. St. John</MudText>
+    <ul class="fm-id-roles" aria-label="Roles">
+        <li>
+            <svg width="13" height="10" viewBox="-12 -11 34 22" aria-hidden="true">
                 <polygon points="-10,-10 -10,10 20,0" fill="#888e99" />
                 <polygon points="-10,-10 -10,10 -3,0" fill="#3b82f6" />
             </svg>
-            <span>Lead Software Architect</span>
-        </MudText>
-        <MudText Typo="Typo.caption" Class="mud-text-secondary d-flex align-center gap-2" Style="line-height: 1.2">
-            <svg width="13" height="10" viewBox="-12 -11 34 22" aria-hidden="true" style="flex-shrink: 0">
+            Lead Software Architect
+        </li>
+        <li>
+            <svg width="13" height="10" viewBox="-12 -11 34 22" aria-hidden="true">
                 <polygon points="-10,-10 -10,10 20,0" fill="#888e99" />
                 <polygon points="-10,-10 -10,10 -3,0" fill="#facc15" />
             </svg>
-            <span>Full-Stack Engineer</span>
-        </MudText>
-    </div>
+            Full-Stack Engineer
+        </li>
+    </ul>
 </div>
 
-<h1 class="mud-typography mud-typography-h3" style="margin-bottom: 0.5rem">
+<h1 class="mud-typography mud-typography-h3 fm-hero-title">
     My first computer didn't play games.
 </h1>
-
-<MudText Typo="Typo.body1" Class="mb-4" Style="font-size: 1.15rem; line-height: 1.6">
+<MudText Typo="Typo.body1" Class="fm-hero-sub mb-2">
     So I learned BASIC and taught it to.<br />We've been learning from each other ever since.
 </MudText>
 
 <div class="hero-cols">
     <div class="d-flex flex-column justify-space-between">
-        <MudText Typo="Typo.body1" Style="line-height: 1.75">
+        <MudText Typo="Typo.body1" Class="fm-measure" Style="line-height: 1.75">
             Twelve years of development, most recently eight years architecting production .NET
             and Vue/Nuxt platforms, with a few years teaching school before that. Directing AI agents
             is an instruction problem: decomposition, scaffolding, feedback, and telling the
             difference between a model that misunderstood and one that wasn't given enough. Lately
             the teaching runs both ways; an agent is walking me through Rust.
         </MudText>
-
         <div class="mt-6">
-            <div class="d-flex flex-wrap align-center gap-3 mb-2">
-                <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Primary"
+            <div class="d-flex flex-wrap align-center gap-3 mb-3">
+                <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Secondary"
                            EndIcon="@Icons.Material.Filled.ArrowForward">
                     Work with me
                 </MudButton>
@@ -59,14 +52,18 @@
                     Browse projects
                 </MudButton>
             </div>
-            <MudText Typo="Typo.caption" Class="mud-text-secondary d-block">
-                Taking on contract architecture, platform builds, and legacy migrations, and open to the right lead role.
-            </MudText>
+            <p class="fm-status">
+                <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="5" r="4" /></svg>
+                Taking on contract architecture, platform builds and legacy migrations now, and open to the right lead role.
+            </p>
         </div>
     </div>
-
-    <div class="json-card">
-        <pre aria-label="Summary of Jason St. John as a JSON object"><span class="j-p">{</span>
+    <section class="json-card fm-panel fm-accent-amber" aria-label="Summary of Jason St. John as a JSON object">
+        <div class="fm-panel-head">
+            <span class="fm-panel-title fm-mono">jason.json</span>
+            <span class="fm-tag">schema: human</span>
+        </div>
+        <pre><span class="j-p">{</span>
   <span class="j-k">"name"</span><span class="j-p">:</span> <span class="j-s">"Jason R. St. John"</span><span class="j-p">,</span>
   <span class="j-k">"role"</span><span class="j-p">:</span> <span class="j-s">"lead software architect"</span><span class="j-p">,</span>
   <span class="j-k">"basedIn"</span><span class="j-p">:</span> <span class="j-s">"Upstate New York"</span><span class="j-p">,</span>
@@ -80,10 +77,19 @@
     <span class="j-s">"spec, plan, implement, review"</span><span class="j-p">,</span>
   <span class="j-k">"dogs"</span><span class="j-p">:</span> <span class="j-n">2</span>
 <span class="j-p">}</span></pre>
-    </div>
+    </section>
 </div>
 
-<MudText Typo="Typo.overline" Class="mud-text-secondary d-block mb-4 mt-10">Latest from the record</MudText>
+@* Real figures only. Each traces to the site's own copy or to the
+   "What Happened to See Ya Real Soon" record entry (Nov 2026). *@
+<ul class="fm-stats" aria-label="By the numbers">
+    <li class="fm-stat fm-accent-cyan"><span class="fm-stat-n fm-mono">12</span><span class="fm-stat-l">Years in tech</span></li>
+    <li class="fm-stat fm-accent-amber"><span class="fm-stat-n fm-mono">8+</span><span class="fm-stat-l">Years leading .NET and Vue platforms</span></li>
+    <li class="fm-stat fm-accent-green"><span class="fm-stat-n fm-mono">5</span><span class="fm-stat-l">Live sites shipped since July</span></li>
+    <li class="fm-stat fm-accent-violet"><span class="fm-stat-n fm-mono">540+</span><span class="fm-stat-l">Commits across 16 repos since July</span></li>
+</ul>
+
+<h2 class="mud-typography mud-typography-h5 fm-section-title">Latest from the record</h2>
 
 @if (_recent is null)
 {

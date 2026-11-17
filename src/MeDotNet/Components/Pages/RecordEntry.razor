@@ -16,18 +16,16 @@
 }
 else
 {
-    <div class="d-flex align-center gap-3 mb-2">
-        <MudChip T="string" Size="Size.Small" Style="@($"background-color:{_post.Kind.RailColor()};color:#fff;font-weight:700;letter-spacing:.08em;")">
-            @_post.Kind.Label()
-        </MudChip>
-        <MudText Typo="Typo.caption">
+    <div class="fm-entry-meta mb-3 @_post.Kind.CssClass()">
+        <span class="fm-tag">@_post.Kind.Label()</span>
+        <span class="fm-entry-date fm-mono">
             @(_post.Project is not null ? $"{_post.Project} · " : "")@SiteTime.FormatDate(_post.PublishedAt!.Value)
-        </MudText>
+        </span>
     </div>
     <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">@_post.Title</h1>
     @if (!string.IsNullOrWhiteSpace(_post.Summary))
     {
-        <MudText Typo="Typo.h6" Class="mud-text-secondary mb-6">@_post.Summary</MudText>
+        <p class="fm-entry-lede mb-8">@_post.Summary</p>
     }
     <div class="record-body">@((MarkupString)MarkdownRenderer.ToHtml(_post.Body))</div>
 }

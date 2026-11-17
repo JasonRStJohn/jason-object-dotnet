@@ -10,24 +10,24 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="1">
+    <MudAppBar Elevation="0" Class="fm-appbar">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
                        OnClick="ToggleDrawer" aria-label="Toggle navigation" Class="nav-mobile-only mr-1" />
         <MudLink Href="/" Underline="Underline.None" Color="Color.Inherit" Class="d-flex align-center">
             <img src="@Assets["img/logo-j.png"]" alt="" width="28" height="28" class="mr-2" style="display: block" />
-            <MudText Typo="Typo.h6">JasonObject</MudText>
+            <span class="fm-wordmark">JasonObject</span>
         </MudLink>
         <MudSpacer />
-        <div class="nav-desktop-only align-center gap-1 mr-3">
-            <MudButton Href="/" Variant="Variant.Text" Color="Color.Inherit">Home</MudButton>
-            <MudButton Href="/notes" Variant="Variant.Text" Color="Color.Inherit">The Record</MudButton>
-            <MudButton Href="/projects" Variant="Variant.Text" Color="Color.Inherit">Projects</MudButton>
-            <MudButton Href="/about" Variant="Variant.Text" Color="Color.Inherit">About</MudButton>
-        </div>
-        <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Primary" Class="mr-3 cta-wide">
+        @* NavLink (not MudButton) so the current page gets the `active` class and an underline marker. *@
+        <nav class="nav-desktop-only align-center fm-nav mr-4" aria-label="Main">
+            <NavLink href="notes" class="fm-nav-link">The Record</NavLink>
+            <NavLink href="projects" class="fm-nav-link">Projects</NavLink>
+            <NavLink href="about" class="fm-nav-link">About</NavLink>
+        </nav>
+        <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Secondary" Class="mr-3 cta-wide">
             Work with me
         </MudButton>
-        <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Small" Class="mr-2 cta-compact">
+        <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Small" Class="mr-2 cta-compact">
             Contact
         </MudButton>
         <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
@@ -78,9 +78,13 @@
         </MudContainer>
         <footer class="site-footer py-4 px-4">
             <MudContainer MaxWidth="MaxWidth.Large" Class="px-2 px-md-6 d-flex flex-wrap align-center justify-space-between gap-2">
-                <MudText Typo="Typo.caption" Class="mud-text-secondary">
-                    Jason R. St. John · jasonobject.work · .NET, Vue/Nuxt &amp; AI Systems Architecture
-                </MudText>
+                <p class="fm-footer-meta">
+                    <span>JasonObject field manual</span>
+                    <span aria-hidden="true">|</span>
+                    <span>Rev 2026.11</span>
+                    <span aria-hidden="true">|</span>
+                    <span>Built by a human, with agents, reviewed by the human</span>
+                </p>
                 <div class="d-flex align-center gap-2">
                     <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Size="Size.Small"
                                    Href="https://github.com/JasonRStJohn" Target="_blank" aria-label="GitHub" />

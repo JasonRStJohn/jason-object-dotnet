@@ -359,69 +359,151 @@ html, body {
 }
 
 /* ---------------------------------------------------------------------------
-   The hero columns: photo beside the JSON object
+   Home hero: bio beside the JSON object, then the figures strip
    ---------------------------------------------------------------------------
-   Grid rather than float, so the photo and the object stay locked on one row down
-   to the phone breakpoint (600px, MudBlazor's sm) and then stack. The photo column
-   is capped at its intrinsic width; the object takes the rest. Tablets (>=600px)
-   keep the two columns, which is the intent. The prose bio and the record sit
-   full width below this row.
+   Grid so the bio and jason.json share one row on wide screens and stack below
+   MudBlazor's md breakpoint (960px).
    --------------------------------------------------------------------------- */
 .hero-cols {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 2rem;
 }
 
-.hero-cols > * {
-    min-width: 0;
-}
+.hero-cols > * { min-width: 0; }
 
 @media (min-width: 960px) {
     .hero-cols {
-        margin-top: 2rem;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        gap: 3rem;
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+        gap: 3.5rem;
         align-items: start;
     }
 }
 
-/* No full border and no scrollbar. A single accent rule on the left reads as a
-   code block without boxing the content in; pre-wrap lets long values wrap on
-   narrow phones instead of blowing out the grid track width. */
+.fm-measure { max-width: 68ch; }
+
+.fm-id-name {
+    font-weight: 800;
+    letter-spacing: 0.01em;
+}
+
+.fm-id-roles {
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.25rem;
+    font-size: 0.875rem;
+    color: var(--mud-palette-text-secondary);
+}
+
+.fm-id-roles li { display: inline-flex; align-items: center; gap: 0.5rem; }
+
+.fm-hero-title {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2.25rem, 1.4rem + 3.4vw, 4.25rem);
+    max-width: 18ch;
+}
+
+.fm-hero-sub {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--mud-palette-text-secondary);
+}
+
+/* Availability, said as a sentence next to the action rather than a 12px pill. */
+.fm-status {
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--mud-palette-text-primary);
+    max-width: 52ch;
+}
+
+.fm-status svg { flex: none; fill: var(--mud-palette-success); transform: translateY(1px); }
+
+/* jason.json: an amber code panel, as in the manual's code boxes. */
 .json-card {
-    padding-top: 0;
+    padding: 1rem 1.25rem 1.25rem;
     max-width: 100%;
 }
 
+.json-card .fm-panel-head { margin-bottom: 0.75rem; padding-bottom: 0.6rem; }
+
+.json-card .fm-panel-title { font-size: 0.8125rem; font-weight: 600; }
+
 .json-card pre {
     margin: 0;
-    padding: 0.25rem 0 0.25rem 0.9rem;
-    border-left: 3px solid var(--mud-palette-primary);
     background: none;
-    font-family: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
-    font-size: 0.8rem;
-    line-height: 1.65;
-    max-width: 100%;
-    box-sizing: border-box;
+    font-family: var(--fm-mono);
+    font-size: 0.78rem;
+    line-height: 1.75;
     white-space: pre-wrap;
     overflow-wrap: break-word;
 }
 
 @media (min-width: 600px) {
-    .json-card pre {
-        padding-left: 1.1rem;
-        font-size: 0.85rem;
-        line-height: 1.7;
-    }
+    .json-card pre { font-size: 0.82rem; }
 }
 
-/* Punctuation recedes; keys and values carry the colour. */
-.json-card .j-p { color: var(--mud-palette-text-disabled); }
+/* Punctuation recedes; keys, strings and numbers each keep one role colour. */
+.json-card .j-p { color: var(--mud-palette-text-secondary); }
 .json-card .j-k { color: var(--mud-palette-primary); }
-.json-card .j-s { color: var(--mud-palette-tertiary); }
-.json-card .j-n { color: var(--mud-palette-secondary); }
+.json-card .j-s { color: var(--mud-palette-success); }
+.json-card .j-n { color: var(--mud-palette-error); }
+
+/* The figures strip: the manual's top row of tiles, real numbers only. */
+.fm-stats {
+    list-style: none;
+    margin: 2.5rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+}
+
+@media (min-width: 960px) {
+    .fm-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+}
+
+.fm-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 0.35rem;
+    padding: 1.1rem 0.75rem;
+    background: var(--mud-palette-surface);
+    border: var(--fm-outline) solid color-mix(in srgb, var(--fm-accent) 70%, transparent);
+    border-radius: var(--fm-radius);
+}
+
+.fm-stat-n {
+    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--fm-accent);
+}
+
+.fm-stat-l {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1.35;
+    color: var(--mud-palette-text-secondary);
+}
+
+.fm-section-title {
+    margin: 3.5rem 0 1.25rem;
+    color: var(--mud-palette-text-primary);
+}
 
 /* Allow MudChips inside main content to wrap cleanly on narrow phone screens
    instead of forcing horizontal overflow with white-space: nowrap. */
@@ -535,4 +617,134 @@ html[data-theme="dark"] .chasma-arena-layer {
 .site-footer {
     margin-top: auto;
     border-top: 1px solid var(--mud-palette-lines-default);
+}
+
+/* ---------------------------------------------------------------------------
+   App bar, nav and footer (Field Manual)
+   --------------------------------------------------------------------------- */
+.fm-appbar {
+    border-bottom: 1px solid var(--mud-palette-lines-default);
+}
+
+.fm-wordmark {
+    font-weight: 850;
+    font-stretch: 115%;
+    font-size: 1.125rem;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+}
+
+.fm-nav { gap: 1.75rem; }
+
+.fm-nav-link {
+    position: relative;
+    color: var(--mud-palette-text-secondary);
+    text-decoration: none;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.5rem 0;
+    transition: color 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fm-nav-link:hover { color: var(--mud-palette-text-primary); }
+
+.fm-nav-link.active { color: var(--mud-palette-text-primary); }
+
+/* The current page wears a short cyan bar under its label, like an active tab on the manual. */
+.fm-nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--mud-palette-primary);
+}
+
+.fm-footer-meta {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mud-palette-text-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+   Record entries: accent + outline style per kind
+   ---------------------------------------------------------------------------
+   Spec solid cyan, Plan dashed violet, Post-mortem double coral, Note dotted
+   amber. The outline style means the kind survives without colour.
+   --------------------------------------------------------------------------- */
+.fm-kind-spec       { --fm-accent: var(--mud-palette-primary);   --fm-kind-line: solid; }
+.fm-kind-plan       { --fm-accent: var(--mud-palette-tertiary);  --fm-kind-line: dashed; }
+.fm-kind-postmortem { --fm-accent: var(--mud-palette-error);     --fm-kind-line: double; }
+.fm-kind-note       { --fm-accent: var(--mud-palette-secondary); --fm-kind-line: dotted; }
+
+.fm-entry {
+    position: relative;
+    margin-bottom: 1rem;
+    padding: 1.1rem 1.35rem 1.2rem;
+    background: var(--mud-palette-surface);
+    border: 2px var(--fm-kind-line, solid) color-mix(in srgb, var(--fm-accent) 60%, transparent);
+    border-radius: var(--fm-radius);
+    transition: border-color 200ms cubic-bezier(0.16, 1, 0.3, 1), background-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fm-kind-postmortem.fm-entry { border-width: 3px; }
+
+.fm-entry:hover,
+.fm-entry:focus-within {
+    border-color: var(--fm-accent);
+    background: color-mix(in srgb, var(--fm-accent) 5%, var(--mud-palette-surface));
+}
+
+.fm-entry-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.9rem;
+    margin-bottom: 0.6rem;
+}
+
+.fm-entry-date {
+    font-size: 0.75rem;
+    color: var(--mud-palette-text-secondary);
+}
+
+.fm-entry-title { margin: 0; }
+
+/* The whole card is the hit area; the link stays the accessible name. */
+.fm-entry-title a {
+    color: var(--mud-palette-text-primary);
+    text-decoration: none;
+}
+
+.fm-entry-title a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--fm-radius);
+}
+
+.fm-entry:hover .fm-entry-title a { color: var(--fm-accent); }
+
+.fm-entry-summary {
+    margin: 0.4rem 0 0;
+    max-width: 75ch;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--mud-palette-text-secondary);
+}
+
+.fm-entry-lede {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    max-width: 60ch;
+    color: var(--mud-palette-text-secondary);
 }
