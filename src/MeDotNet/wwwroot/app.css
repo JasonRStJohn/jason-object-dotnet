@@ -831,3 +831,10 @@ html[data-theme="light"] { --fm-grid-line: rgba(14, 116, 144, 0.07); }
     opacity: 0.72;
     filter: none;
 }
+
+/* Long-form reading (The Record entries): a book measure, not the container width. */
+.record-body { max-width: 72ch; font-size: 1.0625rem; }
+.record-body pre, .record-body table { max-width: 100%; }
+
+/* About: the portrait sits in an outline like every other panel. */
+.mud-image.float-left { border: var(--fm-outline) solid var(--mud-palette-lines-default); }
