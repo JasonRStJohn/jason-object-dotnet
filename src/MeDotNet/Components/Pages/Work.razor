@@ -6,7 +6,7 @@
 
 <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">Work with me</h1>
 
-<MudText Typo="Typo.body1" Class="mb-6">
+<MudText Typo="Typo.body1" Class="mb-6 fm-measure">
     I take on contract architecture and development work, and I'm open to the right lead or principal
     engineering role. Below are the three problems people usually bring me in to solve.
 </MudText>
@@ -23,12 +23,15 @@
         pasting sensitive context into raw chat windows with no guardrails, or buying black-box "agent"
         platforms that hallucinate the moment they touch messy enterprise data.
     </MudText>
-    <MudText Typo="Typo.body1" Class="mb-3">
-        <strong>How I approach it:</strong> Directing models reliably is an instruction and systems-architecture
+    <details class="fm-disclose mb-3">
+        <summary>How I approach it</summary>
+        <MudText Typo="Typo.body1" Class="mt-2">
+            Directing models reliably is an instruction and systems-architecture
         problem. I build constrained, multi-stage harnesses that sit between your existing systems of record
         (ERPs, databases, internal APIs) and the people making decisions. Separating context assembly,
         generation, and cold verification keeps outputs auditable and repeatable.
-    </MudText>
+        </MudText>
+    </details>
     <div class="d-flex flex-wrap align-center gap-3">
         <MudButton Href="/projects?category=ai-systems" Variant="Variant.Text" Color="Color.Primary"
                    EndIcon="@Icons.Material.Filled.ArrowForward" Class="px-0">
@@ -53,12 +56,15 @@
         spreadsheets and off-the-shelf SaaS, or get trapped paying steep licensing fees for rigid legacy
         software that doesn't match how their people actually work.
     </MudText>
-    <MudText Typo="Typo.body1" Class="mb-3">
-        <strong>How I approach it:</strong> I architect and ship custom web platforms and automation engines
+    <details class="fm-disclose mb-3">
+        <summary>How I approach it</summary>
+        <MudText Typo="Typo.body1" Class="mt-2">
+            I architect and ship custom web platforms and automation engines
         in .NET, C#, Vue/Nuxt, and SQL, from multi-workflow production systems and airspace tooling to civic
         utilities and operational dashboards. Clean data models, permissions that match the floor, and
         codebases another engineer can actually maintain.
-    </MudText>
+        </MudText>
+    </details>
     <div class="d-flex flex-wrap align-center gap-3">
         <MudButton Href="/projects?category=platforms" Variant="Variant.Text" Color="Color.Primary"
                    EndIcon="@Icons.Material.Filled.ArrowForward" Class="px-0">
@@ -83,13 +89,16 @@
         run on aging WordPress installs buried under twenty plugins. They are slow, fragile on update day, and
         confusing for staff who just need to post an agenda, a catalog update, or an event.
     </MudText>
-    <MudText Typo="Typo.body1" Class="mb-3">
-        <strong>How I approach it:</strong> I built <strong>ClaudePress</strong> (which currently underlies five
+    <details class="fm-disclose mb-3">
+        <summary>How I approach it</summary>
+        <MudText Typo="Typo.body1" Class="mt-2">
+            I built <strong>ClaudePress</strong> (which currently underlies five
         live production sites, plus vertical layers like <strong>PawPress</strong>). It is a fast, model-agnostic Nuxt 3 +
         PocketBase stack with an admin interface tailored to the organization's actual content, paired with an
         automated migration pipeline that moves sites off WordPress without billing for a hundred hours of
         hand-copying.
-    </MudText>
+        </MudText>
+    </details>
     <div class="d-flex flex-wrap align-center gap-3">
         <MudButton Href="/projects?category=claudepress" Variant="Variant.Text" Color="Color.Primary"
                    EndIcon="@Icons.Material.Filled.ArrowForward" Class="px-0">
@@ -102,7 +111,7 @@
     </div>
 </MudPaper>
 
-<MudPaper Class="pa-4 pa-sm-6 mb-6 fm-panel fm-accent-sky" Elevation="0">
+<MudPaper Class="pa-4 pa-sm-6 mb-6 fm-panel fm-neutral" Elevation="0">
     <div class="fm-panel-head">
         <h2 class="mud-typography mud-typography-h5 fm-panel-title">How we can work together</h2>
         <MudButton Variant="Variant.Text" Color="Color.Primary" Size="Size.Small"

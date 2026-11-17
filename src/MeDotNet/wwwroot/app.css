@@ -839,3 +839,65 @@ html[data-theme="light"] { --fm-grid-line: rgba(14, 116, 144, 0.07); }
 
 /* About: the portrait sits in an outline like every other panel. */
 .mud-image.float-left { border: var(--fm-outline) solid var(--mud-palette-lines-default); }
+
+/* ---- Finish-review fixes ---- */
+
+/* A panel with no category: neutral outline, title in the body ink. */
+.fm-neutral { --fm-accent: var(--mud-palette-text-primary); }
+.fm-neutral.fm-panel { border-color: var(--mud-palette-lines-inputs); }
+
+/* Figures share one treatment: they are facts, not categories. Numerals sit on one
+   row whatever their label length. */
+.fm-stat {
+    --fm-accent: var(--mud-palette-primary);
+    justify-content: flex-start;
+    border-color: var(--mud-palette-lines-inputs);
+}
+
+/* Record rows: title with the kind pill at its right, date beneath in mono. */
+.fm-entry-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem 1rem;
+}
+
+.fm-entry-head .fm-tag { margin-top: 0.2rem; }
+
+.fm-entry-date { margin: 0.35rem 0 0; }
+
+/* Progressive disclosure: a quiet mono toggle in the panel's accent. */
+.fm-disclose > summary {
+    cursor: pointer;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 36px;
+    font-family: var(--fm-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fm-accent);
+}
+
+.fm-disclose > summary::-webkit-details-marker { display: none; }
+
+.fm-disclose > summary::before {
+    content: "+";
+    display: inline-grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--fm-accent) 65%, transparent);
+    border-radius: 6px;
+    transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fm-disclose[open] > summary::before { content: "\2212"; }
+
+/* Phones: the two hero actions share one width. */
+@media (max-width: 599.98px) {
+    .hero-cols .mud-button-root { width: 100%; }
+}

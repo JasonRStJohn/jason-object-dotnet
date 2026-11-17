@@ -5,16 +5,16 @@
    without relying on colour. HeadingLevel keeps the outline correct: rows sit
    under an h2 on Home and directly under the page h1 on /notes. *@
 <article class="fm-entry @Entry.Kind.CssClass()">
-    <div class="fm-entry-meta">
+    <div class="fm-entry-head">
+        @{ var tag = $"h{Math.Clamp(HeadingLevel, 2, 6)}"; }
+        <DynamicHeading Tag="@tag" Class="mud-typography mud-typography-h6 fm-entry-title">
+            <a href="@($"/notes/{Entry.Slug}")">@Entry.Title</a>
+        </DynamicHeading>
         <span class="fm-tag">@Entry.Kind.Label()</span>
-        <span class="fm-entry-date fm-mono">
-            @(Entry.Project is not null ? $"{Entry.Project} · " : "")@SiteTime.FormatDate(Entry.PublishedAt!.Value)
-        </span>
     </div>
-    @{ var tag = $"h{Math.Clamp(HeadingLevel, 2, 6)}"; }
-    <DynamicHeading Tag="@tag" Class="mud-typography mud-typography-h6 fm-entry-title">
-        <a href="@($"/notes/{Entry.Slug}")">@Entry.Title</a>
-    </DynamicHeading>
+    <p class="fm-entry-date fm-mono">
+        @(Entry.Project is not null ? $"{Entry.Project} · " : "")@SiteTime.FormatDate(Entry.PublishedAt!.Value)
+    </p>
     @if (ShowSummary && !string.IsNullOrWhiteSpace(Entry.Summary))
     {
         <p class="fm-entry-summary">@Entry.Summary</p>
