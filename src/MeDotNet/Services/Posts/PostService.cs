@@ -40,6 +40,27 @@ public class PostService(IDbContextFactory<AppDbContext> dbFactory)
         return await db.Posts.AsNoTracking().FirstOrDefaultAsync(p => p.Slug == slug && p.PublishedAt != null);
     }
 
+    /// <summary>
+    /// The published entries immediately newer and older than <paramref name="post"/>,
+    /// ordered the way the record lists them (CreatedAt). Either side may be null.
+    /// </summary>
+    public async Task<PostNeighbours> GetNeighboursAsync(Post post)
+    {
+        await using var db = await dbFactory.CreateDbContextAsync();
+        var published = db.Posts.AsNoTracking().Where(p => p.PublishedAt != null && p.Id != post.Id);
+
+        var newer = await published.Where(p => p.CreatedAt > post.CreatedAt)
+            .OrderBy(p => p.CreatedAt)
+            .Select(p => new PostLink(p.Title, p.Slug))
+            .FirstOrDefaultAsync();
+        var older = await published.Where(p => p.CreatedAt < post.CreatedAt)
+            .OrderByDescending(p => p.CreatedAt)
+            .Select(p => new PostLink(p.Title, p.Slug))
+            .FirstOrDefaultAsync();
+
+        return new PostNeighbours(newer, older);
+    }
+
     public async Task CreateAsync(Post post)
     {
         await using var db = await dbFactory.CreateDbContextAsync();
