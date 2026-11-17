@@ -1075,4 +1075,6 @@ html[data-theme="light"] { --fm-grid-line: rgba(14, 116, 144, 0.07); }
 /* Phones already show type and date under the title; skip the repeat. */
 @media (max-width: 1023.98px) {
     .fm-entry-aside > .fm-aside-panel:first-child { display: none; }
+    /* About's facts repeat the copy above them; on phones the page should end on how to reach me. */
+    .fm-about-facts { display: none; }
 }
