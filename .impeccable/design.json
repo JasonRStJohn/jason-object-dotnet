@@ -1,0 +1,719 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-17T22:46:56+00:00",
+  "title": "Design System: JasonObject",
+  "extensions": {
+    "colorMeta": {
+      "navy-ground": {
+        "role": "neutral",
+        "displayName": "Navy Ground",
+        "purpose": "The page in dark mode (default).",
+        "canonical": "oklch(18.3% 0.031 263.4)",
+        "tonalRamp": [
+          "#080B11",
+          "#20252E",
+          "#3C424F",
+          "#596171",
+          "#798395",
+          "#9CA5B6",
+          "#C2C9D8",
+          "#E8EFFB"
+        ]
+      },
+      "navy-ground-raised": {
+        "role": "neutral",
+        "displayName": "Navy Ground Raised",
+        "purpose": "Code blocks and table headers in long-form entries, dark.",
+        "canonical": "oklch(20.6% 0.041 262.3)",
+        "tonalRamp": [
+          "#070B13",
+          "#1F2531",
+          "#394252",
+          "#566276",
+          "#75839B",
+          "#99A6BC",
+          "#BFCADD",
+          "#E6EFFF"
+        ]
+      },
+      "navy-panel": {
+        "role": "neutral",
+        "displayName": "Navy Panel",
+        "purpose": "Every outlined surface in dark mode.",
+        "canonical": "oklch(21.9% 0.043 261.6)",
+        "tonalRamp": [
+          "#070B14",
+          "#1E2532",
+          "#394253",
+          "#566277",
+          "#74839C",
+          "#99A6BD",
+          "#BECADE",
+          "#E5EFFF"
+        ]
+      },
+      "manual-ink": {
+        "role": "neutral",
+        "displayName": "Manual Ink",
+        "purpose": "Headings and body text on navy.",
+        "canonical": "oklch(94.4% 0.015 257.2)",
+        "tonalRamp": [
+          "#090B0E",
+          "#22252A",
+          "#3E4248",
+          "#5C6269",
+          "#7D838C",
+          "#A0A5AD",
+          "#C5CAD1",
+          "#EBEFF5"
+        ]
+      },
+      "manual-ink-muted": {
+        "role": "neutral",
+        "displayName": "Manual Ink Muted",
+        "purpose": "Secondary copy, nav at rest, dates, fact labels.",
+        "canonical": "oklch(73.6% 0.041 257.9)",
+        "tonalRamp": [
+          "#060B13",
+          "#1E2631",
+          "#384352",
+          "#556276",
+          "#73839B",
+          "#98A6BC",
+          "#BDCADD",
+          "#E5EFFF"
+        ]
+      },
+      "manual-ink-faint": {
+        "role": "neutral",
+        "displayName": "Manual Ink Faint",
+        "purpose": "Disabled text and actions.",
+        "canonical": "oklch(54.1% 0.046 258.8)",
+        "tonalRamp": [
+          "#060B14",
+          "#1D2533",
+          "#374354",
+          "#546278",
+          "#72839E",
+          "#96A6BE",
+          "#BCCADF",
+          "#E4EFFF"
+        ]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "purpose": "Default outlines and header rules on navy.",
+        "canonical": "oklch(31.0% 0.051 262.2)",
+        "tonalRamp": [
+          "#060B15",
+          "#1D2534",
+          "#374256",
+          "#54627B",
+          "#7283A1",
+          "#96A6C1",
+          "#BCCAE2",
+          "#E4EFFF"
+        ]
+      },
+      "outline-strong": {
+        "role": "neutral",
+        "displayName": "Outline Strong",
+        "purpose": "Neutral panels, figure tiles, inputs, scrollbar thumb.",
+        "canonical": "oklch(40.8% 0.052 261.3)",
+        "tonalRamp": [
+          "#060B15",
+          "#1C2534",
+          "#374257",
+          "#53627B",
+          "#7183A2",
+          "#96A6C2",
+          "#BCCAE2",
+          "#E3EFFF"
+        ]
+      },
+      "signal-cyan": {
+        "role": "primary",
+        "displayName": "Signal Cyan",
+        "purpose": "Platforms, Spec entries, links, focus, active nav, figures.",
+        "canonical": "oklch(79.7% 0.134 211.5)",
+        "tonalRamp": [
+          "#00101A",
+          "#002E3B",
+          "#004E60",
+          "#007187",
+          "#0096B0",
+          "#30B8CE",
+          "#77DAED",
+          "#AFFDFF"
+        ]
+      },
+      "signal-amber": {
+        "role": "secondary",
+        "displayName": "Signal Amber",
+        "purpose": "The call to action, Note entries, jason.json, inquiry.",
+        "canonical": "oklch(83.7% 0.164 84.4)",
+        "tonalRamp": [
+          "#1A0500",
+          "#3B1D00",
+          "#5F3900",
+          "#865700",
+          "#AF7700",
+          "#CE9C1D",
+          "#EDC369",
+          "#FFEAA2"
+        ]
+      },
+      "signal-violet": {
+        "role": "tertiary",
+        "displayName": "Signal Violet",
+        "purpose": "AI harness work, Plan entries.",
+        "canonical": "oklch(70.9% 0.159 293.5)",
+        "tonalRamp": [
+          "#0E0227",
+          "#29174E",
+          "#47317A",
+          "#674DA8",
+          "#886CD7",
+          "#AA93F2",
+          "#CCBBFF",
+          "#F1E3FF"
+        ]
+      },
+      "signal-green": {
+        "role": "tertiary",
+        "displayName": "Signal Green",
+        "purpose": "Migrations and ClaudePress, availability, JSON strings.",
+        "canonical": "oklch(77.3% 0.153 163.2)",
+        "tonalRamp": [
+          "#001303",
+          "#003217",
+          "#005330",
+          "#00784B",
+          "#009D68",
+          "#42BE8D",
+          "#80E0B5",
+          "#B6FFDD"
+        ]
+      },
+      "signal-coral": {
+        "role": "tertiary",
+        "displayName": "Signal Coral",
+        "purpose": "Post-mortems, JSON numerals.",
+        "canonical": "oklch(71.9% 0.169 13.4)",
+        "tonalRamp": [
+          "#230003",
+          "#4B0216",
+          "#761A2E",
+          "#A43348",
+          "#D34E64",
+          "#F17B8A",
+          "#FFA7B2",
+          "#FFD3DB"
+        ]
+      },
+      "grid-line": {
+        "role": "neutral",
+        "displayName": "Arena Grid Line",
+        "purpose": "44px arena grid on navy (rgba, no ramp)."
+      },
+      "paper-ground": {
+        "role": "neutral",
+        "displayName": "Paper Ground",
+        "purpose": "The page in light mode.",
+        "canonical": "oklch(97.5% 0.006 255.5)",
+        "tonalRamp": [
+          "#0A0B0C",
+          "#242527",
+          "#404244",
+          "#5F6164",
+          "#808286",
+          "#A3A5A8",
+          "#C7C9CC",
+          "#EDEFF1"
+        ]
+      },
+      "paper-ground-raised": {
+        "role": "neutral",
+        "displayName": "Paper Ground Raised",
+        "purpose": "Code blocks and table headers, light.",
+        "canonical": "oklch(95.3% 0.011 252.1)",
+        "tonalRamp": [
+          "#0A0B0D",
+          "#232528",
+          "#3F4246",
+          "#5D6267",
+          "#7E8389",
+          "#A1A6AB",
+          "#C5CACE",
+          "#EBEFF3"
+        ]
+      },
+      "paper-panel": {
+        "role": "neutral",
+        "displayName": "Paper Panel",
+        "purpose": "Every outlined surface in light mode.",
+        "canonical": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#A5A5A5",
+          "#C9C9C9",
+          "#EEEEEE"
+        ]
+      },
+      "print-ink": {
+        "role": "neutral",
+        "displayName": "Print Ink",
+        "purpose": "Headings and body text on paper.",
+        "canonical": "oklch(18.3% 0.031 263.4)",
+        "tonalRamp": [
+          "#080B11",
+          "#20252E",
+          "#3C424F",
+          "#596171",
+          "#798395",
+          "#9CA5B6",
+          "#C2C9D8",
+          "#E8EFFB"
+        ]
+      },
+      "print-ink-muted": {
+        "role": "neutral",
+        "displayName": "Print Ink Muted",
+        "purpose": "Secondary copy on paper.",
+        "canonical": "oklch(43.9% 0.044 259.7)",
+        "tonalRamp": [
+          "#060B14",
+          "#1D2532",
+          "#384354",
+          "#546278",
+          "#73839D",
+          "#97A6BD",
+          "#BDCADF",
+          "#E4EFFF"
+        ]
+      },
+      "print-hairline": {
+        "role": "neutral",
+        "displayName": "Print Hairline",
+        "purpose": "Default outlines on paper.",
+        "canonical": "oklch(87.3% 0.020 257.5)",
+        "tonalRamp": [
+          "#090B0F",
+          "#21252B",
+          "#3D424A",
+          "#5B626C",
+          "#7B838F",
+          "#9EA6B0",
+          "#C3CAD3",
+          "#E9EFF7"
+        ]
+      },
+      "print-outline-strong": {
+        "role": "neutral",
+        "displayName": "Print Outline Strong",
+        "purpose": "Neutral panels and inputs on paper.",
+        "canonical": "oklch(76.9% 0.029 258.4)",
+        "tonalRamp": [
+          "#080B11",
+          "#20252E",
+          "#3B424E",
+          "#596270",
+          "#788394",
+          "#9CA6B5",
+          "#C1CAD7",
+          "#E8EFFA"
+        ]
+      },
+      "print-cyan": {
+        "role": "primary",
+        "displayName": "Print Cyan",
+        "purpose": "Signal Cyan's print twin.",
+        "canonical": "oklch(52.0% 0.094 223.1)",
+        "tonalRamp": [
+          "#000E19",
+          "#002A39",
+          "#034A5D",
+          "#1C6B83",
+          "#368EAB",
+          "#69B0CA",
+          "#98D4EA",
+          "#C7F8FF"
+        ]
+      },
+      "print-amber": {
+        "role": "secondary",
+        "displayName": "Print Amber",
+        "purpose": "Signal Amber's print twin; the light-mode CTA.",
+        "canonical": "oklch(55.5% 0.146 49.0)",
+        "tonalRamp": [
+          "#200000",
+          "#451200",
+          "#6D2B00",
+          "#98460A",
+          "#C56325",
+          "#E48C5B",
+          "#FFB58B",
+          "#FFDEBC"
+        ]
+      },
+      "print-violet": {
+        "role": "tertiary",
+        "displayName": "Print Violet",
+        "purpose": "Signal Violet's print twin.",
+        "canonical": "oklch(49.1% 0.241 292.6)",
+        "tonalRamp": [
+          "#0F002B",
+          "#291454",
+          "#472E81",
+          "#674AB1",
+          "#8868E2",
+          "#A990FC",
+          "#CCB9FF",
+          "#F0E2FF"
+        ]
+      },
+      "print-green": {
+        "role": "tertiary",
+        "displayName": "Print Green",
+        "purpose": "Signal Green's print twin.",
+        "canonical": "oklch(50.8% 0.105 165.6)",
+        "tonalRamp": [
+          "#001106",
+          "#002E1D",
+          "#024F38",
+          "#1D7155",
+          "#379673",
+          "#6BB798",
+          "#9AD9BD",
+          "#C8FCE5"
+        ]
+      },
+      "print-coral": {
+        "role": "tertiary",
+        "displayName": "Print Coral",
+        "purpose": "Signal Coral's print twin; sketched ship flame.",
+        "canonical": "oklch(51.4% 0.198 16.9)",
+        "tonalRamp": [
+          "#250001",
+          "#4D0011",
+          "#791527",
+          "#A82E40",
+          "#D8495B",
+          "#F67882",
+          "#FFA5AB",
+          "#FFD2D5"
+        ]
+      },
+      "graph-paper-line": {
+        "role": "neutral",
+        "displayName": "Graph Paper Line",
+        "purpose": "44px grid on paper (rgba, no ramp)."
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The Home hook only; uppercase, capped at 18ch."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page h1 on every other page; uppercase; 2rem on phones."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Section and panel titles, uppercase, in the panel accent."
+      },
+      "title-entry": {
+        "displayName": "Title Entry",
+        "purpose": "Record entry and project names, sentence case."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Home sub-hook and entry summary, muted, max 60ch."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Reading copy at 68 to 72ch; 1.7 line height in long-form entries."
+      },
+      "body-sm": {
+        "displayName": "Body Small",
+        "purpose": "Entry summaries, panel intros, aside copy."
+      },
+      "nav-label": {
+        "displayName": "Nav Label",
+        "purpose": "App-bar links and figure labels; uppercase sans."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "All button labels; uppercase."
+      },
+      "data-figure": {
+        "displayName": "Data Figure",
+        "purpose": "Home figure strip; mono, tabular."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Pill tags, chips, disclosure toggles, fact labels; mono uppercase."
+      },
+      "code": {
+        "displayName": "Code",
+        "purpose": "jason.json and code; mono, tabular, slashed zero."
+      }
+    },
+    "shadows": [
+      {
+        "name": "floating",
+        "value": "0 18px 40px -12px rgba(2,6,16,0.55), 0 4px 12px -4px rgba(2,6,16,0.35)",
+        "purpose": "Menus, popovers, dialogs, snackbars, drawer (Mud elevation 8+). Nothing on the page gets a shadow."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "All state transitions."
+      },
+      {
+        "name": "nav-color",
+        "value": "160ms",
+        "purpose": "Nav link colour on hover."
+      },
+      {
+        "name": "entry-state",
+        "value": "200ms",
+        "purpose": "Entry outline and wash on hover/focus; disclosure toggle."
+      },
+      {
+        "name": "ship-drift",
+        "value": "linear, 115-160px/s; first at 2.5s, then every 14-28s; 30% chance of a chaser 650ms behind",
+        "purpose": "Chasma ships across the arena; disabled under prefers-reduced-motion."
+      },
+      {
+        "name": "ship-flame",
+        "value": "140ms alternate, opacity 0.45-0.95, scaleY 0.85-1.15",
+        "purpose": "Thruster flicker."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "600px"
+      },
+      {
+        "name": "md",
+        "value": "960px"
+      },
+      {
+        "name": "side-column",
+        "value": "1024px"
+      },
+      {
+        "name": "container-lg",
+        "value": "1280px"
+      }
+    ],
+    "outlines": [
+      {
+        "name": "default",
+        "value": "1.5px",
+        "purpose": "Panels, tiles, outlined buttons."
+      },
+      {
+        "name": "strong",
+        "value": "2px",
+        "purpose": "Inquiry panel, entry rows, group rules."
+      },
+      {
+        "name": "post-mortem",
+        "value": "3px double",
+        "purpose": "Post-mortem entries only."
+      },
+      {
+        "name": "hairline",
+        "value": "1px",
+        "purpose": "Header rules, app bar, footer, tags, chips."
+      }
+    ],
+    "focus": {
+      "value": "outline: 2px solid var(--mud-palette-primary); outline-offset: 3px; border-radius: 6px",
+      "purpose": "Keyboard focus only; suppressed for pointer focus."
+    },
+    "chasmaShip": {
+      "hull": "#888e99",
+      "playerColors": [
+        "#facc15",
+        "#ef4444",
+        "#3b82f6",
+        "#10b981"
+      ],
+      "inkTwins": {
+        "#facc15": "#B45309",
+        "#ef4444": "#BE123C",
+        "#3b82f6": "#1D4ED8",
+        "#10b981": "#047857"
+      },
+      "graphite": "#334155",
+      "darkOpacity": 0.32,
+      "sketchOpacity": 0.72,
+      "purpose": "Brand asset from the Chasma game; filled in dark, pencil-sketched in light."
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button (CTA)",
+      "kind": "button",
+      "refersTo": "button-cta",
+      "description": "Amber filled call to action; flat in every state, one per screen region.",
+      "html": "<button class=\"ds-btn-cta\">Work with me</button>",
+      "css": ":host{--n:#0B1220;--p:#0F1A2E;--i:#E6EDF7;--m:#9AABC4;--h:#22304A;--o:#3A4A66;--cy:#22D3EE;--am:#FBBF24;--vi:#A78BFA;--gr:#34D399;--co:#FB7185;} .ds-btn-cta{font-family:Archivo,'Helvetica Neue',Arial,sans-serif;background:var(--am);color:#1A1203;border:0;border-radius:10px;padding:6px 16px;font-size:.875rem;font-weight:750;letter-spacing:.04em;text-transform:uppercase;line-height:1.75;cursor:pointer;box-shadow:none;transition:background-color 160ms cubic-bezier(.16,1,.3,1);} .ds-btn-cta:hover{background:color-mix(in srgb,var(--am) 88%,#fff);} .ds-btn-cta:focus-visible{outline:2px solid var(--cy);outline-offset:3px;}"
+    },
+    {
+      "name": "Outlined Button",
+      "kind": "button",
+      "refersTo": "button-outlined",
+      "description": "Secondary action: 1.5px cyan outline.",
+      "html": "<button class=\"ds-btn-out\">Browse projects</button>",
+      "css": ":host{--n:#0B1220;--p:#0F1A2E;--i:#E6EDF7;--m:#9AABC4;--h:#22304A;--o:#3A4A66;--cy:#22D3EE;--am:#FBBF24;--vi:#A78BFA;--gr:#34D399;--co:#FB7185;} .ds-btn-out{font-family:Archivo,'Helvetica Neue',Arial,sans-serif;background:transparent;color:var(--cy);border:1.5px solid var(--cy);border-radius:10px;padding:5px 15px;font-size:.875rem;font-weight:750;letter-spacing:.04em;text-transform:uppercase;line-height:1.75;cursor:pointer;} .ds-btn-out:hover{background:color-mix(in srgb,var(--cy) 8%,transparent);} .ds-btn-out:focus-visible{outline:2px solid var(--cy);outline-offset:3px;}"
+    },
+    {
+      "name": "Accent Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Outlined panel with a semantic accent: title left in the accent, pill tag right, hairline beneath.",
+      "html": "<section class=\"ds-panel\"><div class=\"ds-panel-head\"><h2 class=\"ds-panel-title\">1. Curated AI Harnesses</h2><span class=\"ds-tag\">Architecture / Sprint</span></div><p class=\"ds-body\">The problem: pasting sensitive context into raw chat windows with no guardrails.</p><details class=\"ds-disclose\"><summary>How I approach it</summary><p class=\"ds-body\">Separating context assembly, generation and cold verification keeps outputs auditable.</p></details></section>",
+      "css": ":host{--n:#0B1220;--p:#0F1A2E;--i:#E6EDF7;--m:#9AABC4;--h:#22304A;--o:#3A4A66;--cy:#22D3EE;--am:#FBBF24;--vi:#A78BFA;--gr:#34D399;--co:#FB7185;} .ds-panel{--a:var(--vi);font-family:Archivo,'Helvetica Neue',Arial,sans-serif;background:var(--p);color:var(--i);border:1.5px solid color-mix(in srgb,var(--a) 70%,transparent);border-radius:14px;padding:24px;max-width:640px;} .ds-panel-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem 1rem;padding-bottom:.75rem;margin-bottom:1rem;border-bottom:1px solid var(--h);} .ds-panel-title{margin:0;color:var(--a);font-size:1.125rem;font-weight:800;font-stretch:112%;text-transform:uppercase;letter-spacing:.01em;line-height:1.3;} .ds-tag{font-family:'Martian Mono',ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.6875rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;line-height:1;color:var(--a);background:color-mix(in srgb,var(--a) 10%,transparent);border:1px solid color-mix(in srgb,var(--a) 65%,transparent);border-radius:999px;padding:.42em .8em;white-space:nowrap;} .ds-body{font-size:1.0625rem;line-height:1.65;max-width:68ch;margin:0 0 .75rem;} .ds-disclose>summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:.5rem;min-height:36px;font-family:'Martian Mono',ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--a);} .ds-disclose>summary::-webkit-details-marker{display:none;} .ds-disclose>summary::before{content:'+';display:inline-grid;place-items:center;width:1.25rem;height:1.25rem;border:1px solid color-mix(in srgb,var(--a) 65%,transparent);border-radius:6px;} .ds-disclose[open]>summary::before{content:'\\2212';} .ds-disclose>summary:focus-visible{outline:2px solid var(--cy);outline-offset:3px;border-radius:6px;}"
+    },
+    {
+      "name": "Pill Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "Mono uppercase category label in the accent; sits at a header's right.",
+      "html": "<span class=\"ds-tag2\">schema: human</span>",
+      "css": ":host{--n:#0B1220;--p:#0F1A2E;--i:#E6EDF7;--m:#9AABC4;--h:#22304A;--o:#3A4A66;--cy:#22D3EE;--am:#FBBF24;--vi:#A78BFA;--gr:#34D399;--co:#FB7185;} .ds-tag2{font-family:'Martian Mono',ui-monospace,SFMono-Regular,Consolas,monospace;display:inline-flex;align-items:center;font-size:.6875rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;line-height:1;color:var(--am);background:color-mix(in srgb,var(--am) 10%,transparent);border:1px solid color-mix(in srgb,var(--am) 65%,transparent);border-radius:999px;padding:.42em .8em;}"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip-filter",
+      "description": "Record and project filters: outlined mono pills; the selected one is filled.",
+      "html": "<div class=\"ds-chips\"><a class=\"ds-chip is-on\" href=\"#\">All</a><a class=\"ds-chip\" href=\"#\">Spec</a><a class=\"ds-chip\" href=\"#\">Post-mortem</a></div>",
+      "css": ":host{--n:#0B1220;--p:#0F1A2E;--i:#E6EDF7;--m:#9AABC4;--h:#22304A;--o:#3A4A66;--cy:#22D3EE;--am:#FBBF24;--vi:#A78BFA;--gr:#34D399;--co:#FB7185;} .ds-chips{display:flex;flex-wrap:wrap;gap:8px;} .ds-chip{font-family:'Martian Mono',ui-monospace,SFMono-Regular,Consolas,monospace;display:inline-flex;align-items:center;min-height:36px;padding:0 14px;font-size:.75rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;text-decoration:none;color:var(--cy);border:1px solid var(--cy);border-radius:999px;} .ds-chip:hover{background:color-mix(in srgb,var(--cy) 8%,transparent);} .ds-chip.is-on{background:var(--cy);color:#06202A;} .ds-chip:focus-visible{outline:2px solid var(--cy);outline-offset:3px;}"
+    },
+    {
+      "name": "Record Entry Row",
+      "kind": "custom",
+      "refersTo": "record-entry",
+      "description": "Kind carried by colour and line style: Spec solid cyan, Plan dashed violet, Post-mortem double coral (3px), Note dotted amber.",
+      "html": "<article class=\"ds-entry ds-k-pm\"><div class=\"ds-entry-head\"><h3 class=\"ds-entry-title\"><a href=\"#\">What Happened to \"See Ya Real Soon\"</a></h3><span class=\"ds-etag\">Post-mortem</span></div><p class=\"ds-entry-date\">14 November 2026</p><p class=\"ds-entry-sum\">Three months shipping five live sites on a shared platform.</p></article><article class=\"ds-entry ds-k-plan\"><div class=\"ds-entry-head\"><h3 class=\"ds-entry-title\"><a href=\"#\">The Record: implementation plan</a></h3><span class=\"ds-etag\">Plan</span></div><p class=\"ds-entry-date\">5 August 2026</p></article>",
+      "css": ":host{--n:#0B1220;--p:#0F1A2E;--i:#E6EDF7;--m:#9AABC4;--h:#22304A;--o:#3A4A66;--cy:#22D3EE;--am:#FBBF24;--vi:#A78BFA;--gr:#34D399;--co:#FB7185;} .ds-entry{--a:var(--cy);--ln:solid;position:relative;font-family:Archivo,'Helvetica Neue',Arial,sans-serif;color:var(--i);background:var(--p);border:2px var(--ln) color-mix(in srgb,var(--a) 60%,transparent);border-radius:14px;padding:1.1rem 1.35rem 1.2rem;margin-bottom:1rem;transition:border-color 200ms cubic-bezier(.16,1,.3,1),background-color 200ms cubic-bezier(.16,1,.3,1);} .ds-k-plan{--a:var(--vi);--ln:dashed;} .ds-k-pm{--a:var(--co);--ln:double;border-width:3px;} .ds-k-note{--a:var(--am);--ln:dotted;} .ds-entry:hover,.ds-entry:focus-within{border-color:var(--a);background:color-mix(in srgb,var(--a) 5%,var(--p));} .ds-entry-head{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem 1rem;} .ds-entry-title{margin:0;font-size:1.1875rem;font-weight:700;line-height:1.35;} .ds-entry-title a{color:var(--i);text-decoration:none;} .ds-entry-title a::after{content:'';position:absolute;inset:0;border-radius:14px;} .ds-entry-title a:focus-visible{outline:none;} .ds-entry:hover .ds-entry-title a{color:var(--a);} .ds-etag{font-family:'Martian Mono',ui-monospace,SFMono-Regular,Consolas,monospace;margin-top:.2rem;font-size:.6875rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;line-height:1;color:var(--a);background:color-mix(in srgb,var(--a) 10%,transparent);border:1px solid color-mix(in srgb,var(--a) 65%,transparent);border-radius:999px;padding:.42em .8em;white-space:nowrap;} .ds-entry-date{font-family:'Martian Mono',ui-monospace,SFMono-Regular,Consolas,monospace;margin:.35rem 0 0;font-size:.75rem;color:var(--m);} .ds-entry-sum{margin:.4rem 0 0;max-width:75ch;font-size:.9375rem;line-height:1.6;color:var(--m);}"
+    },
+    {
+      "name": "Figure Tile",
+      "kind": "card",
+      "refersTo": "figure-tile",
+      "description": "Real numbers only: cyan mono figure, sans uppercase label, neutral frame.",
+      "html": "<ul class=\"ds-stats\"><li class=\"ds-stat\"><span class=\"ds-n\">12</span><span class=\"ds-l\">Years in tech</span></li><li class=\"ds-stat\"><span class=\"ds-n\">540+</span><span class=\"ds-l\">Commits across 16 repos since July</span></li></ul>",
+      "css": ":host{--n:#0B1220;--p:#0F1A2E;--i:#E6EDF7;--m:#9AABC4;--h:#22304A;--o:#3A4A66;--cy:#22D3EE;--am:#FBBF24;--vi:#A78BFA;--gr:#34D399;--co:#FB7185;} .ds-stats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;max-width:560px;} .ds-stat{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.35rem;padding:1.1rem .75rem;background:var(--p);border:1.5px solid var(--o);border-radius:14px;} .ds-n{font-family:'Martian Mono',ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums slashed-zero;font-size:2rem;font-weight:700;line-height:1.1;color:var(--cy);} .ds-l{font-family:Archivo,'Helvetica Neue',Arial,sans-serif;font-size:.6875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;line-height:1.35;color:var(--m);}"
+    },
+    {
+      "name": "App Bar Navigation",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Translucent navy bar, hairline beneath, uppercase nav with a cyan bar under the current page, amber CTA.",
+      "html": "<header class=\"ds-bar\"><span class=\"ds-word\"><span class=\"ds-mark\">{J}</span>JasonObject</span><nav class=\"ds-nav\"><a href=\"#\" class=\"ds-link is-active\">The Record</a><a href=\"#\" class=\"ds-link\">Projects</a><a href=\"#\" class=\"ds-link\">About</a></nav><a href=\"#\" class=\"ds-cta\">Work with me</a></header>",
+      "css": ":host{--n:#0B1220;--p:#0F1A2E;--i:#E6EDF7;--m:#9AABC4;--h:#22304A;--o:#3A4A66;--cy:#22D3EE;--am:#FBBF24;--vi:#A78BFA;--gr:#34D399;--co:#FB7185;} .ds-bar{font-family:Archivo,'Helvetica Neue',Arial,sans-serif;display:flex;align-items:center;gap:1.75rem;height:68px;padding:0 24px;background:rgba(11,18,32,.92);color:var(--i);border-bottom:1px solid var(--h);} .ds-word{display:flex;align-items:center;gap:8px;font-weight:850;font-stretch:115%;font-size:1.125rem;letter-spacing:.01em;text-transform:uppercase;margin-right:auto;} .ds-mark{font-family:'Martian Mono',ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.75rem;color:var(--vi);} .ds-nav{display:flex;gap:1.75rem;} .ds-link{position:relative;color:var(--m);text-decoration:none;font-size:.8125rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.5rem 0;transition:color 160ms cubic-bezier(.16,1,.3,1);} .ds-link:hover,.ds-link.is-active{color:var(--i);} .ds-link.is-active::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:2px;border-radius:2px;background:var(--cy);} .ds-link:focus-visible,.ds-cta:focus-visible{outline:2px solid var(--cy);outline-offset:3px;border-radius:6px;} .ds-cta{background:var(--am);color:#1A1203;text-decoration:none;border-radius:10px;padding:6px 16px;font-size:.875rem;font-weight:750;letter-spacing:.04em;text-transform:uppercase;}"
+    },
+    {
+      "name": "Outlined Text Field",
+      "kind": "input",
+      "description": "MudBlazor outlined field on the panel surface; cyan stroke and caret on focus.",
+      "html": "<label class=\"ds-field\"><span>Your name or organization (optional)</span><input type=\"text\" placeholder=\"Optional\"></label>",
+      "css": ":host{--n:#0B1220;--p:#0F1A2E;--i:#E6EDF7;--m:#9AABC4;--h:#22304A;--o:#3A4A66;--cy:#22D3EE;--am:#FBBF24;--vi:#A78BFA;--gr:#34D399;--co:#FB7185;} .ds-field{font-family:Archivo,'Helvetica Neue',Arial,sans-serif;display:grid;gap:6px;color:var(--m);font-size:.8125rem;max-width:420px;} .ds-field input{font-family:Archivo,'Helvetica Neue',Arial,sans-serif;font-size:1rem;color:var(--i);caret-color:var(--cy);background:var(--p);border:1px solid var(--o);border-radius:10px;padding:10px 14px;} .ds-field input:hover{border-color:var(--m);} .ds-field input:focus-visible{outline:none;border-color:var(--cy);box-shadow:0 0 0 1px var(--cy);}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Field Manual",
+    "overview": "The site is a field manual for one engineer's own work, drawn in the language of his Chasma architectural infographic. Deep navy ground under a faint 44px arena grid, panels drawn with thin coloured outlines instead of raised shadows, heavy expanded uppercase headings, and monospace reserved for data. Every colour is a role: a visitor who learns that violet means AI work on /work reads the same violet on /projects and on a Plan entry in the record without being told.\n\nDark is the default and the manual's native state. Light mode is not a different design: it is the same manual printed on graph paper, the same outlines on white panels, the same accents deepened until they pass AA on paper, and the drifting Chasma ships redrawn as pencil sketches. Both modes ship, both must stay legible, and both share one set of semantic roles.\n\nDensity is deliberately low. Home and /work show one claim per panel and put the detail behind a quiet \"How I approach it\" disclosure; /projects may run denser because it is the evidence index. Long reading sits at a book measure with a side column of facts beside it on desktop. The system rejects the stock MudBlazor portfolio it replaced: the indigo app bar, raised grey cards, Roboto, and colours that mean nothing.",
+    "keyCharacteristics": [
+      "Navy ground (dark default) or graph paper (light), with the arena grid visible in both.",
+      "Outlined panels at 14px radius; no shadows on anything that sits on the page.",
+      "Five semantic accents, each owning one category, never decoration.",
+      "Archivo heavy, expanded and uppercase for display; Archivo for reading; Martian Mono only for data and labels.",
+      "The animated Chasma ships are brand, present in both modes, absent under reduced motion.",
+      "Built on Blazor and MudBlazor: the theme is overridden, never replaced."
+    ],
+    "rules": [
+      {
+        "name": "The Colour Is A Role Rule",
+        "body": "Violet is AI, cyan is platforms, green is migrations and ClaudePress, amber is the call to action and notes, coral is post-mortems. A panel picks one role and everything inside it reads that role. Never use an accent because a screen needs colour.",
+        "section": "colors"
+      },
+      {
+        "name": "The Neutral Figures Rule",
+        "body": "Facts are not categories. Figure tiles and the record navigation panel take a neutral outline, never a category accent, and every figure numeral shares the same cyan. An entry's facts panel takes that entry's kind, because the kind is the fact it reports.",
+        "section": "colors"
+      },
+      {
+        "name": "The Same Manual, Printed Rule",
+        "body": "Light mode keeps every role and only swaps the value for its print twin. A new colour needs both a dark value and a print value that passes AA on its own ground before it ships.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Signals Rule",
+        "body": "Kind is never carried by colour alone. Record entries pair each colour with a line style (Spec solid, Plan dashed, Post-mortem double and heavier, Note dotted) so the kind survives without colour.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Is Data Rule",
+        "body": "Martian Mono appears only on data and labels: figures, dates, reading time, code, the JSON card, pill tags, chips, fact labels, stack lists. Never on a sentence, a heading or a button.",
+        "section": "typography"
+      },
+      {
+        "name": "The No Kicker Rule",
+        "body": "No small label sits above a heading to announce it. A heading states its own subject; a category belongs in the pill tag at the panel header's right.",
+        "section": "typography"
+      },
+      {
+        "name": "The Book Measure Rule",
+        "body": "Reading copy stops at 68 to 72ch: 68ch for page prose, 72ch for record entries. Prose inside panels stops at 75ch.",
+        "section": "typography"
+      },
+      {
+        "name": "The Progressive Disclosure Rule",
+        "body": "Lower density first: each panel states one problem, and the method sits behind a native `details` disclosure with a mono \"+\" toggle in the panel's accent. Detail is one click away, never on the first read.",
+        "section": "layout"
+      },
+      {
+        "name": "The Outlines Not Elevation Rule",
+        "body": "Anything that sits on the page is drawn, not lifted. If a surface needs emphasis, thicken or colour its outline (1.5px default, 2px strong, 3px for post-mortems).",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** keep dark as the default and ship light as the same manual printed on graph paper, with the sketched ships.",
+      "**Do** keep the animated Chasma ships and the arena grid in both modes; they are brand.",
+      "**Do** build on Blazor and MudBlazor, styling through the theme and the field-manual classes rather than replacing components.",
+      "**Do** give every panel, group and entry exactly one semantic role: violet AI, cyan platforms, green migrations and ClaudePress, amber CTA and notes, coral post-mortems.",
+      "**Do** keep figure tiles and record navigation neutral.",
+      "**Do** hold body copy at 68 to 72ch and fill the space beside it with a side column on desktop.",
+      "**Do** put detail behind a disclosure and keep the first read to one claim per panel.",
+      "**Do** pair every colour-coded kind with a second signal (line style, label).",
+      "**Do** use outlines for emphasis: 1.5px default, 2px strong, 3px post-mortem."
+    ],
+    "donts": [
+      "**Don't** put a kicker or eyebrow label above a heading.",
+      "**Don't** set sentences, headings or buttons in Martian Mono.",
+      "**Don't** use an accent colour decoratively, or give one figure a different colour from the rest; every figure shares one treatment.",
+      "**Don't** add shadows to anything that sits on the page; only floating layers get one.",
+      "**Don't** use em-dashes in site copy.",
+      "**Don't** let prose run the full container width.",
+      "**Don't** fall back to the stock MudBlazor look: indigo app bar, raised grey cards, Roboto.",
+      "**Don't** put anything in the design, its assets or this file that should not be public; the repository is public."
+    ]
+  }
+}
