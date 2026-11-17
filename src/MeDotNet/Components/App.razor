@@ -35,7 +35,14 @@
 </head>
 
 <body>
-    @* Subtle dark-mode arena grid and occasional Chasma ships (pointer-events: none, hidden in light mode). *@
+    @* Arena grid and occasional Chasma ships behind everything (pointer-events: none).
+       Dark: the game's own ships. Light: the same ships sketched in ink on the graph paper. *@
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <filter id="fm-pencil" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="grain" />
+            <feDisplacementMap in="SourceGraphic" in2="grain" scale="1.8" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
     <div class="chasma-bg-grid" aria-hidden="true"></div>
     <div id="chasma-arena-layer" class="chasma-arena-layer" aria-hidden="true"></div>
 
@@ -83,7 +90,7 @@
             }
         };
 
-        /* Occasional Chasma ships flying across the dark-mode grid.
+        /* Occasional Chasma ships flying across the arena grid (both modes).
            Uses the exact polygon vertices from Chasma's player.py:
            - Main hull: (-10, -10), (10, -10), (0, 20) in SHIP_GRAY
            - Tail chevron: (-10, -10), (10, -10), (0, -3) in player color
@@ -92,10 +99,37 @@
             if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
             var playerColors = ["#facc15", "#ef4444", "#3b82f6", "#10b981"];
+            // Light mode draws the ships in ink, so each player colour has a pen-ink twin.
+            var inkColors = { "#facc15": "#B45309", "#ef4444": "#BE123C", "#3b82f6": "#1D4ED8", "#10b981": "#047857" };
+
+            function shipSvg(color, sketch) {
+                if (!sketch) {
+                    return '<svg width="22" height="32" viewBox="-14 -24 28 48" xmlns="http://www.w3.org/2000/svg">' +
+                        '<polygon class="chasma-flame" points="-4,10 4,10 0,20" fill="#ef4444" />' +
+                        '<polygon points="-10,10 10,10 0,-20" fill="#888e99" />' +
+                        '<polygon points="-10,10 10,10 0,3" fill="' + color + '" />' +
+                        '</svg>';
+                }
+                // Same vertices, drawn rather than filled: a graphite hull traced twice
+                // slightly off (the way a pencil goes over a line), an ink-coloured tail
+                // with hatching, and the flame as three quick strokes. The fm-pencil
+                // filter roughens every edge so nothing reads as a vector shape.
+                var ink = inkColors[color] || "#1D4ED8";
+                return '<svg width="46" height="64" viewBox="-15 -24 30 48" xmlns="http://www.w3.org/2000/svg" ' +
+                    'fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#fm-pencil)">' +
+                    '<g class="chasma-flame" stroke="#BE123C" stroke-width="1.1">' +
+                    '<path d="M-3 11 L0 19" /><path d="M0 11 L0.4 21" /><path d="M3 11 L0.8 18.5" /></g>' +
+                    '<polygon points="-10,10 10,10 0,-20" stroke="#334155" stroke-width="1.3" />' +
+                    '<polygon points="-10.6,10.4 9.6,9.8 0.5,-19.4" stroke="#334155" stroke-width="0.6" opacity="0.55" />' +
+                    '<polygon points="-10,10 10,10 0,3" stroke="' + ink + '" stroke-width="1.3" />' +
+                    '<path d="M-6 9 L-3.5 6.5 M-2 9 L1 6 M2 9 L4.5 6.6 M6 9 L7 8" stroke="' + ink + '" stroke-width="0.8" />' +
+                    '</svg>';
+            }
 
             function spawnShip(delayMs, preset) {
                 setTimeout(function () {
-                    if (document.documentElement.dataset.theme === "light" || document.hidden) return;
+                    if (document.hidden) return;
+                    var sketch = document.documentElement.dataset.theme === "light";
                     var layer = document.getElementById("chasma-arena-layer");
                     if (!layer) return;
 
@@ -137,17 +171,12 @@
                     var color = (preset && preset.color) || playerColors[Math.floor(Math.random() * playerColors.length)];
 
                     var el = document.createElement("div");
-                    el.className = "chasma-ship";
+                    el.className = sketch ? "chasma-ship chasma-ship-sketch" : "chasma-ship";
                     el.style.transform = "translate3d(" + startX + "px, " + startY + "px, 0) rotate(" + angleDeg + "deg)";
                     el.style.transition = "transform " + durationMs + "ms linear";
 
                     // Note: SVG Y is inverted relative to Arcade, so nose is at (0, -20) and tail at (-10, 10)..(10, 10)
-                    el.innerHTML =
-                        '<svg width="22" height="32" viewBox="-14 -24 28 48" xmlns="http://www.w3.org/2000/svg">' +
-                        '<polygon class="chasma-flame" points="-4,10 4,10 0,20" fill="#ef4444" />' +
-                        '<polygon points="-10,10 10,10 0,-20" fill="#888e99" />' +
-                        '<polygon points="-10,10 10,10 0,3" fill="' + color + '" />' +
-                        '</svg>';
+                    el.innerHTML = shipSvg(color, sketch);
 
                     layer.appendChild(el);
 

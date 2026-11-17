@@ -587,9 +587,7 @@ html, body {
 html[data-theme="dark"] { --fm-grid-line: rgba(96, 165, 250, 0.075); }
 html[data-theme="light"] { --fm-grid-line: rgba(14, 116, 144, 0.07); }
 
-html[data-theme="dark"] .chasma-arena-layer {
-    display: block;
-}
+.chasma-arena-layer { display: block; }
 
 .chasma-ship {
     position: absolute;
@@ -816,3 +814,20 @@ html[data-theme="dark"] .chasma-arena-layer {
 
 /* Clickable chips (filters, inquiry picks) get a thumb-sized hit area. */
 .mud-chip.mud-clickable { min-height: 36px; padding-inline: 14px; }
+
+/* Phones: the app bar holds menu, mark, wordmark, Contact and the theme toggle
+   in ~390px, so the wordmark narrows and the compact CTA tightens. */
+@media (max-width: 599.98px) {
+    .fm-wordmark { font-size: 0.875rem; font-stretch: 100%; letter-spacing: 0; }
+    .fm-appbar .mud-toolbar { padding-inline: 8px; gap: 2px; }
+    .cta-compact.mud-button-root { min-width: 0; padding-inline: 12px; margin-left: 8px; }
+    .json-card { padding: 0.9rem 1rem 1rem; }
+    .json-card pre { font-size: 0.7rem; }
+}
+
+/* Light mode: ships sketched on the graph paper. Darker and a touch stronger than
+   the dark-mode ships because ink on white needs no glow to read. */
+.chasma-ship-sketch {
+    opacity: 0.72;
+    filter: none;
+}
