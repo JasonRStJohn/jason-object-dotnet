@@ -294,9 +294,10 @@ html, body {
 
 .record-body blockquote {
     margin: 0 0 1em 0;
-    padding: 0.25em 1em;
-    border-left: 4px solid var(--mud-palette-lines-default);
+    padding: 0.25em 1.1em;
+    border-left: 1px solid var(--mud-palette-secondary);
     color: var(--mud-palette-text-secondary);
+    font-style: italic;
 }
 /* Markdown body links are plain <a> tags (not MudLink), so give them the same
    primary accent color MudLink uses on the About/Projects pages. */
