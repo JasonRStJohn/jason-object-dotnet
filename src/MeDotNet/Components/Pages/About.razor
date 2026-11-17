@@ -3,9 +3,25 @@
 <PageTitle>About - JasonObject</PageTitle>
 
 <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">About</h1>
-<MudImage Src="/img/jason-cabin.jpg" Alt="Jason St. John" Fluid="true" Width="900" Height="1005" Class="rounded mb-6 float-left"
-          Style="max-width: min(420px, 100%)" />
+<div class="fm-about">
+<aside class="fm-about-side" aria-label="Jason at a glance">
+    <MudImage Src="/img/jason-cabin.jpg" Alt="Jason St. John" Fluid="true" Width="900" Height="1005"
+              Class="fm-about-photo" />
+    @* Every line here is already stated on the site (About copy, Home JSON card). *@
+    <div class="fm-panel fm-aside-panel fm-accent-amber fm-about-facts">
+        <dl class="fm-facts">
+            <div><dt>Based in</dt><dd>Upstate New York, open to remote</dd></div>
+            <div><dt>Role</dt><dd>Lead full-stack developer and software architect</dd></div>
+            <div><dt>In tech</dt><dd class="fm-mono">12 years</dd></div>
+            <div><dt>Degree</dt><dd>M.A. in Education</dd></div>
+            <div><dt>Before this</dt><dd>Taught social studies, worked IT, ran a web business</dd></div>
+            <div><dt>Open to</dt><dd>Contract work, and lead, staff or principal roles</dd></div>
+            <div><dt>Dogs</dt><dd class="fm-mono">2</dd></div>
+        </dl>
+    </div>
+</aside>
 
+<div class="fm-about-main">
 <h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">The short version</h2>
 <MudText Typo="Typo.body1" Class="mb-6 fm-measure">
     I'm Jason St. John, a lead full-stack developer and software architect in Upstate New York.
@@ -47,9 +63,9 @@
 </MudText>
 
 <MudImage Src="/img/foggy-coast.jpg" Alt="A foggy morning on the coast" Fluid="true"
-          Width="1600" Height="600" Class="rounded my-8" />
+          Width="1600" Height="600" Class="rounded my-8 fm-about-wide" />
 
-<h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom clear-float">Get in touch</h2>
+<h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">Get in touch</h2>
 <MudText Typo="Typo.body1" Class="mb-2 fm-measure">
     The fastest way to reach me is email, or you can use the inquiry helper on the <MudLink Href="/work">Work with me</MudLink> page.
 </MudText>
@@ -64,3 +80,5 @@
         linkedin.com/in/jasonrstjohn
     </MudListItem>
 </MudList>
+</div>
+</div>

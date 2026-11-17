@@ -838,7 +838,6 @@ html[data-theme="light"] { --fm-grid-line: rgba(14, 116, 144, 0.07); }
 .record-body pre, .record-body table { max-width: 100%; }
 
 /* About: the portrait sits in an outline like every other panel. */
-.mud-image.float-left { border: var(--fm-outline) solid var(--mud-palette-lines-default); }
 
 /* ---- Finish-review fixes ---- */
 
@@ -900,4 +899,180 @@ html[data-theme="light"] { --fm-grid-line: rgba(14, 116, 144, 0.07); }
 /* Phones: the two hero actions share one width. */
 @media (max-width: 599.98px) {
     .hero-cols .mud-button-root { width: 100%; }
+}
+
+/* ---------------------------------------------------------------------------
+   Record entry: reading column plus a side column of entry facts.
+   The body keeps its 72ch measure; the side column fills the space that
+   measure would otherwise leave empty, and stays in view while reading.
+   --------------------------------------------------------------------------- */
+.fm-entry-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "head" "body" "side";
+    row-gap: 0;
+}
+
+.fm-entry-header { grid-area: head; }
+.fm-entry-body   { grid-area: body; }
+.fm-entry-aside  { grid-area: side; margin-top: 3rem; display: grid; gap: 1rem; align-content: start; }
+
+@media (min-width: 1024px) {
+    .fm-entry-layout {
+        grid-template-columns: minmax(0, 72ch) minmax(15rem, 21rem);
+        grid-template-areas: "head side" "body side";
+        grid-template-rows: auto 1fr;
+        justify-content: space-between;
+        column-gap: 3rem;
+    }
+
+    .fm-entry-aside {
+        margin-top: 0.4rem;
+        align-self: start;
+    }
+
+    .fm-entry-meta-inline { display: none; }
+}
+
+@media (min-width: 1024px) and (min-height: 640px) {
+    .fm-entry-aside { position: sticky; top: calc(var(--mud-appbar-height, 68px) + 1.5rem); }
+}
+
+.fm-aside-panel { padding: 1rem 1.15rem; }
+
+/* Facts: a small mono label over its value, like a spec sheet. */
+.fm-facts { margin: 0; display: grid; gap: 0.85rem; }
+.fm-facts > div { display: grid; gap: 0.3rem; }
+.fm-facts dt {
+    font-family: var(--fm-mono);
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mud-palette-text-secondary);
+}
+.fm-facts dd { margin: 0; font-size: 0.9375rem; line-height: 1.4; }
+.fm-facts dd.fm-mono { font-size: 0.8125rem; }
+.fm-facts a { color: var(--mud-palette-primary); text-underline-offset: 0.2em; }
+
+/* Previous / next: each link is a full-width row, direction in mono above the title. */
+.fm-step {
+    display: grid;
+    gap: 0.25rem;
+    padding: 0.7rem 0;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--mud-palette-text-primary);
+    text-decoration: none;
+    border-bottom: 1px solid var(--mud-palette-lines-default);
+}
+.fm-step:first-child { padding-top: 0; }
+.fm-step:last-child { border-bottom: 0; padding-bottom: 0; }
+.fm-step:hover { color: var(--mud-palette-primary); }
+.fm-step-dir {
+    font-family: var(--fm-mono);
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mud-palette-text-secondary);
+}
+.fm-step-all {
+    font-family: var(--fm-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--mud-palette-primary);
+}
+
+.fm-aside-cta { padding: 0.25rem 0.15rem 0; }
+.fm-aside-cta p {
+    margin: 0 0 0.6rem;
+    font-size: 0.9375rem;
+    color: var(--mud-palette-text-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+   About: narrative on the left at reading width, portrait and facts on the
+   right. On phones the portrait leads, the facts follow the story.
+   --------------------------------------------------------------------------- */
+.fm-about {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "photo" "main" "facts";
+    gap: 1.5rem;
+}
+
+.fm-about-side { display: contents; }
+.fm-about-photo { grid-area: photo; max-width: min(420px, 100%); border: var(--fm-outline) solid var(--mud-palette-lines-default); border-radius: var(--fm-radius); }
+.fm-about-facts { grid-area: facts; }
+.fm-about-main { grid-area: main; min-width: 0; }
+.fm-about-main .fm-measure { max-width: 68ch; }
+
+@media (min-width: 1024px) {
+    .fm-about {
+        grid-template-columns: minmax(0, 68ch) minmax(17rem, 22rem);
+        grid-template-areas: "main side";
+        justify-content: space-between;
+        column-gap: 3rem;
+    }
+
+    .fm-about-side {
+        grid-area: side;
+        display: grid;
+        gap: 1rem;
+        align-content: start;
+        align-self: start;
+    }
+
+    .fm-about-photo,
+    .fm-about-facts { grid-area: auto; }
+    .fm-about-photo { max-width: 100%; }
+}
+
+/* Portrait plus facts is ~800px tall: only pin it where the whole column fits. */
+@media (min-width: 1024px) and (min-height: 900px) {
+    .fm-about-side { position: sticky; top: calc(var(--mud-appbar-height, 68px) + 1.5rem); }
+}
+
+/* ---------------------------------------------------------------------------
+   /work tracks: the problem at reading width on the left, the track's two
+   actions in a column on the right, divided by a hairline.
+   --------------------------------------------------------------------------- */
+.fm-track { display: grid; gap: 1rem; }
+.fm-track-main > :last-child { margin-bottom: 0 !important; }
+.fm-track-side { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+
+@media (min-width: 960px) {
+    .fm-track {
+        grid-template-columns: minmax(0, 68ch) minmax(14rem, 17rem);
+        justify-content: space-between;
+        column-gap: 2.5rem;
+    }
+
+    .fm-track-side {
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-items: stretch;
+        align-self: start;
+        gap: 0.75rem;
+        padding-left: 1.5rem;
+        border-left: 1px solid var(--mud-palette-lines-default);
+    }
+
+    .fm-track-side .mud-button-root { justify-content: flex-start; text-align: left; white-space: normal; }
+    .fm-track-side .mud-button-outlined { justify-content: center; }
+}
+
+/* Two short statements read better beside each other than stacked at 68ch. */
+.fm-split { display: grid; gap: 1rem; }
+@media (min-width: 960px) {
+    .fm-split { grid-template-columns: 1fr 1fr; column-gap: 2.5rem; }
+}
+.fm-split > * { margin: 0; max-width: 60ch; }
+
+/* Phones already show type and date under the title; skip the repeat. */
+@media (max-width: 1023.98px) {
+    .fm-entry-aside > .fm-aside-panel:first-child { display: none; }
 }

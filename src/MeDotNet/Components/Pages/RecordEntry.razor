@@ -16,24 +16,64 @@
 }
 else
 {
-    <div class="fm-entry-meta mb-3 @_post.Kind.CssClass()">
-        <span class="fm-tag">@_post.Kind.Label()</span>
-        <span class="fm-entry-date fm-mono">
-            @(_post.Project is not null ? $"{_post.Project} · " : "")@SiteTime.FormatDate(_post.PublishedAt!.Value)
-        </span>
+    <div class="fm-entry-layout @_post.Kind.CssClass()">
+        <header class="fm-entry-header">
+            <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">@_post.Title</h1>
+            @* Phones get the essentials inline; wider screens read them in the side column. *@
+            <div class="fm-entry-meta fm-entry-meta-inline mb-4">
+                <span class="fm-tag">@_post.Kind.Label()</span>
+                <span class="fm-entry-date fm-mono">
+                    @(_post.Project is not null ? $"{_post.Project} · " : "")@SiteTime.FormatDate(_post.PublishedAt!.Value)
+                </span>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(_post.Summary))
+            {
+                <p class="fm-entry-lede mb-8">@_post.Summary</p>
+            }
+        </header>
+
+        <div class="record-body fm-entry-body">@((MarkupString)MarkdownRenderer.ToHtml(_post.Body))</div>
+
+        <aside class="fm-entry-aside" aria-label="About this entry">
+            <div class="fm-panel fm-aside-panel">
+                <dl class="fm-facts">
+                    <div><dt>Type</dt><dd><span class="fm-tag">@_post.Kind.Label()</span></dd></div>
+                    @if (_post.Project is not null)
+                    {
+                        <div><dt>Project</dt><dd><a href="@($"/notes?project={Uri.EscapeDataString(_post.Project)}")">@_post.Project</a></dd></div>
+                    }
+                    <div><dt>Published</dt><dd class="fm-mono">@SiteTime.FormatDate(_post.PublishedAt!.Value)</dd></div>
+                    <div><dt>Reading</dt><dd class="fm-mono">@ReadingTime.Minutes(_post.Body) min</dd></div>
+                </dl>
+            </div>
+
+            <nav class="fm-panel fm-aside-panel fm-neutral" aria-label="More from the record">
+                @if (_neighbours?.Newer is { } newer)
+                {
+                    <a class="fm-step" href="@($"/notes/{newer.Slug}")"><span class="fm-step-dir">Newer</span>@newer.Title</a>
+                }
+                @if (_neighbours?.Older is { } older)
+                {
+                    <a class="fm-step" href="@($"/notes/{older.Slug}")"><span class="fm-step-dir">Older</span>@older.Title</a>
+                }
+                <a class="fm-step fm-step-all" href="/notes">All entries</a>
+            </nav>
+
+            <div class="fm-aside-cta">
+                <p>Got a problem shaped like this one?</p>
+                <MudButton Href="/work" Variant="Variant.Outlined" Color="Color.Secondary" Size="Size.Small">
+                    Work with me
+                </MudButton>
+            </div>
+        </aside>
     </div>
-    <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">@_post.Title</h1>
-    @if (!string.IsNullOrWhiteSpace(_post.Summary))
-    {
-        <p class="fm-entry-lede mb-8">@_post.Summary</p>
-    }
-    <div class="record-body">@((MarkupString)MarkdownRenderer.ToHtml(_post.Body))</div>
 }
 
 @code {
     [Parameter] public string Slug { get; set; } = "";
     [CascadingParameter] HttpContext? HttpContext { get; set; }
     private Post? _post;
+    private PostNeighbours? _neighbours;
     private string? _loadedSlug;
     private PersistentLoader? _loader;
 
@@ -49,8 +89,16 @@ else
 
         _loadedSlug = Slug;
         _post = await _loader!.LoadAsync($"note-{Slug}", () => PostService.GetBySlugAsync(Slug));
-        if (_post is null && HttpContext is not null)
-            HttpContext.Response.StatusCode = 404;
+        if (_post is null)
+        {
+            _neighbours = null;
+            if (HttpContext is not null)
+                HttpContext.Response.StatusCode = 404;
+            return;
+        }
+
+        var post = _post;
+        _neighbours = await _loader.LoadAsync($"note-{Slug}-neighbours", () => PostService.GetNeighboursAsync(post));
     }
 
     public void Dispose() => _loader?.Dispose();
