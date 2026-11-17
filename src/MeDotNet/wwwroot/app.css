@@ -574,14 +574,18 @@ html, body {
     display: none;
 }
 
-html[data-theme="dark"] .chasma-bg-grid {
+/* The arena grid shows in both modes: blue-tinted lines on the navy manual,
+   and the same grid as faint graph paper on the printed (light) one. */
+.chasma-bg-grid {
     display: block;
-    opacity: 0.045;
     background-image:
-        linear-gradient(#94a3b8 1px, transparent 1px),
-        linear-gradient(90deg, #94a3b8 1px, transparent 1px);
+        linear-gradient(var(--fm-grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--fm-grid-line) 1px, transparent 1px);
     background-size: 44px 44px;
 }
+
+html[data-theme="dark"] { --fm-grid-line: rgba(96, 165, 250, 0.075); }
+html[data-theme="light"] { --fm-grid-line: rgba(14, 116, 144, 0.07); }
 
 html[data-theme="dark"] .chasma-arena-layer {
     display: block;
@@ -748,3 +752,67 @@ html[data-theme="dark"] .chasma-arena-layer {
     max-width: 60ch;
     color: var(--mud-palette-text-secondary);
 }
+
+/* ---------------------------------------------------------------------------
+   /work and /projects panels
+   --------------------------------------------------------------------------- */
+.fm-panel-strong { border-width: 2px; }
+
+.fm-group-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding-bottom: 0.6rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 2px solid color-mix(in srgb, var(--fm-accent) 70%, transparent);
+}
+
+/* Project cards inside a group take the group's accent at a quieter strength. */
+.fm-group .mud-card.fm-panel {
+    border-color: color-mix(in srgb, var(--fm-accent) 38%, var(--mud-palette-lines-default));
+}
+
+.fm-group .mud-card.fm-panel:hover {
+    border-color: color-mix(in srgb, var(--fm-accent) 75%, transparent);
+}
+
+.fm-project-meta {
+    margin: 0.15rem 0 0.75rem;
+    font-size: 0.72rem;
+    line-height: 1.6;
+    color: var(--mud-palette-text-secondary);
+}
+
+/* Stack list: the manual's mono package column, as a quiet inline list. */
+.fm-stack {
+    list-style: none;
+    margin: 0.9rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1rem;
+    font-family: var(--fm-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.02em;
+    color: var(--fm-accent);
+}
+
+.fm-stack li + li::before {
+    content: "+";
+    margin-right: 1rem;
+    color: var(--mud-palette-text-secondary);
+}
+
+/* Reading measure inside panels: long prose lines stop at about 75 characters. */
+.fm-panel .mud-typography-body1,
+.fm-panel .mud-typography-body2 { max-width: 75ch; }
+
+/* Outlines carry depth here; filled buttons sit flat in both modes. */
+.mud-button-filled,
+.mud-button-filled:hover,
+.mud-button-filled:focus-visible { box-shadow: none; }
+
+/* Clickable chips (filters, inquiry picks) get a thumb-sized hit area. */
+.mud-chip.mud-clickable { min-height: 36px; padding-inline: 14px; }

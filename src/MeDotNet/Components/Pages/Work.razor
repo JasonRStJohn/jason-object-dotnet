@@ -11,14 +11,12 @@
     engineering role. Below are the three problems people usually bring me in to solve.
 </MudText>
 
-<MudPaper Class="pa-4 pa-sm-6 mb-4" Elevation="1">
-    <div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-2">
-        <h2 class="mud-typography mud-typography-h5">
+<MudPaper Class="pa-4 pa-sm-6 mb-4 fm-panel fm-accent-violet" Elevation="0">
+    <div class="fm-panel-head">
+        <h2 class="mud-typography mud-typography-h5 fm-panel-title">
             1. Curated AI Harnesses &amp; Workflow Architecture
         </h2>
-        <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Info" Class="ma-0">
-            Architecture / Sprint
-        </MudChip>
+        <span class="fm-tag">Architecture / Sprint</span>
     </div>
     <MudText Typo="Typo.body1" Class="mb-3">
         <strong>The problem:</strong> Organizations adopting AI usually get stuck between two bad options:
@@ -43,14 +41,12 @@
     </div>
 </MudPaper>
 
-<MudPaper Class="pa-4 pa-sm-6 mb-4" Elevation="1">
-    <div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-2">
-        <h2 class="mud-typography mud-typography-h5">
+<MudPaper Class="pa-4 pa-sm-6 mb-4 fm-panel fm-accent-cyan" Elevation="0">
+    <div class="fm-panel-head">
+        <h2 class="mud-typography mud-typography-h5 fm-panel-title">
             2. Custom Line-of-Business &amp; Civic Software
         </h2>
-        <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Primary" Class="ma-0">
-            Project / Fractional Lead
-        </MudChip>
+        <span class="fm-tag">Project / Fractional Lead</span>
     </div>
     <MudText Typo="Typo.body1" Class="mb-3">
         <strong>The problem:</strong> Operations teams, startups, and municipalities regularly outgrow
@@ -75,14 +71,12 @@
     </div>
 </MudPaper>
 
-<MudPaper Class="pa-4 pa-sm-6 mb-6" Elevation="1">
-    <div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-2">
-        <h2 class="mud-typography mud-typography-h5">
+<MudPaper Class="pa-4 pa-sm-6 mb-6 fm-panel fm-accent-green" Elevation="0">
+    <div class="fm-panel-head">
+        <h2 class="mud-typography mud-typography-h5 fm-panel-title">
             3. Legacy Web &amp; Fleet Migrations
         </h2>
-        <MudChip T="string" Size="Size.Small" Variant="Variant.Outlined" Color="Color.Success" Class="ma-0">
-            Fixed-Scope / Retainer
-        </MudChip>
+        <span class="fm-tag">Fixed-Scope / Retainer</span>
     </div>
     <MudText Typo="Typo.body1" Class="mb-3">
         <strong>The problem:</strong> Small businesses, public library systems, and local governments often
@@ -108,9 +102,9 @@
     </div>
 </MudPaper>
 
-<MudPaper Class="pa-4 pa-sm-6 mb-6" Elevation="1">
-    <div class="d-flex flex-wrap align-center justify-space-between gap-2 mb-2">
-        <h2 class="mud-typography mud-typography-h5">How we can work together</h2>
+<MudPaper Class="pa-4 pa-sm-6 mb-6 fm-panel fm-accent-sky" Elevation="0">
+    <div class="fm-panel-head">
+        <h2 class="mud-typography mud-typography-h5 fm-panel-title">How we can work together</h2>
         <MudButton Variant="Variant.Text" Color="Color.Primary" Size="Size.Small"
                    OnClick="@(() => SelectTrackAndScroll(Tracks[3]))">
             Ask about a leadership role
@@ -127,8 +121,11 @@
 </MudPaper>
 
 <div id="inquiry">
-    <MudPaper Class="pa-4 pa-sm-6 mb-8" Elevation="2">
-        <h2 class="mud-typography mud-typography-h5 mud-typography-gutterbottom">Start a conversation</h2>
+    <MudPaper Class="pa-4 pa-sm-6 mb-8 fm-panel fm-accent-amber fm-panel-strong" Elevation="0">
+        <div class="fm-panel-head">
+            <h2 class="mud-typography mud-typography-h5 fm-panel-title">Start a conversation</h2>
+            <span class="fm-tag">mailto, no forms, no spam</span>
+        </div>
         <MudText Typo="Typo.body2" Class="mud-text-secondary mb-4">
             Pick a track and timeline below to format a quick note, then open it in your email client or copy it
             to your clipboard. Or skip the form and email <MudLink Href="mailto:jasonrstjohn@gmail.com">jasonrstjohn@gmail.com</MudLink> directly.
@@ -169,7 +166,7 @@
         </div>
 
         <div class="d-flex flex-wrap align-center gap-3">
-            <MudButton Href="@MailtoHref" Variant="Variant.Filled" Color="Color.Primary"
+            <MudButton Href="@MailtoHref" Variant="Variant.Filled" Color="Color.Secondary"
                        StartIcon="@Icons.Material.Filled.Email">
                 Open in Email Client
             </MudButton>
