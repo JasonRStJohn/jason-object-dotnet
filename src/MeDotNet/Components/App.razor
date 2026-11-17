@@ -104,7 +104,7 @@
 
             function shipSvg(color, sketch) {
                 if (!sketch) {
-                    return '<svg width="22" height="32" viewBox="-14 -24 28 48" xmlns="http://www.w3.org/2000/svg">' +
+                    return '<svg width="28" height="48" viewBox="-14 -24 28 48" xmlns="http://www.w3.org/2000/svg">' +
                         '<polygon class="chasma-flame" points="-4,10 4,10 0,20" fill="#ef4444" />' +
                         '<polygon points="-10,10 10,10 0,-20" fill="#888e99" />' +
                         '<polygon points="-10,10 10,10 0,3" fill="' + color + '" />' +
@@ -115,7 +115,7 @@
                 // with hatching, and the flame as three quick strokes. The fm-pencil
                 // filter roughens every edge so nothing reads as a vector shape.
                 var ink = inkColors[color] || "#1D4ED8";
-                return '<svg width="46" height="64" viewBox="-15 -24 30 48" xmlns="http://www.w3.org/2000/svg" ' +
+                return '<svg width="30" height="48" viewBox="-15 -24 30 48" xmlns="http://www.w3.org/2000/svg" ' +
                     'fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#fm-pencil)">' +
                     '<g class="chasma-flame" stroke="#BE123C" stroke-width="1.1">' +
                     '<path d="M-3 11 L0 19" /><path d="M0 11 L0.4 21" /><path d="M3 11 L0.8 18.5" /></g>' +
