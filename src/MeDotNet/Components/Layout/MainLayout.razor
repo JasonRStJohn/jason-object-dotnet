@@ -4,7 +4,7 @@
 @inject PersistentComponentState AppState
 @inject IJSRuntime JS
 
-<MudThemeProvider @bind-IsDarkMode="_isDarkMode" />
+<MudThemeProvider Theme="SiteTheme.Theme" @bind-IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />

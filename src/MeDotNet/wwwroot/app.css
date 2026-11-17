@@ -1,3 +1,173 @@
+/* ===========================================================================
+   FIELD MANUAL: the site's visual system
+   ---------------------------------------------------------------------------
+   The site is set in the language of the Chasma architectural infographic
+   (~/sites/Chasma/Chasma_Codebase_Infographic.pdf): deep navy, panels drawn
+   with thin coloured outlines instead of shadows, uppercase engineering
+   headings, monospace only for data. Colour is a role, not decoration: each
+   fm-accent-* class points a panel at one MudBlazor palette role, and the
+   palette (Components/Layout/SiteTheme.cs) supplies an AA-passing value for
+   dark and for light. Dark is the default; light is the same manual printed.
+   =========================================================================== */
+
+@font-face {
+    font-family: "Archivo";
+    src: url("fonts/archivo-var-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-stretch: 62% 125%;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Martian Mono";
+    src: url("fonts/martian-mono-var-latin.woff2") format("woff2");
+    font-weight: 100 800;
+    font-stretch: 75% 112.5%;
+    font-display: swap;
+}
+
+:root {
+    --fm-mono: "Martian Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+    --fm-radius: 14px;
+    --fm-outline: 1.5px;
+    --fm-accent: var(--mud-palette-lines-inputs);
+}
+
+/* Accent roles. A panel, tag or row picks one; everything inside reads --fm-accent. */
+.fm-accent-cyan   { --fm-accent: var(--mud-palette-primary); }
+.fm-accent-amber  { --fm-accent: var(--mud-palette-secondary); }
+.fm-accent-violet { --fm-accent: var(--mud-palette-tertiary); }
+.fm-accent-green  { --fm-accent: var(--mud-palette-success); }
+.fm-accent-coral  { --fm-accent: var(--mud-palette-error); }
+.fm-accent-sky    { --fm-accent: var(--mud-palette-info); }
+.fm-accent-orange { --fm-accent: var(--mud-palette-warning); }
+
+/* ---- Browser surfaces: the parts nobody draws still carry the design ---- */
+::selection {
+    background: color-mix(in srgb, var(--mud-palette-primary) 32%, transparent);
+    color: var(--mud-palette-text-primary);
+}
+
+html {
+    caret-color: var(--mud-palette-primary);
+    scrollbar-color: var(--mud-palette-lines-inputs) var(--mud-palette-background);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--mud-palette-background); }
+::-webkit-scrollbar-thumb {
+    background: var(--mud-palette-lines-inputs);
+    border-radius: 999px;
+    border: 3px solid var(--mud-palette-background);
+}
+
+:focus-visible {
+    outline: 2px solid var(--mud-palette-primary);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+a { text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+
+/* Display headings run slightly expanded, like the manual's titles. */
+.mud-typography-h1, .mud-typography-h2, .mud-typography-h3,
+.mud-typography-h4, .mud-typography-h5 {
+    font-stretch: 112%;
+    text-wrap: balance;
+}
+
+.mud-typography-body1, .mud-typography-body2 { text-wrap: pretty; }
+
+/* Monospace is for data: figures, code, tags. Tabular numerals keep columns honest. */
+.fm-mono, code, pre, kbd {
+    font-family: var(--fm-mono);
+    font-variant-numeric: tabular-nums slashed-zero;
+}
+
+/* ---- Panels: outlines, not elevation ---- */
+.mud-paper.mud-paper-outlined,
+.mud-paper:not(.mud-appbar):not(.mud-drawer):not(.mud-popover):not(.mud-snackbar):not(.mud-dialog):not(.mud-table),
+.mud-card {
+    background-color: var(--mud-palette-surface);
+    border: var(--fm-outline) solid var(--mud-palette-lines-default);
+    border-radius: var(--fm-radius);
+    box-shadow: none;
+}
+
+.fm-panel {
+    background-color: var(--mud-palette-surface);
+    border: var(--fm-outline) solid color-mix(in srgb, var(--fm-accent) 70%, transparent);
+    border-radius: var(--fm-radius);
+}
+
+.mud-paper.fm-panel,
+.mud-card.fm-panel {
+    border-color: color-mix(in srgb, var(--fm-accent) 70%, transparent);
+}
+
+/* Panel header: uppercase title in the accent, a tag pill on the right, a hairline beneath. */
+.fm-panel-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--mud-palette-lines-default);
+}
+
+.fm-panel-title {
+    margin: 0;
+    color: var(--fm-accent);
+}
+
+/* The manual's pill tag: mono caps, outlined in the accent, a whisper of fill. */
+.fm-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-family: var(--fm-mono);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--fm-accent);
+    background: color-mix(in srgb, var(--fm-accent) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--fm-accent) 65%, transparent);
+    border-radius: 999px;
+    padding: 0.42em 0.8em;
+}
+
+/* MudChips become manual pills: outlined, mono, never a solid low-contrast fill. */
+.mud-chip {
+    font-family: var(--fm-mono);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 999px;
+}
+
+.mud-chip.mud-chip-outlined {
+    border-width: 1px;
+}
+
+/* Filter chips: the selected one is a solid accent pill with the palette's contrast ink. */
+.mud-chip.mud-chip-filled.mud-chip-color-primary {
+    color: var(--mud-palette-primary-text);
+}
+
+/* Buttons: squarer corners than Mud's default pill, matching the panels. */
+.mud-button-root.mud-button { border-radius: 10px; }
+
+.mud-button-outlined { border-width: 1.5px; }
+
 html, body {
     margin: 0;
     max-width: 100%;
