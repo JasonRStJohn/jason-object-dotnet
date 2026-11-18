@@ -6,6 +6,8 @@
 @inject ISnackbar Snackbar
 
 <PageTitle>@(Id is null ? "New Project" : "Edit Project") - Admin</PageTitle>
+
+<AdminBack />
 <div class="d-flex align-center flex-wrap gap-2 mb-4">
     <h1 class="mud-typography mud-typography-h4" style="margin:0">@(Id is null ? "New project" : "Edit project")</h1>
     <MudSpacer />

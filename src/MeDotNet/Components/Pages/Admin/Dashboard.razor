@@ -1,0 +1,78 @@
+@page "/admin"
+@attribute [Authorize]
+@inject PostService PostService
+@inject PageCopyService PageCopyService
+
+<PageTitle>Admin - JasonObject</PageTitle>
+
+<h1 class="mud-typography mud-typography-h4 mud-typography-gutterbottom">Admin</h1>
+<MudText Typo="Typo.body2" Class="mud-text-secondary mb-6">What are you changing?</MudText>
+
+<div class="fm-admin-grid">
+    <section class="fm-panel fm-neutral fm-admin-card">
+        <h2 class="mud-typography mud-typography-h6">The record</h2>
+        <p class="fm-admin-what">Specs, plans, post-mortems and notes on /notes.</p>
+        @if (_posts is not null)
+        {
+            <p class="fm-admin-count fm-mono">@_posts.Value.Published published · @_posts.Value.Drafts drafts</p>
+        }
+        <div class="fm-admin-actions">
+            <MudButton Href="/admin/posts" Variant="Variant.Filled" Color="Color.Primary">Manage entries</MudButton>
+            <MudButton Href="/admin/posts/new" Variant="Variant.Text" Color="Color.Primary"
+                       StartIcon="@Icons.Material.Filled.Add">New entry</MudButton>
+        </div>
+    </section>
+
+    <section class="fm-panel fm-neutral fm-admin-card">
+        <h2 class="mud-typography mud-typography-h6">Projects</h2>
+        <p class="fm-admin-what">The cards on /projects: add, edit, reorder, hide.</p>
+        @if (_projects is not null)
+        {
+            <p class="fm-admin-count fm-mono">@_projects.Value.Total projects · @_projects.Value.Hidden hidden</p>
+        }
+        <div class="fm-admin-actions">
+            <MudButton Href="/admin/projects" Variant="Variant.Filled" Color="Color.Primary">Manage projects</MudButton>
+        </div>
+    </section>
+
+    <section class="fm-panel fm-neutral fm-admin-card">
+        <h2 class="mud-typography mud-typography-h6">Page text</h2>
+        <p class="fm-admin-what">The wording on /work and /projects. Each category holds its /work panel and its /projects group.</p>
+        <ul class="fm-admin-links">
+            @foreach (var category in _categories)
+            {
+                <li><a href="@($"/admin/categories/{category.Key}")">@category.ProjectsShortLabel</a></li>
+            }
+            <li><a href="/admin/page-text">Page blocks</a> <span class="fm-admin-note">intros, how we can work together, inquiry instructions</span></li>
+        </ul>
+    </section>
+
+    <section class="fm-panel fm-neutral fm-admin-card">
+        <h2 class="mud-typography mud-typography-h6">Account</h2>
+        <p class="fm-admin-what">Your sign-in.</p>
+        <div class="fm-admin-actions">
+            <MudButton Href="/account/changepassword" Variant="Variant.Outlined" Color="Color.Primary">Change password</MudButton>
+            <form method="post" action="/account/logout">
+                <AntiforgeryToken />
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Text" StartIcon="@Icons.Material.Filled.Logout">Log out</MudButton>
+            </form>
+        </div>
+    </section>
+</div>
+
+@code {
+    private (int Published, int Drafts)? _posts;
+    private (int Total, int Hidden)? _projects;
+    private List<ProjectCategory> _categories = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var posts = await PostService.GetAllAsync();
+        _posts = (posts.Count(p => p.PublishedAt is not null), posts.Count(p => p.PublishedAt is null));
+
+        var projects = await PageCopyService.GetAllProjectsAsync();
+        _projects = (projects.Count, projects.Count(p => !p.IsVisible));
+
+        _categories = (await PageCopyService.GetAsync()).Categories.Select(c => c.Category).ToList();
+    }
+}

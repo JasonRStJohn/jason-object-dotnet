@@ -20,6 +20,26 @@ await page.fill('#Input_Password', process.env.ADMIN_PASSWORD ?? '');
 await Promise.all([page.waitForURL(u => !u.pathname.startsWith('/account/login')), page.click('button[type=submit]')]);
 ok('logged in');
 
+// 0. Everything is reachable by clicking, starting from the footer link: no typed URLs.
+if (!page.url().endsWith('/admin')) fail(`login should land on the dashboard, landed on ${page.url()}`);
+ok('login lands on the dashboard');
+await go('/');
+await page.getByRole('contentinfo').getByRole('link', { name: 'Admin', exact: true }).click();
+await page.waitForURL(u => u.pathname === '/admin'); await page.waitForTimeout(1200);
+ok('footer Admin link opens the dashboard');
+const reach = async (name, path) => {
+  await go('/admin');
+  await page.getByRole('link', { name, exact: true }).click();
+  await page.waitForURL(u => u.pathname === path); await page.waitForTimeout(800);
+  await page.getByRole('link', { name: 'Back to admin' }).click();
+  await page.waitForURL(u => u.pathname === '/admin');
+  ok(`dashboard → ${path} → back`);
+};
+await reach('Manage entries', '/admin/posts');
+await reach('Manage projects', '/admin/projects');
+await reach('Page blocks', '/admin/page-text');
+await reach('Platforms & .NET', '/admin/categories/platforms');
+
 // 1. Edit the body
 await go('/admin/projects');
 await page.getByLabel(`Edit ${TITLE}`).click();

@@ -36,7 +36,7 @@ public class LoginModel : PageModel
 
         var result = await _authService.SignInAsync(Input.Email, Input.Password);
         if (result.Success)
-            return LocalRedirect(Url.IsLocalUrl(ReturnUrl) ? ReturnUrl! : "/admin/posts");
+            return LocalRedirect(Url.IsLocalUrl(ReturnUrl) ? ReturnUrl! : "/admin");
 
         ModelState.AddModelError(string.Empty, result.ErrorMessage!);
         return Page();

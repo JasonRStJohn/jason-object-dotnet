@@ -47,6 +47,7 @@
             <MudNavMenu>
                 <AuthorizeView>
                     <Authorized>
+                        <MudNavLink Href="admin" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">Admin</MudNavLink>
                         <MudNavLink Href="admin/posts" Icon="@Icons.Material.Filled.EditNote">Manage Posts</MudNavLink>
                         <MudNavLink Href="admin/projects" Icon="@Icons.Material.Filled.Work">Manage Projects</MudNavLink>
                         <MudNavLink Href="admin/page-text" Icon="@Icons.Material.Filled.TextSnippet">Page Text</MudNavLink>
@@ -96,7 +97,7 @@
                                    Href="mailto:jasonrstjohn@gmail.com" aria-label="Email" />
                     <AuthorizeView>
                         <Authorized>
-                            <MudLink Href="/admin/posts" Typo="Typo.caption" Class="ml-2">Admin</MudLink>
+                            <MudLink Href="/admin" Typo="Typo.caption" Class="ml-2">Admin</MudLink>
                         </Authorized>
                         <NotAuthorized>
                             <MudLink Href="/account/login" Typo="Typo.caption" Class="ml-2 mud-text-secondary">Login</MudLink>

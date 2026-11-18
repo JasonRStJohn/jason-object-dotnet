@@ -1096,3 +1096,18 @@ html[data-theme="light"] { --fm-grid-line: rgba(14, 116, 144, 0.07); }
 .fm-copy > :last-child { margin-bottom: 0; }
 .fm-copy a { color: var(--mud-palette-primary); text-decoration: none; }
 .fm-copy a:hover { text-decoration: underline; }
+
+/* ---------------------------------------------------------------------------
+   Admin dashboard: one panel per thing you can change.
+   --------------------------------------------------------------------------- */
+.fm-admin-grid { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 900px) { .fm-admin-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.fm-admin-card { padding: 1.25rem 1.4rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.fm-admin-card h2 { margin: 0; }
+.fm-admin-what { margin: 0; color: var(--mud-palette-text-secondary); font-size: 0.9375rem; }
+.fm-admin-count { margin: 0; font-size: 0.75rem; color: var(--mud-palette-text-secondary); }
+.fm-admin-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; padding-top: 0.5rem; }
+.fm-admin-links { margin: 0.25rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.5rem; }
+.fm-admin-links a { color: var(--mud-palette-primary); font-weight: 600; text-decoration: none; }
+.fm-admin-links a:hover { text-decoration: underline; }
+.fm-admin-note { color: var(--mud-palette-text-secondary); font-size: 0.875rem; }
