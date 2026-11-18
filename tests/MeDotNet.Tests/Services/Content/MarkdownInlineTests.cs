@@ -36,4 +36,8 @@ public class MarkdownInlineTests
         html.Should().NotMatchRegex(@"<[^>]*\son\w+\s*=");
         html.Should().NotContain("<img");
     }
+
+    [Fact]
+    public void ToInlineHtml_Heading_KeepsItsText() =>
+        MarkdownRenderer.ToInlineHtml("# Big idea\nthen detail").Should().Be("Big idea then detail");
 }

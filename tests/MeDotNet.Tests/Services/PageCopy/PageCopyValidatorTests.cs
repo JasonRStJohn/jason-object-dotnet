@@ -18,10 +18,18 @@ public class PageCopyValidatorTests
     [Theory]
     [InlineData("title")]
     [InlineData("body")]
+    [InlineData("badge")]
+    [InlineData("meta")]
     public void Validate_WhitespaceOnlyRequired_Fails(string field)
     {
         var p = Valid();
-        if (field == "title") p.Title = "   "; else p.Body = " \n ";
+        switch (field)
+        {
+            case "title": p.Title = "   "; break;
+            case "body": p.Body = " \n "; break;
+            case "badge": p.Badge = " "; break;
+            default: p.Meta = ""; break;
+        }
         PageCopyValidator.Validate(p).Should().NotBeEmpty();
     }
 

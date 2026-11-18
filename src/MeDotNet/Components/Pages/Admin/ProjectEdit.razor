@@ -29,10 +29,10 @@
         }
     </MudSelect>
     <MudTextField T="string" Label="Title" @bind-Value="_project.Title" Variant="Variant.Outlined" Class="mb-4" />
-    <MudTextField T="string" Label="Badge" @bind-Value="_project.Badge"
+    <MudTextField T="string" Label="Badge" @bind-Value="_project.Badge" Required="true"
                   HelperText="The pill beside the title, e.g. Open Source, Contract, Previous Employer"
                   Variant="Variant.Outlined" Class="mb-4" />
-    <MudTextField T="string" Label="Meta line" @bind-Value="_project.Meta"
+    <MudTextField T="string" Label="Meta line" @bind-Value="_project.Meta" Required="true"
                   HelperText="The small line under the title, e.g. 2026 · Nuxt 3, PocketBase"
                   Variant="Variant.Outlined" Class="mb-4" />
     <MudTextField T="string" Label="Body" @bind-Value="_project.Body" Lines="10"

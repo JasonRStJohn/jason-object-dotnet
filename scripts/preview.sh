@@ -18,8 +18,12 @@ SQL=medotnet-sqlserver-1
 PREVIEW_DB=MeDotNet_Preview
 set -a; . ./.env; set +a
 
+# Exported once and passed by NAME (-e SQLCMDPASSWORD), so docker inherits the value
+# and it never appears in the process list.
+export SQLCMDPASSWORD="$SA_PASSWORD"
+
 sql() {
-    docker exec -e SQLCMDPASSWORD="$SA_PASSWORD" "$SQL" \
+    docker exec -e SQLCMDPASSWORD "$SQL" \
         /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -C -b -h -1 -W -Q "SET NOCOUNT ON; $1"
 }
 

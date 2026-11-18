@@ -17,6 +17,8 @@ public static class PageCopyValidator
         if (!CategoryKeys.Contains(p.CategoryKey)) errors.Add("Pick one of the three categories.");
         if (string.IsNullOrWhiteSpace(p.Title)) errors.Add("Title is required.");
         if (string.IsNullOrWhiteSpace(p.Body)) errors.Add("Body is required.");
+        if (string.IsNullOrWhiteSpace(p.Badge)) errors.Add("Badge is required.");
+        if (string.IsNullOrWhiteSpace(p.Meta)) errors.Add("Meta line is required.");
 
         var hasText = !string.IsNullOrWhiteSpace(p.LinkText);
         var hasHref = !string.IsNullOrWhiteSpace(p.LinkHref);

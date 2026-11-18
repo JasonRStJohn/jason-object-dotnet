@@ -70,7 +70,7 @@ public static class MarkdownRenderer
     /// <summary>
     /// Renders Markdown as inline HTML with no wrapping paragraph, for copy that
     /// continues a label inside an existing paragraph ("<strong>The problem:</strong> ...").
-    /// Several paragraphs are joined with a space. Same pipeline, link filter and sanitizer
+    /// Several paragraphs (or a stray heading) are joined with a space, keeping their text. Same pipeline, link filter and sanitizer
     /// as <see cref="ToHtml"/>.
     /// </summary>
     public static string ToInlineHtml(string? markdown)
@@ -79,7 +79,9 @@ public static class MarkdownRenderer
 
         var document = Parse(markdown);
         var parts = new List<string>();
-        foreach (var paragraph in document.Descendants<ParagraphBlock>())
+        // Every block that carries inline text (paragraphs, and headings typed by mistake),
+        // so nothing an editor writes silently disappears.
+        foreach (var paragraph in document.Descendants<LeafBlock>())
         {
             if (paragraph.Inline is null) continue;
             using var writer = new StringWriter();
