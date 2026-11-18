@@ -34,7 +34,12 @@ services:
       retries: 10
       start_period: 30s
     volumes:
-      - sqlserver_data:/var/lib/mssql/data
+      # SQL Server keeps its databases, logs and machine key under /var/opt/mssql.
+      # Until 2026-11-18 this mounted /var/lib/mssql/data, a path SQL Server never
+      # uses: the volume stayed empty and the live database lived in the container's
+      # writable layer, one `docker compose down` from gone. Fixed by backing up,
+      # remounting here and restoring.
+      - sqlserver_data:/var/opt/mssql
     restart: unless-stopped
     networks:
       - internal
