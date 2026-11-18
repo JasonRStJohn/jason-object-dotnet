@@ -1,5 +1,7 @@
 using System.Text.RegularExpressions;
+using Ganss.Xss;
 using Markdig;
+using Markdig.Extensions.GenericAttributes;
 using Markdig.Syntax;
 using Markdig.Syntax.Inlines;
 
@@ -13,6 +15,11 @@ namespace MeDotNet.Services.Content;
 /// Disabling raw HTML doesn't stop a link or image URL from using an executable
 /// scheme (javascript:, data:, etc), so link/image URLs are additionally filtered
 /// against an allowlist on the parsed AST before rendering.
+///
+/// Markdig's generic-attributes syntax ({onclick=...}) is removed from the pipeline,
+/// because it let Markdown attach event handlers and styles to any element. Finally,
+/// the rendered HTML passes an allowlist sanitizer, so whatever a future pipeline
+/// option produces, no script, event attribute, style or unsafe URL reaches the page.
 /// </summary>
 public static class MarkdownRenderer
 {
@@ -25,10 +32,31 @@ public static class MarkdownRenderer
     // (e.g. "/search?q=10:30").
     private static readonly Regex SchemePattern = new(@"^[a-zA-Z][a-zA-Z0-9+.\-]*:", RegexOptions.Compiled);
 
-    private static readonly MarkdownPipeline Pipeline = new MarkdownPipelineBuilder()
-        .UseAdvancedExtensions()
-        .DisableHtml()
-        .Build();
+    private static readonly MarkdownPipeline Pipeline = BuildPipeline();
+
+    private static MarkdownPipeline BuildPipeline()
+    {
+        var builder = new MarkdownPipelineBuilder()
+            .UseAdvancedExtensions()
+            .DisableHtml();
+        builder.Extensions.RemoveAll(e => e is GenericAttributesExtension);
+        return builder.Build();
+    }
+
+    // Configured once; HtmlSanitizer is safe to share across threads after setup.
+    private static readonly HtmlSanitizer Sanitizer = BuildSanitizer();
+
+    private static HtmlSanitizer BuildSanitizer()
+    {
+        var sanitizer = new HtmlSanitizer();
+        sanitizer.AllowedAttributes.Remove("style");
+        sanitizer.AllowedCssProperties.Clear();
+        sanitizer.AllowedSchemes.Clear();
+        foreach (var scheme in new[] { "http", "https", "mailto" })
+            sanitizer.AllowedSchemes.Add(scheme);
+        sanitizer.AllowedAttributes.Add("id"); // heading anchors from auto-identifiers
+        return sanitizer;
+    }
 
     public static string ToHtml(string? markdown)
     {
@@ -41,7 +69,7 @@ public static class MarkdownRenderer
             if (!IsSafeUrl(link.Url)) link.Url = "#";
         }
 
-        return document.ToHtml(Pipeline);
+        return Sanitizer.Sanitize(document.ToHtml(Pipeline));
     }
 
     /// <summary>
