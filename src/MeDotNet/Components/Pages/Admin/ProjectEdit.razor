@@ -1,0 +1,100 @@
+@page "/admin/projects/new"
+@page "/admin/projects/{Id:int}"
+@attribute [Authorize]
+@inject PageCopyService PageCopyService
+@inject NavigationManager Nav
+@inject ISnackbar Snackbar
+
+<PageTitle>@(Id is null ? "New Project" : "Edit Project") - Admin</PageTitle>
+<div class="d-flex align-center flex-wrap gap-2 mb-4">
+    <h1 class="mud-typography mud-typography-h4" style="margin:0">@(Id is null ? "New project" : "Edit project")</h1>
+    <MudSpacer />
+    <MudButton Href="@($"/projects#{_project.CategoryKey}")" Target="_blank" Variant="Variant.Text" Color="Color.Primary"
+               EndIcon="@Icons.Material.Filled.OpenInNew">View page</MudButton>
+</div>
+
+@if (_errors.Count > 0)
+{
+    <MudAlert Severity="Severity.Error" Class="mb-4">
+        @foreach (var error in _errors) { <div>@error</div> }
+    </MudAlert>
+}
+
+@if (_loaded)
+{
+    <MudSelect T="string" Label="Category" @bind-Value="_project.CategoryKey" Variant="Variant.Outlined" Class="mb-4">
+        @foreach (var category in _categories)
+        {
+            <MudSelectItem T="string" Value="@category.Key">@category.ProjectsTitle</MudSelectItem>
+        }
+    </MudSelect>
+    <MudTextField T="string" Label="Title" @bind-Value="_project.Title" Variant="Variant.Outlined" Class="mb-4" />
+    <MudTextField T="string" Label="Badge" @bind-Value="_project.Badge"
+                  HelperText="The pill beside the title, e.g. Open Source, Contract, Previous Employer"
+                  Variant="Variant.Outlined" Class="mb-4" />
+    <MudTextField T="string" Label="Meta line" @bind-Value="_project.Meta"
+                  HelperText="The small line under the title, e.g. 2026 · Nuxt 3, PocketBase"
+                  Variant="Variant.Outlined" Class="mb-4" />
+    <MudTextField T="string" Label="Body" @bind-Value="_project.Body" Lines="10"
+                  HelperText="Markdown: **bold**, *italic*, [links](https://...). Blank line between paragraphs."
+                  Variant="Variant.Outlined" Class="mb-4" />
+    <MudTextField T="string" Label="Stack tags" @bind-Value="_project.Tags" Lines="4"
+                  HelperText="One per line" Variant="Variant.Outlined" Class="mb-4" />
+    <div class="d-flex flex-wrap gap-4">
+        <MudTextField T="string" Label="Link text" @bind-Value="_project.LinkText"
+                      HelperText="Optional, e.g. Source on GitHub" Variant="Variant.Outlined" Class="mb-4 flex-grow-1" />
+        <MudTextField T="string" Label="Link URL" @bind-Value="_project.LinkHref"
+                      HelperText="https://..." Variant="Variant.Outlined" Class="mb-4 flex-grow-1" />
+    </div>
+    <MudTextField T="string" Label="Record project" @bind-Value="_project.RecordProject"
+                  HelperText="Optional. Adds a Read the record button linking to /notes?project=..."
+                  Variant="Variant.Outlined" Class="mb-4" />
+    <MudSwitch T="bool" @bind-Value="_project.IsEmployer" Label="Previous-employer project (shows the employer note)"
+               Color="Color.Primary" Class="mb-2" />
+    <MudSwitch T="bool" @bind-Value="_project.IsVisible" Label="Visible on /projects" Color="Color.Primary" Class="mb-4" />
+
+    <div class="d-flex gap-4">
+        <MudButton OnClick="SaveAsync" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+        <MudButton Href="/admin/projects" Variant="Variant.Text">Cancel</MudButton>
+    </div>
+}
+else if (_missing)
+{
+    <MudAlert Severity="Severity.Warning">This project no longer exists.</MudAlert>
+}
+
+@code {
+    [Parameter] public int? Id { get; set; }
+    [SupplyParameterFromQuery(Name = "category")] public string? CategoryQuery { get; set; }
+
+    private Project _project = new();
+    private List<ProjectCategory> _categories = [];
+    private IReadOnlyList<string> _errors = [];
+    private bool _loaded;
+    private bool _missing;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _categories = (await PageCopyService.GetAsync()).Categories.Select(c => c.Category).ToList();
+        if (Id is null)
+        {
+            var key = _categories.Any(c => c.Key == CategoryQuery) ? CategoryQuery! : _categories.FirstOrDefault()?.Key ?? "";
+            _project = new Project { CategoryKey = key };
+            _loaded = true;
+            return;
+        }
+
+        var existing = await PageCopyService.GetProjectAsync(Id.Value);
+        if (existing is null) { _missing = true; return; }
+        _project = existing;
+        _loaded = true;
+    }
+
+    private async Task SaveAsync()
+    {
+        _errors = await PageCopyService.SaveProjectAsync(_project);
+        if (_errors.Count > 0) return;
+        Snackbar.Add("Saved.", Severity.Success);
+        Nav.NavigateTo("/admin/projects");
+    }
+}

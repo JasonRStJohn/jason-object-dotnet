@@ -26,11 +26,17 @@ sql() {
 exists=$(sql "SELECT COUNT(*) FROM sys.databases WHERE name = N'$PREVIEW_DB'")
 if [[ "${1:-}" == "--refresh-db" || "$exists" == "0" ]]; then
     echo "Copying live data into $PREVIEW_DB..."
+    # RESTORE needs exclusive access: stop the preview and drop any other sessions first.
+    docker rm -f medotnet-preview >/dev/null 2>&1 || true
+    if [[ "$exists" != "0" ]]; then
+        sql "ALTER DATABASE [$PREVIEW_DB] SET SINGLE_USER WITH ROLLBACK IMMEDIATE" >/dev/null
+    fi
     sql "BACKUP DATABASE [MeDotNet] TO DISK = N'/var/opt/mssql/data/preview-src.bak' WITH COPY_ONLY, INIT" >/dev/null
     sql "RESTORE DATABASE [$PREVIEW_DB] FROM DISK = N'/var/opt/mssql/data/preview-src.bak'
          WITH REPLACE,
          MOVE N'MeDotNet' TO N'/var/opt/mssql/data/$PREVIEW_DB.mdf',
          MOVE N'MeDotNet_log' TO N'/var/opt/mssql/data/${PREVIEW_DB}_log.ldf'" >/dev/null
+    sql "ALTER DATABASE [$PREVIEW_DB] SET MULTI_USER" >/dev/null
 fi
 
 echo "Building medotnet-preview:dev..."
