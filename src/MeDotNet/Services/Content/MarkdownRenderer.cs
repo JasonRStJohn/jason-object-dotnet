@@ -3,6 +3,7 @@ using Ganss.Xss;
 using Markdig;
 using Markdig.Extensions.GenericAttributes;
 using Markdig.Syntax;
+using Markdig.Renderers;
 using Markdig.Syntax.Inlines;
 
 namespace MeDotNet.Services.Content;
@@ -62,14 +63,44 @@ public static class MarkdownRenderer
     {
         if (string.IsNullOrWhiteSpace(markdown)) return string.Empty;
 
-        var document = Markdig.Markdown.Parse(markdown, Pipeline);
+        var document = Parse(markdown);
+        return Sanitizer.Sanitize(document.ToHtml(Pipeline));
+    }
 
+    /// <summary>
+    /// Renders Markdown as inline HTML with no wrapping paragraph, for copy that
+    /// continues a label inside an existing paragraph ("<strong>The problem:</strong> ...").
+    /// Several paragraphs are joined with a space. Same pipeline, link filter and sanitizer
+    /// as <see cref="ToHtml"/>.
+    /// </summary>
+    public static string ToInlineHtml(string? markdown)
+    {
+        if (string.IsNullOrWhiteSpace(markdown)) return string.Empty;
+
+        var document = Parse(markdown);
+        var parts = new List<string>();
+        foreach (var paragraph in document.Descendants<ParagraphBlock>())
+        {
+            if (paragraph.Inline is null) continue;
+            using var writer = new StringWriter();
+            var renderer = new HtmlRenderer(writer);
+            Pipeline.Setup(renderer);
+            renderer.WriteChildren(paragraph.Inline);
+            writer.Flush();
+            parts.Add(writer.ToString().Trim());
+        }
+
+        return Sanitizer.Sanitize(string.Join(" ", parts.Where(p => p.Length > 0)));
+    }
+
+    private static MarkdownDocument Parse(string markdown)
+    {
+        var document = Markdig.Markdown.Parse(markdown, Pipeline);
         foreach (var link in document.Descendants<LinkInline>())
         {
             if (!IsSafeUrl(link.Url)) link.Url = "#";
         }
-
-        return Sanitizer.Sanitize(document.ToHtml(Pipeline));
+        return document;
     }
 
     /// <summary>
