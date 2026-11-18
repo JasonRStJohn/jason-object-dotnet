@@ -31,7 +31,7 @@
 @foreach (var group in FilteredGroups)
 {
     var category = group.Category;
-    <section id="@category.Key" class="fm-group @GroupAccent(category.Key) mb-10">
+    <section id="@category.Key" class="fm-group @CategoryAccent.For(category.Key) mb-10">
         <div class="fm-group-head">
             <h2 class="mud-typography mud-typography-h5 fm-panel-title">@category.ProjectsTitle</h2>
             <span class="fm-tag">@group.Projects.Count systems</span>
@@ -117,14 +117,6 @@
         string.IsNullOrWhiteSpace(_activeCategory)
             ? ShownGroups
             : ShownGroups.Where(g => string.Equals(g.Category.Key, _activeCategory, StringComparison.OrdinalIgnoreCase));
-
-    // One colour per problem type, shared with the matching /work panel.
-    private static string GroupAccent(string id) => id switch
-    {
-        "ai-systems" => "fm-accent-violet",
-        "platforms" => "fm-accent-cyan",
-        _ => "fm-accent-green"
-    };
 
     public void Dispose() => _loader?.Dispose();
 }
