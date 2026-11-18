@@ -277,4 +277,36 @@ public class PostServiceTests
 
         result.Should().Equal("JasonObject");
     }
+
+    [Fact]
+    public async Task GetNeighboursAsync_ReturnsNewerAndOlderPublishedEntries()
+    {
+        var db = CreateDb();
+        var svc = new PostService(db);
+        var now = DateTime.UtcNow;
+        var oldest = MakePost("Oldest", published: true); oldest.CreatedAt = now.AddDays(-3);
+        var draft = MakePost("Draft", published: false); draft.CreatedAt = now.AddDays(-2);
+        var middle = MakePost("Middle", published: true); middle.CreatedAt = now.AddDays(-1);
+        var newest = MakePost("Newest", published: true); newest.CreatedAt = now;
+        foreach (var p in new[] { oldest, draft, middle, newest }) await svc.CreateAsync(p);
+
+        var result = await svc.GetNeighboursAsync(middle);
+
+        result.Newer!.Slug.Should().Be("newest");
+        result.Older!.Slug.Should().Be("oldest");
+    }
+
+    [Fact]
+    public async Task GetNeighboursAsync_ReturnsNullAtTheEnds()
+    {
+        var db = CreateDb();
+        var svc = new PostService(db);
+        var only = MakePost("Only", published: true);
+        await svc.CreateAsync(only);
+
+        var result = await svc.GetNeighboursAsync(only);
+
+        result.Newer.Should().BeNull();
+        result.Older.Should().BeNull();
+    }
 }

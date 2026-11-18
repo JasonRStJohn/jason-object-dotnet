@@ -36,3 +36,11 @@ docs/*.jpg
 
 # DataProtection keys (bind-mounted crypto material — never commit)
 dataprotection-keys/
+
+# Local Taildrop / mockup scratch folders
+jasonrstjohn-gmail.com-*/
+
+# Preview container key ring and Playwright tooling (scripts/preview.sh, scripts/visual)
+dataprotection-keys-preview/
+scripts/visual/node_modules/
+scripts/visual/package-lock.json

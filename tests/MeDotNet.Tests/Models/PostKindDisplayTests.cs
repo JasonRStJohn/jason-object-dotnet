@@ -16,13 +16,15 @@ public class PostKindDisplayTests
     }
 
     [Theory]
-    [InlineData(PostKind.Spec, "#7a5cff")]
-    [InlineData(PostKind.Plan, "#7a5cff")]
-    [InlineData(PostKind.PostMortem, "#d4763a")]
-    [InlineData(PostKind.Note, "#2fb47c")]
-    public void RailColor_ReturnsSpecifiedHex(PostKind kind, string expected)
+    [InlineData(PostKind.Spec, "fm-kind-spec")]
+    [InlineData(PostKind.Plan, "fm-kind-plan")]
+    [InlineData(PostKind.PostMortem, "fm-kind-postmortem")]
+    [InlineData(PostKind.Note, "fm-kind-note")]
+    public void CssClass_IsDistinctPerKind(PostKind kind, string expected)
     {
-        kind.RailColor().Should().Be(expected);
+        // Colour and outline style both come from this class (wwwroot/app.css), so the
+        // kind is never carried by colour alone.
+        kind.CssClass().Should().Be(expected);
     }
 
     [Theory]

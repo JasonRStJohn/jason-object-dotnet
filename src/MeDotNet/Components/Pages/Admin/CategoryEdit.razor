@@ -1,0 +1,87 @@
+@page "/admin/categories/{Key}"
+@attribute [Authorize]
+@inject PageCopyService PageCopyService
+@inject ISnackbar Snackbar
+
+<PageTitle>Edit Category - Admin</PageTitle>
+
+<AdminBack />
+
+@if (_category is null)
+{
+    @if (_missing)
+    {
+        <MudAlert Severity="Severity.Warning">There's no category called "@Key".</MudAlert>
+    }
+}
+else
+{
+    <div class="d-flex align-center flex-wrap gap-2 mb-6">
+        <h1 class="mud-typography mud-typography-h4" style="margin:0">@_category.ProjectsShortLabel</h1>
+        <MudSpacer />
+        <MudButton Href="/admin/page-text" Variant="Variant.Text">Back to page text</MudButton>
+    </div>
+
+    @if (_errors.Count > 0)
+    {
+        <MudAlert Severity="Severity.Error" Class="mb-4">
+            @foreach (var error in _errors) { <div>@error</div> }
+        </MudAlert>
+    }
+
+    <div class="d-flex align-center gap-2 mb-2">
+        <h2 class="mud-typography mud-typography-h6" style="margin:0">On /work</h2>
+        <MudButton Href="/work" Target="_blank" Variant="Variant.Text" Color="Color.Primary" Size="Size.Small"
+                   EndIcon="@Icons.Material.Filled.OpenInNew">View</MudButton>
+    </div>
+    <MudTextField T="string" Label="Panel title" @bind-Value="_category.WorkTitle" Variant="Variant.Outlined" Class="mb-4" />
+    <MudTextField T="string" Label="Tag" @bind-Value="_category.WorkTag"
+                  HelperText="The pill at the right of the panel title" Variant="Variant.Outlined" Class="mb-4" />
+    <MudTextField T="string" Label="The problem" @bind-Value="_category.WorkProblem" Lines="4"
+                  HelperText="One paragraph. Shown after a bold &quot;The problem:&quot;. Markdown: **bold**, *italic*, [links](https://...)."
+                  Variant="Variant.Outlined" Class="mb-4" />
+    <MudTextField T="string" Label="How I approach it" @bind-Value="_category.WorkApproach" Lines="6"
+                  HelperText="Inside the expandable section. Markdown; blank line between paragraphs."
+                  Variant="Variant.Outlined" Class="mb-4" />
+    <MudTextField T="string" Label="Projects link text" @bind-Value="_category.WorkLinkText"
+                  HelperText="The &quot;See the...&quot; button. Hidden while this category has no visible projects."
+                  Variant="Variant.Outlined" Class="mb-4" />
+    <MudTextField T="string" Label="Inquiry label" @bind-Value="_category.InquiryLabel"
+                  HelperText="The chip in the inquiry helper and the email subject" Variant="Variant.Outlined" Class="mb-8" />
+
+    <div class="d-flex align-center gap-2 mb-2">
+        <h2 class="mud-typography mud-typography-h6" style="margin:0">On /projects</h2>
+        <MudButton Href="@($"/projects#{_category.Key}")" Target="_blank" Variant="Variant.Text" Color="Color.Primary"
+                   Size="Size.Small" EndIcon="@Icons.Material.Filled.OpenInNew">View</MudButton>
+    </div>
+    <MudTextField T="string" Label="Filter label" @bind-Value="_category.ProjectsShortLabel"
+                  HelperText="The short chip above the groups" Variant="Variant.Outlined" Class="mb-4" />
+    <MudTextField T="string" Label="Group title" @bind-Value="_category.ProjectsTitle" Variant="Variant.Outlined" Class="mb-4" />
+    <MudTextField T="string" Label="Group subtitle" @bind-Value="_category.ProjectsSubtitle" Lines="2"
+                  HelperText="Plain text" Variant="Variant.Outlined" Class="mb-6" />
+
+    <div class="d-flex gap-4">
+        <MudButton OnClick="SaveAsync" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+        <MudButton Href="/admin/page-text" Variant="Variant.Text">Cancel</MudButton>
+    </div>
+}
+
+@code {
+    [Parameter] public string Key { get; set; } = "";
+
+    private ProjectCategory? _category;
+    private bool _missing;
+    private IReadOnlyList<string> _errors = [];
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _category = await PageCopyService.GetCategoryAsync(Key);
+        _missing = _category is null;
+    }
+
+    private async Task SaveAsync()
+    {
+        _errors = await PageCopyService.SaveCategoryAsync(_category!);
+        if (_errors.Count == 0) Snackbar.Add("Saved.", Severity.Success);
+    }
+}

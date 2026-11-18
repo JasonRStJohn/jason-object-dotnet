@@ -1,0 +1,79 @@
+@page "/admin/page-text"
+@attribute [Authorize]
+@inject PageCopyService PageCopyService
+@inject ISnackbar Snackbar
+
+<PageTitle>Page Text - Admin</PageTitle>
+
+<AdminBack />
+
+<h1 class="mud-typography mud-typography-h4 mud-typography-gutterbottom">Page text</h1>
+<MudText Typo="Typo.body2" Class="mud-text-secondary mb-6">
+    The words on /work and /projects. Layout and colours stay in code. Saving publishes immediately.
+</MudText>
+
+<h2 class="mud-typography mud-typography-h6 mb-2">Categories</h2>
+<MudText Typo="Typo.body2" Class="mud-text-secondary mb-3">
+    Each category's /work panel and /projects group, edited together.
+</MudText>
+<MudList T="string" Dense="true" Class="mb-8">
+    @foreach (var category in _categories)
+    {
+        <MudListItem T="string" Href="@($"/admin/categories/{category.Key}")" Icon="@Icons.Material.Filled.Edit">
+            @category.WorkTitle
+        </MudListItem>
+    }
+</MudList>
+
+<h2 class="mud-typography mud-typography-h6 mb-4">Page blocks</h2>
+
+@if (_errors.Count > 0)
+{
+    <MudAlert Severity="Severity.Error" Class="mb-4">
+        @foreach (var error in _errors) { <div>@error</div> }
+    </MudAlert>
+}
+
+@foreach (var definition in PageTextKeys.All)
+{
+    var key = definition.Key;
+    <MudTextField T="string" Label="@definition.Label" Value="@Value(key)" ValueChanged="v => _values[key] = v"
+                  Lines="@(definition.Format == PageTextFormat.Block ? 4 : 2)"
+                  HelperText="@Helper(definition)" Variant="Variant.Outlined" Class="mb-4" />
+}
+
+<div class="d-flex flex-wrap gap-4">
+    <MudButton OnClick="SaveAsync" Variant="Variant.Filled" Color="Color.Primary">Save</MudButton>
+    <MudButton Href="/work" Target="_blank" Variant="Variant.Text" Color="Color.Primary"
+               EndIcon="@Icons.Material.Filled.OpenInNew">View /work</MudButton>
+    <MudButton Href="/projects" Target="_blank" Variant="Variant.Text" Color="Color.Primary"
+               EndIcon="@Icons.Material.Filled.OpenInNew">View /projects</MudButton>
+</div>
+
+@code {
+    private List<ProjectCategory> _categories = [];
+    private Dictionary<string, string> _values = [];
+    private IReadOnlyList<string> _errors = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var copy = await PageCopyService.GetAsync();
+        _categories = copy.Categories.Select(c => c.Category).ToList();
+        _values = new Dictionary<string, string>(copy.Texts);
+    }
+
+    private string Value(string key) => _values.TryGetValue(key, out var v) ? v : "";
+
+    private static string Helper(PageTextDefinition d) => d.Format switch
+    {
+        PageTextFormat.Inline => $"{d.WhereShown}. Markdown, one paragraph.",
+        PageTextFormat.Block => $"{d.WhereShown}. Markdown.",
+        _ => $"{d.WhereShown}. Plain text.",
+    };
+
+    private async Task SaveAsync()
+    {
+        _errors = await PageCopyService.SaveTextsAsync(_values);
+        if (_errors.Count == 0) Snackbar.Add("Saved.", Severity.Success);
+    }
+}

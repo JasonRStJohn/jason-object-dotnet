@@ -4,45 +4,53 @@
 @inject PersistentComponentState AppState
 @inject IJSRuntime JS
 
-<MudThemeProvider @bind-IsDarkMode="_isDarkMode" />
+<MudThemeProvider Theme="SiteTheme.Theme" @bind-IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="1">
+    <MudAppBar Elevation="0" Class="fm-appbar">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start"
-                       OnClick="ToggleDrawer" aria-label="Toggle navigation" />
-        <MudText Typo="Typo.h6" Class="ml-2">JasonObject</MudText>
+                       OnClick="ToggleDrawer" aria-label="Toggle navigation" Class="nav-mobile-only mr-1" />
+        <MudLink Href="/" Underline="Underline.None" Color="Color.Inherit" Class="d-flex align-center">
+            <img src="@Assets["img/logo-j.png"]" alt="" width="28" height="28" class="mr-2" style="display: block" />
+            <span class="fm-wordmark">JasonObject</span>
+        </MudLink>
         <MudSpacer />
-        @* "Work with me" needs room; on a phone it overflows the app bar, so below
-           600px it becomes a compact "Contact". Pure CSS (not MudHidden) so both
-           render server-side and the right one shows on the first paint — MudHidden
-           defers to a client-measured breakpoint and would pop the button in late. *@
-        <MudButton Href="/work" Variant="Variant.Outlined" Color="Color.Inherit" Class="mr-3 cta-wide">
+        @* NavLink (not MudButton) so the current page gets the `active` class and an underline marker. *@
+        <nav class="nav-desktop-only align-center fm-nav mr-4" aria-label="Main">
+            <NavLink href="notes" class="fm-nav-link">The Record</NavLink>
+            <NavLink href="projects" class="fm-nav-link">Projects</NavLink>
+            <NavLink href="about" class="fm-nav-link">About</NavLink>
+        </nav>
+        <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Secondary" Class="mr-3 cta-wide">
             Work with me
         </MudButton>
-        <MudButton Href="/work" Variant="Variant.Outlined" Color="Color.Inherit" Size="Size.Small" Class="mr-2 cta-compact">
+        <MudButton Href="/work" Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Small" Class="mr-2 cta-compact">
             Contact
         </MudButton>
         <MudIconButton Icon="@(_isDarkMode ? Icons.Material.Filled.LightMode : Icons.Material.Filled.DarkMode)"
                        Color="Color.Inherit" OnClick="ToggleDarkMode" aria-label="Toggle dark mode" />
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" Elevation="1" Class="d-flex flex-column">
+
+    <MudDrawer @bind-Open="_drawerOpen" Variant="DrawerVariant.Temporary" Elevation="1" Class="d-flex flex-column">
         <MudNavMenu>
             <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
             <MudNavLink Href="notes" Icon="@Icons.Material.Filled.Article">The Record</MudNavLink>
             <MudNavLink Href="projects" Icon="@Icons.Material.Filled.Code">Projects</MudNavLink>
             <MudNavLink Href="about" Icon="@Icons.Material.Filled.Person">About</MudNavLink>
+            <MudNavLink Href="work" Icon="@Icons.Material.Filled.WorkOutline">Work with me</MudNavLink>
         </MudNavMenu>
         <div class="mt-auto pa-4">
-            @* Account links sit at the foot of the drawer, kept apart from the site
-               menu above. *@
             <MudDivider Class="mb-2" />
             <MudNavMenu>
                 <AuthorizeView>
                     <Authorized>
+                        <MudNavLink Href="admin" Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Dashboard">Admin</MudNavLink>
                         <MudNavLink Href="admin/posts" Icon="@Icons.Material.Filled.EditNote">Manage Posts</MudNavLink>
+                        <MudNavLink Href="admin/projects" Icon="@Icons.Material.Filled.Work">Manage Projects</MudNavLink>
+                        <MudNavLink Href="admin/page-text" Icon="@Icons.Material.Filled.TextSnippet">Page Text</MudNavLink>
                         <MudNavLink Href="account/changepassword" Icon="@Icons.Material.Filled.Password">Change Password</MudNavLink>
                         <form method="post" action="/account/logout" class="d-flex px-4 py-2">
                             <AntiforgeryToken />
@@ -66,10 +74,38 @@
             </div>
         </div>
     </MudDrawer>
-    <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.Medium" Class="py-8">
+
+    <MudMainContent Class="d-flex flex-column flex-grow-1">
+        <MudContainer MaxWidth="MaxWidth.Large" Class="py-6 py-sm-8 py-md-10 px-4 px-sm-6 px-md-10 flex-grow-1">
             @Body
         </MudContainer>
+        <footer class="site-footer py-4 px-4">
+            <MudContainer MaxWidth="MaxWidth.Large" Class="px-2 px-md-6 d-flex flex-wrap align-center justify-space-between gap-2">
+                <p class="fm-footer-meta">
+                    <span>JasonObject field manual</span>
+                    <span aria-hidden="true">|</span>
+                    <span>Rev 2026.11</span>
+                    <span aria-hidden="true">|</span>
+                    <span>Built by a human, with agents, reviewed by the human</span>
+                </p>
+                <div class="d-flex align-center gap-2">
+                    <MudIconButton Icon="@Icons.Custom.Brands.GitHub" Size="Size.Small"
+                                   Href="https://github.com/JasonRStJohn" Target="_blank" aria-label="GitHub" />
+                    <MudIconButton Icon="@Icons.Custom.Brands.LinkedIn" Size="Size.Small"
+                                   Href="https://www.linkedin.com/in/jasonrstjohn" Target="_blank" aria-label="LinkedIn" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Email" Size="Size.Small"
+                                   Href="mailto:jasonrstjohn@gmail.com" aria-label="Email" />
+                    <AuthorizeView>
+                        <Authorized>
+                            <MudLink Href="/admin" Typo="Typo.caption" Class="ml-2">Admin</MudLink>
+                        </Authorized>
+                        <NotAuthorized>
+                            <MudLink Href="/account/login" Typo="Typo.caption" Class="ml-2 mud-text-secondary">Login</MudLink>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </div>
+            </MudContainer>
+        </footer>
     </MudMainContent>
 </MudLayout>
 
@@ -83,14 +119,11 @@
     private const string ThemeStateKey = "isDarkMode";
 
     private bool _isDarkMode;
-    private bool _drawerOpen = true;
+    private bool _drawerOpen;
     private PersistingComponentStateSubscription _persistSubscription;
 
     protected override void OnInitialized()
     {
-        // Carry the theme from prerender into the interactive circuit. Reading the
-        // cookie only works during prerender (HttpContext is null in the circuit),
-        // so we persist the resolved value and take it back on the interactive pass.
         _persistSubscription = AppState.RegisterOnPersisting(PersistTheme);
 
         if (AppState.TryTakeFromJson<bool>(ThemeStateKey, out var restored))
@@ -99,8 +132,6 @@
         }
         else
         {
-            // Prerender: default to dark unless the visitor explicitly chose light.
-            // App.razor sets the same value on <html data-theme> for a flash-free paint.
             _isDarkMode = HttpContextAccessor.HttpContext?.Request.Cookies["theme"] != "light";
         }
     }
@@ -116,7 +147,6 @@
     private async Task ToggleDarkMode()
     {
         _isDarkMode = !_isDarkMode;
-        // Persist to a cookie so the next full load renders this choice flash-free.
         await JS.InvokeVoidAsync("jasonObjectTheme.set", _isDarkMode);
     }
 

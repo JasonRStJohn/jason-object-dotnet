@@ -58,6 +58,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddScoped<IAuthService, IdentityAuthService>();
 builder.Services.AddScoped<PostService>();
+builder.Services.AddScoped<MeDotNet.Services.PageCopy.PageCopyService>();
 
 var app = builder.Build();
 

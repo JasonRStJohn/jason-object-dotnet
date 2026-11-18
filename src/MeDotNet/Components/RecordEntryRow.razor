@@ -1,24 +1,28 @@
 @using MeDotNet.Models
 
-<div style="border-left: 3px solid @Entry.Kind.RailColor(); padding: 2px 0 2px 16px;" class="mb-6">
-    <div class="d-flex align-center gap-3 mb-1">
-        <MudChip T="string" Size="Size.Small" Style="@($"background-color:{Entry.Kind.RailColor()};color:#fff;font-weight:700;letter-spacing:.08em;")">
-            @Entry.Kind.Label()
-        </MudChip>
-        <MudText Typo="Typo.caption">
-            @(Entry.Project is not null ? $"{Entry.Project} · " : "")@SiteTime.FormatDate(Entry.PublishedAt!.Value)
-        </MudText>
+@* One record entry in a list. The outline colour AND style come from the kind
+   (Spec solid, Plan dashed, Post-mortem double, Note dotted), so the kind reads
+   without relying on colour. HeadingLevel keeps the outline correct: rows sit
+   under an h2 on Home and directly under the page h1 on /notes. *@
+<article class="fm-entry @Entry.Kind.CssClass()">
+    <div class="fm-entry-head">
+        @{ var tag = $"h{Math.Clamp(HeadingLevel, 2, 6)}"; }
+        <DynamicHeading Tag="@tag" Class="mud-typography mud-typography-h6 fm-entry-title">
+            <a href="@($"/notes/{Entry.Slug}")">@Entry.Title</a>
+        </DynamicHeading>
+        <span class="fm-tag">@Entry.Kind.Label()</span>
     </div>
-    <MudText Typo="Typo.h6" Class="mb-1">
-        <MudLink Href="@($"/notes/{Entry.Slug}")" Typo="Typo.h6">@Entry.Title</MudLink>
-    </MudText>
+    <p class="fm-entry-date fm-mono">
+        @(Entry.Project is not null ? $"{Entry.Project} · " : "")@SiteTime.FormatDate(Entry.PublishedAt!.Value)
+    </p>
     @if (ShowSummary && !string.IsNullOrWhiteSpace(Entry.Summary))
     {
-        <MudText Typo="Typo.body2" Class="mud-text-secondary">@Entry.Summary</MudText>
+        <p class="fm-entry-summary">@Entry.Summary</p>
     }
-</div>
+</article>
 
 @code {
     [Parameter, EditorRequired] public Post Entry { get; set; } = default!;
     [Parameter] public bool ShowSummary { get; set; } = true;
+    [Parameter] public int HeadingLevel { get; set; } = 3;
 }

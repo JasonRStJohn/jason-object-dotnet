@@ -1,0 +1,130 @@
+@page "/admin/projects"
+@attribute [Authorize]
+@inject PageCopyService PageCopyService
+@inject IDialogService DialogService
+@inject ISnackbar Snackbar
+@inject PersistentComponentState ApplicationState
+@implements IDisposable
+
+<PageTitle>Projects - Admin</PageTitle>
+
+<AdminBack />
+
+<div class="d-flex align-center flex-wrap gap-2 mb-2">
+    <h1 class="mud-typography mud-typography-h4" style="margin:0">Projects</h1>
+    <MudSpacer />
+    <MudButton Href="/admin/page-text" Variant="Variant.Text" Color="Color.Primary">Page text &amp; categories</MudButton>
+    <MudButton Href="/projects" Target="_blank" Variant="Variant.Text" Color="Color.Primary"
+               EndIcon="@Icons.Material.Filled.OpenInNew">View page</MudButton>
+</div>
+<MudText Typo="Typo.body2" Class="mud-text-secondary mb-6">
+    Hidden projects stay here but don't show on /projects. Arrows reorder within a category.
+</MudText>
+
+@if (_data is null)
+{
+    <MudProgressCircular Indeterminate="true" />
+}
+else
+{
+    @foreach (var category in _data.Categories)
+    {
+        var rows = _data.Projects.Where(p => p.CategoryKey == category.Key).ToList();
+        <div class="d-flex align-center flex-wrap gap-2 mt-6 mb-2">
+            <h2 class="mud-typography mud-typography-h6" style="margin:0">@category.ProjectsTitle</h2>
+            <MudSpacer />
+            <MudButton Href="@($"/admin/projects/new?category={category.Key}")" Variant="Variant.Outlined"
+                       Color="Color.Primary" Size="Size.Small" StartIcon="@Icons.Material.Filled.Add">
+                New project
+            </MudButton>
+        </div>
+        @if (rows.Count == 0)
+        {
+            <MudText Typo="Typo.body2" Class="mud-text-secondary">No projects in this category.</MudText>
+        }
+        else
+        {
+            <MudTable Items="rows" Hover="true" Elevation="1" Dense="true">
+                <HeaderContent>
+                    <MudTh>Order</MudTh>
+                    <MudTh>Title</MudTh>
+                    <MudTh>Badge</MudTh>
+                    <MudTh>Visible</MudTh>
+                    <MudTh></MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Order">
+                        <MudIconButton Icon="@Icons.Material.Filled.ArrowUpward" Size="Size.Small"
+                                       Disabled="@(context == rows[0])" aria-label="@($"Move {context.Title} up")"
+                                       OnClick="() => MoveAsync(context, -1)" />
+                        <MudIconButton Icon="@Icons.Material.Filled.ArrowDownward" Size="Size.Small"
+                                       Disabled="@(context == rows[^1])" aria-label="@($"Move {context.Title} down")"
+                                       OnClick="() => MoveAsync(context, +1)" />
+                    </MudTd>
+                    <MudTd DataLabel="Title">@context.Title</MudTd>
+                    <MudTd DataLabel="Badge">@context.Badge</MudTd>
+                    <MudTd DataLabel="Visible">
+                        <MudSwitch T="bool" Value="context.IsVisible" Color="Color.Primary"
+                                   ValueChanged="v => SetVisibleAsync(context, v)"
+                                   aria-label="@($"Show {context.Title} on /projects")" />
+                    </MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small"
+                                       Href="@($"/admin/projects/{context.Id}")" aria-label="@($"Edit {context.Title}")" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" Color="Color.Error"
+                                       OnClick="() => DeleteAsync(context)" aria-label="@($"Delete {context.Title}")" />
+                    </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    }
+}
+
+@code {
+    private sealed record AdminProjects(List<ProjectCategory> Categories, List<Project> Projects);
+
+    private AdminProjects? _data;
+    private PersistentLoader? _loader;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loader = new PersistentLoader(ApplicationState);
+        _data = await _loader.LoadAsync("admin-projects", LoadAsync);
+    }
+
+    private async Task<AdminProjects> LoadAsync()
+    {
+        var copy = await PageCopyService.GetAsync();
+        return new AdminProjects(copy.Categories.Select(c => c.Category).ToList(), await PageCopyService.GetAllProjectsAsync());
+    }
+
+    private async Task MoveAsync(Project project, int direction)
+    {
+        await PageCopyService.MoveProjectAsync(project.Id, direction);
+        _data = await LoadAsync();
+    }
+
+    private async Task SetVisibleAsync(Project project, bool visible)
+    {
+        await PageCopyService.SetProjectVisibleAsync(project.Id, visible);
+        _data = await LoadAsync();
+        Snackbar.Add(visible ? $"\"{project.Title}\" is shown." : $"\"{project.Title}\" is hidden.", Severity.Success);
+    }
+
+    private async Task DeleteAsync(Project project)
+    {
+        var confirmed = await DialogService.ShowMessageBoxAsync(
+            "Delete project",
+            $"Delete \"{project.Title}\"? This cannot be undone. Hiding it keeps it for later.",
+            yesText: "Delete", cancelText: "Cancel");
+
+        if (confirmed == true)
+        {
+            await PageCopyService.DeleteProjectAsync(project.Id);
+            _data = await LoadAsync();
+            Snackbar.Add("Project deleted.", Severity.Success);
+        }
+    }
+
+    public void Dispose() => _loader?.Dispose();
+}
