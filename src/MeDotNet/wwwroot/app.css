@@ -1086,3 +1086,13 @@ html[data-theme="light"] { --fm-grid-line: rgba(14, 116, 144, 0.07); }
     border: var(--fm-outline) solid var(--mud-palette-lines-default);
     border-radius: var(--fm-radius);
 }
+
+/* ---------------------------------------------------------------------------
+   Admin-edited copy rendered from Markdown (/work, /projects). The wrapper carries
+   the typography class the old MudText did; paragraphs inside never nest, and
+   links match MudLink (primary, underline on hover).
+   --------------------------------------------------------------------------- */
+.fm-copy p { margin: 0 0 0.75em; }
+.fm-copy > :last-child { margin-bottom: 0; }
+.fm-copy a { color: var(--mud-palette-primary); text-decoration: none; }
+.fm-copy a:hover { text-decoration: underline; }

@@ -1,38 +1,42 @@
 @page "/projects"
+@using MeDotNet.Services.Content
+@inject PageCopyService PageCopyService
+@inject PersistentComponentState ApplicationState
+@implements IDisposable
 
 <PageTitle>Projects - JasonObject</PageTitle>
 
 <h1 class="mud-typography mud-typography-h3 mud-typography-gutterbottom">Projects</h1>
 
-<MudText Typo="Typo.body1" Class="mb-4 fm-measure">
-    Grouped by the kind of problem they solve. Public repositories link straight to GitHub. Client and
-    employer systems are described by their architecture so proprietary details stay private.
-</MudText>
+@if (_copy is not null)
+{
+<div class="mud-typography mud-typography-body1 mb-4 fm-measure fm-copy">@((MarkupString)MarkdownRenderer.ToHtml(_copy.Text(PageTextKeys.ProjectsIntro)))</div>
 
 <div class="d-flex flex-wrap gap-2 mb-6">
     <MudChip T="string" Variant="@(string.IsNullOrWhiteSpace(_activeCategory) ? Variant.Filled : Variant.Outlined)"
              Color="Color.Primary" Href="/projects">
         All Work
     </MudChip>
-    @foreach (var group in _groups)
+    @foreach (var group in ShownGroups)
     {
-        var capturedId = group.Id;
+        var capturedId = group.Category.Key;
         var isActive = string.Equals(_activeCategory, capturedId, StringComparison.OrdinalIgnoreCase);
         <MudChip T="string" Variant="@(isActive ? Variant.Filled : Variant.Outlined)"
                  Color="Color.Primary" Href="@(isActive ? "/projects" : $"/projects?category={capturedId}")">
-            @group.ShortLabel
+            @group.Category.ProjectsShortLabel
         </MudChip>
     }
 </div>
 
 @foreach (var group in FilteredGroups)
 {
-    <section id="@group.Id" class="fm-group @GroupAccent(group.Id) mb-10">
+    var category = group.Category;
+    <section id="@category.Key" class="fm-group @GroupAccent(category.Key) mb-10">
         <div class="fm-group-head">
-            <h2 class="mud-typography mud-typography-h5 fm-panel-title">@group.Title</h2>
-            <span class="fm-tag">@group.Projects.Length systems</span>
+            <h2 class="mud-typography mud-typography-h5 fm-panel-title">@category.ProjectsTitle</h2>
+            <span class="fm-tag">@group.Projects.Count systems</span>
         </div>
-        <MudText Typo="Typo.body2" Class="mud-text-secondary mb-4 fm-measure">@group.Subtitle</MudText>
+        <MudText Typo="Typo.body2" Class="mud-text-secondary mb-4 fm-measure">@category.ProjectsSubtitle</MudText>
 
         @foreach (var project in group.Projects)
         {
@@ -43,17 +47,17 @@
                         <span class="fm-tag">@project.Badge</span>
                     </div>
                     <p class="fm-project-meta fm-mono">@project.Meta</p>
-                    <MudText Typo="Typo.body1" Class="fm-measure">@project.Body</MudText>
-                    @if (project.Employer)
+                    <div class="mud-typography mud-typography-body1 fm-measure fm-copy">@((MarkupString)MarkdownRenderer.ToHtml(project.Body))</div>
+                    @if (project.IsEmployer)
                     {
                         <MudText Typo="Typo.caption" Class="d-block mt-2 mud-text-secondary">
-                            Built during an 8-year tenure as Lead Developer. Proprietary system; ask me about the architecture.
+                            @_copy.Text(PageTextKeys.ProjectsEmployerNote)
                         </MudText>
                     }
-                    @if (project.Tags.Length > 0)
+                    @if (project.TagList.Count > 0)
                     {
                         <ul class="fm-stack" aria-label="Stack">
-                            @foreach (var tag in project.Tags)
+                            @foreach (var tag in project.TagList)
                             {
                                 <li>@tag</li>
                             }
@@ -83,23 +87,36 @@
         }
     </section>
 }
+}
 
 @code {
     [SupplyParameterFromQuery(Name = "category")] public string? CategoryFilter { get; set; }
 
+    private PageCopy? _copy;
     private string? _activeCategory;
+    private PersistentLoader? _loader;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loader = new PersistentLoader(ApplicationState);
+        _copy = await _loader.LoadAsync("page-copy", PageCopyService.GetAsync);
+    }
 
     protected override void OnParametersSet()
     {
-        _activeCategory = _groups.Any(g => string.Equals(g.Id, CategoryFilter, StringComparison.OrdinalIgnoreCase))
+        // An unknown category, or one whose projects are all hidden, shows everything.
+        _activeCategory = ShownGroups.Any(g => string.Equals(g.Category.Key, CategoryFilter, StringComparison.OrdinalIgnoreCase))
             ? CategoryFilter
             : null;
     }
 
-    private IEnumerable<ProjectGroup> FilteredGroups =>
+    private IEnumerable<CategoryCopy> ShownGroups =>
+        _copy?.Categories.Where(c => c.HasVisibleProjects) ?? [];
+
+    private IEnumerable<CategoryCopy> FilteredGroups =>
         string.IsNullOrWhiteSpace(_activeCategory)
-            ? _groups
-            : _groups.Where(g => string.Equals(g.Id, _activeCategory, StringComparison.OrdinalIgnoreCase));
+            ? ShownGroups
+            : ShownGroups.Where(g => string.Equals(g.Category.Key, _activeCategory, StringComparison.OrdinalIgnoreCase));
 
     // One colour per problem type, shared with the matching /work panel.
     private static string GroupAccent(string id) => id switch
@@ -109,150 +126,5 @@
         _ => "fm-accent-green"
     };
 
-    private record ProjectEntry(
-        string Title,
-        string Badge,
-        Color BadgeColor,
-        string Meta,
-        string Body,
-        string[] Tags,
-        string? LinkText,
-        string? LinkHref,
-        bool Employer,
-        string? RecordProject = null);
-
-    private record ProjectGroup(string Id, string ShortLabel, string Title, string Subtitle, ProjectEntry[] Projects);
-
-    private static readonly ProjectGroup[] _groups =
-    [
-        new("ai-systems",
-            "AI Harnesses",
-            "AI Harnesses & Agent-Directed Systems",
-            "Constrained, multi-stage workflows that put structure and verification around model output.",
-            [
-                new("Enterprise Workforce & ERP AI Harness",
-                    "Contract Architecture", Color.Info,
-                    "2026 · Enterprise ERP Integration, Curated AI Harness",
-                    "Scoping and architecting a workforce management platform that bridges enterprise ERP data (Oracle Fusion) with a curated AI evaluation harness. Built to give operational leaders real-time, grounded feedback on personnel moves across multiple projects and regions without exposing raw data to unconstrained prompts.",
-                    ["Enterprise ERP", "AI Harness Architecture", "Workforce Systems"],
-                    null, null, false),
-
-                new("Site-Creator 2.0 (Agentic Site Factory)",
-                    "Internal Pipeline", Color.Secondary,
-                    "2026 · Multi-Agent Workflow, Nuxt 3, PocketBase, Vitest",
-                    "A five-department, model-agnostic agentic pipeline (Intake, Architecture, Design, Implementation, and QA) that ingests client briefs, design mockups, or legacy WordPress exports and produces tested, production-ready web applications. Each stage operates from isolated Markdown context files with automated verification gates between handoffs.",
-                    ["Multi-Agent Pipeline", "Nuxt 3", "PocketBase", "Vitest"],
-                    null, null, false),
-
-                new("Agentic Job Search",
-                    "Open Source", Color.Success,
-                    "2026 · Multi-Agent Harness, Python, Markdown",
-                    "A portable multi-department AI workflow that separates generation (resume tailoring and drafting) from cold verification (zero-context screener simulation and source-of-truth auditing). Built in plain Markdown context files with no framework lock-in.",
-                    ["AI Evaluation", "Python", "Portable Contexts"],
-                    "Source on GitHub", "https://github.com/JasonRStJohn/agentic-job-search", false),
-
-                new("jasonobject.work (this site)",
-                    "Live in Production", Color.Success,
-                    "2026 · Blazor Web App, .NET 9, EF Core, ASP.NET Identity, MudBlazor, Docker",
-                    "The site you're reading, built as a working demonstration of AI-assisted engineering. Every phase ran from brainstorm to spec to implementation plan to agent-executed tasks, with code review gating each merge. Blazor Web App with a hand-rolled CMS, EF Core, Identity auth, and MudBlazor, shipping via Docker.",
-                    [".NET 9", "Blazor Server", "EF Core", "SQL Server", "MudBlazor", "Docker"],
-                    "Source on GitHub", "https://github.com/JasonRStJohn/jason-object-dotnet", false, RecordProject: "JasonObject"),
-            ]),
-
-        new("platforms",
-            "Platforms & .NET",
-            "Line-of-Business, Airspace & Real-Time Systems",
-            "Custom operational software, workflow engines, and real-time applications.",
-            [
-                new("Civilian VTOL Airspace & ATC Tooling",
-                    "Contract", Color.Info,
-                    "2026 · Aviation & Airspace Operations Software",
-                    "Contract engineering for an emerging aviation technology company building mid-range air traffic control and operational software to support the rollout of civilian VTOL aircraft.",
-                    ["Airspace Operations", "Web Engineering", "Real-Time Workflows"],
-                    null, null, false),
-
-                new("Job Management Platform 2.0",
-                    "Previous Employer", Color.Default,
-                    "Lead Architect · .NET Core, Vue, Nuxt",
-                    "Lead developer and architect of the company's flagship rebuild: job creation, dynamic workflow management, and progress tracking on a modern stack, with inventory and production reporting on the roadmap.",
-                    [".NET Core", "C#", "Vue", "Nuxt", "SQL Server"],
-                    null, null, true),
-
-                new("Automation scripting engine",
-                    "Previous Employer", Color.Default,
-                    "Lead Developer · C#, JSON instruction sets",
-                    "A modular automation language that consumes JSON instruction sets to process mailing lists and artwork into personalized, USPS-sorted mail files for the production floor. My favorite part: a workflow that generates its own instructions from defined criteria.",
-                    ["C#", "JSON DSL", "Workflow Automation"],
-                    null, null, true),
-
-                new("Ballot production & tracking",
-                    "Previous Employer", Color.Default,
-                    "Primary Developer · Vue, .NET Framework",
-                    "Primary developer on a high-velocity system carrying election ballot orders from intake through production, then tracking mail pieces to voters and back to boards of elections. It leaned hard on the automation engine above, and the pace taught me a lot about technical debt by way of the flexibility it cost that engine.",
-                    ["Vue", ".NET Framework", "High-Volume Tracking"],
-                    null, null, true),
-
-                new("Client Portal 2.0",
-                    "Previous Employer", Color.Default,
-                    "Senior Developer · Vue",
-                    "One of three developers who salvaged an outsourced client portal (inherited stack choices and all), reorganizing the codebase into something maintainable enough to hand off for continued development.",
-                    ["Vue", "Legacy Rescue", "Refactoring"],
-                    null, null, true),
-
-                new("Multi-workflow job system",
-                    "Previous Employer", Color.Default,
-                    "Developer · C#",
-                    "My first major C# project: re-architected a single-workflow job system so one job could run multiple template-generated workflows, with steps and ordering editable by management on the fly.",
-                    ["C#", ".NET", "State Machines"],
-                    null, null, true),
-
-                new("Reactive invoicing system",
-                    "Previous Employer", Color.Default,
-                    "Developer · Vue, .NET Framework",
-                    "Asked to make invoicing \"look like PayPal\" in a jQuery shop, I introduced Vue instead (CDN-loaded, no build step, but reactive). It seeded the modern front-end stack the company now uses everywhere.",
-                    ["Vue", ".NET Framework"],
-                    null, null, true),
-
-                new("Chasma & CYOA",
-                    "Open Source", Color.Success,
-                    "2026 · Python, WebSockets, Rust, Docker",
-                    "Two explorations in real-time state and systems programming: Chasma, an online multiplayer 2D space arena game running over WebSockets (whose ships occasionally fly across the background of this site in dark mode), and CYOA, an interactive branching narrative engine built in Rust while learning the language alongside an agent.",
-                    ["Python", "WebSockets", "Rust", "Docker"],
-                    "Chasma on GitHub", "https://github.com/JasonRStJohn/Chasma", false),
-            ]),
-
-        new("claudepress",
-            "Web & Migrations",
-            "Web Platforms & Legacy Migrations",
-            "Replacing fragile, plugin-heavy WordPress installs with fast, self-hosted Nuxt + PocketBase applications.",
-            [
-                new("ClaudePress & PawPress",
-                    "Open Source Core", Color.Success,
-                    "2026 · Nuxt 3, Vue, TypeScript, PocketBase, Tailwind, Docker",
-                    "A modular, model-agnostic Nuxt 3 + PocketBase content and application layer designed to replace bloated WordPress stacks, currently underlying five live production sites. Extended into specialized vertical layers including PawPress (for specialty breeders and kennels) and a current prototype for public libraries (ShelfPress).",
-                    ["Nuxt 3", "Vue 3", "TypeScript", "PocketBase", "Tailwind CSS"],
-                    "ClaudePress on GitHub", "https://github.com/JasonRStJohn/ClaudePress", false),
-
-                new("Municipal & Small-Business Platform Migrations",
-                    "Live in Production", Color.Success,
-                    "2026 · Nuxt 3, PocketBase, Automated Content Migration, VPS Infrastructure",
-                    "Migrating municipal village government and commercial sites off fragile legacy WordPress installs onto self-hosted ClaudePress stacks. Preserves years of public records, meeting minutes, and search indexing while giving non-technical staff a clean, foolproof publishing workflow.",
-                    ["Legacy Migration", "Nuxt 3", "PocketBase", "Linux VPS"],
-                    null, null, false),
-
-                new("CateredTo",
-                    "Historical", Color.Default,
-                    "Infinity Graphics · WordPress, PHP",
-                    "A menu-editing plugin for a catering business that ballooned into a full quoting system with invoice generation. In the long run it shouldn't have been a WordPress plugin, and it should have taught me more about scope creep than it did.",
-                    ["PHP", "WordPress Plugin"],
-                    "Source on GitHub", "https://github.com/JasonRStJohn/catered-to", false),
-
-                new("AGFTC website",
-                    "Historical", Color.Default,
-                    "Infinity Graphics · WordPress (underscores base)",
-                    "My first theme written mostly from scratch, with hand-built support for multiple post types, for the Adirondack/Glens Falls Transportation Council. The organization has since been reorganized, so the live site's days may be numbered.",
-                    ["WordPress Theme", "PHP"],
-                    "agftc.org", "https://agftc.org", false),
-            ]),
-    ];
+    public void Dispose() => _loader?.Dispose();
 }
