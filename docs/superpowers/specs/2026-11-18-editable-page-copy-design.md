@@ -40,7 +40,21 @@ The next piece of planned work is a copy clean-up of `/work`. Building this firs
 - `Program.cs` runs `Database.MigrateAsync()` on startup. **The design preview container currently points at the live database**, so before any build with the new migration is previewed, the preview must use its own database (for example a copy named `MeDotNet_Preview` on the same SQL Server, restored from a backup of the live one). The live `:5000` container is never rebuilt from this branch until the owner says deploy.
 - The repo is public. The seed text is already public on the live site, so committing it is fine. Never commit secrets.
 - Client naming rule: the seeded text already follows it; the admin makes the owner responsible from then on.
-- Fields rendered as Markdown go through `MarkdownRenderer.ToHtml` (raw HTML disabled, link schemes allowlisted). Plain-text fields render as text (Razor-encoded), never `MarkupString`.
+- **Sanitize on render (owner requirement, 2026-11-18).** Every piece of admin-authored HTML is sanitized at render time, even though only the owner edits it, so a compromised admin account cannot plant script.
+  - Plain-text fields render as text (Razor-encoded), never `MarkupString`.
+  - Markdown fields go through `MarkdownRenderer`, and **its output passes an allowlist HTML sanitizer before it reaches the page**: known tags only, no `on*` event attributes, no `style`, and URLs limited to http, https, mailto and relative. This is a separate fix that must land first (see "Prerequisite" below).
+  - The only route to `MarkupString` is the renderer's sanitized output. A test fails the build if any other `MarkupString` cast appears in `Components/`.
+
+## Prerequisite: close the attribute-injection gap
+
+Found 2026-11-18 while checking this requirement. `MarkdownRenderer` uses `UseAdvancedExtensions()`, which includes Markdig's generic-attributes syntax, so Markdown like `hello {onclick="alert(1)"}` renders as `<p onclick="alert(1)">`. Raw HTML and `javascript:` links are already blocked; event attributes are not. This affects record entries on the live site today.
+
+The fix:
+- Drop generic attributes from the pipeline.
+- Add the output sanitizer.
+- Add tests for the injection cases.
+
+It ships as a hotfix off `main`, ahead of and independent from this feature.
 
 ## Approaches considered
 
