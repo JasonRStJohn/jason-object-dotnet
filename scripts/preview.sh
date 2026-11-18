@@ -58,7 +58,7 @@ docker run -d --name medotnet-preview --network medotnet_internal -p 5055:8080 \
 
 for _ in $(seq 1 30); do
     code=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:5055/ || true)
-    [[ "$code" == "200" ]] && { echo "Preview up: http://192.168.4.22:5055 (database $PREVIEW_DB)"; exit 0; }
+    [[ "$code" == "200" ]] && { echo "Preview up on port 5055 (database $PREVIEW_DB)"; exit 0; }
     sleep 2
 done
 echo "Preview did not answer 200 within 60s; see: docker logs medotnet-preview" >&2
