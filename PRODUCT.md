@@ -31,7 +31,7 @@ Voice: a calm tech lead who diagnoses what breaks and how the architecture fixes
 
 - Visitors usually arrive from LinkedIn, a job application, a résumé link, or a referral, and often read on a phone.
 - Most read Home, then `/work` or `/projects`, then perhaps one record entry, then send an email. The `/work` inquiry helper builds a structured `mailto:` (no form backend, no spam surface).
-- Jason publishes and edits through the site's own admin (`/admin/posts`). Every record entry is hand-curated and redacted before it's published. Nothing is published automatically from the repo.
+- Jason publishes and edits through the site's own admin: record entries at `/admin/posts`, and the copy on `/work` and `/projects` at `/admin/projects` and `/admin/page-text`. Every record entry is hand-curated and redacted before it's published. Nothing is published automatically from the repo.
 
 ## Capabilities and Constraints
 
@@ -40,7 +40,7 @@ Voice: a calm tech lead who diagnoses what breaks and how the architecture fixes
 - **The repository is public.** Anything committed is published.
 - Routes: `/` (Home), `/notes` and `/notes/{slug}` (The Record, filterable by kind and project; `/posts` redirects), `/projects` (grouped `#ai-systems`, `#platforms`, `#claudepress`), `/about`, `/work`.
 - Record entry kinds: Spec, Plan, PostMortem, Note. Each has a colour-coded rail. Entries have no featured images; images may appear inside an entry body.
-- **Wanted, not yet built:** most of the copy on `/work` and `/projects` should be editable from the admin backend. Today both pages are hard-coded Razor and only posts are in the CMS. This needs its own spec → plan before it's built.
+- **Editable page copy:** all prose on `/work` and `/projects` lives in the database and is edited in the admin (spec `docs/superpowers/specs/2026-11-18-editable-page-copy-design.md`). The three categories (AI systems, platforms, ClaudePress) are fixed in code, and so are layout, colour, headings and button labels. A fourth category is a code change. Admin Markdown is sanitized when it renders.
 - Single admin account. Password changes happen in-app at `/account/changepassword`. Never delete and reseed the account.
 - Not in scope: pricing, service catalogues or engagement packages, comments, tags, view counts, a résumé download.
 
